@@ -22,7 +22,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.spotify.android.appremote"
     android:versionCode="1"
-    android:versionName="0.5.0-8.4.76.59" >
+    android:versionName="0.6.0-8.4.82.802" >
 
     <uses-sdk
         android:minSdkVersion="14"
