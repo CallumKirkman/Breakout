@@ -45,18 +45,6 @@ class Player : AppCompatActivity() {
             }
         )
 
-        //Thread
-        Thread(Runnable {
-            while (mp != null) {
-                try {
-                    var message = Message()
-                    message.what = mp.currentPosition
-                    handler.sendMessage(message)
-                    Thread.sleep(1000)
-                } catch (e:InterruptedException) {}
-            }
-        }).start()
-
         @SuppressLint("HandlerLeak")
         var handler = object : Handler() {
             override fun handleMessage(msg: Message) {
@@ -87,8 +75,19 @@ class Player : AppCompatActivity() {
                 return timeLabel
             }
         }
-    }
 
+        //Thread
+        Thread(Runnable {
+            while (mp != null) {
+                try {
+                    var message = Message()
+                    message.what = mp.currentPosition
+                    handler.sendMessage(message)
+                    Thread.sleep(1000)
+                } catch (e:InterruptedException) {}
+            }
+        }).start()
+    }
 
     fun playButtonClick(view: View) {
 
