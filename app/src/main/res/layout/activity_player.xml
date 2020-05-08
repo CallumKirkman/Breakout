@@ -21,8 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible"
-        android:contentDescription="@string/noImage_description" />
+        tools:visibility="visible" />
 
     <ImageButton
         android:id="@+id/playButton"
@@ -39,8 +38,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/albumView"
-        tools:visibility="visible"
-        android:contentDescription="@string/play_description" />
+        tools:visibility="visible" />
 
     <SeekBar
         android:id="@+id/positionBar"
