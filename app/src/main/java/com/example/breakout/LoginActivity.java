@@ -8,6 +8,9 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.account_res.*;
+
+
 public class LoginActivity extends Activity {
 
     @Override
@@ -28,7 +31,6 @@ public class LoginActivity extends Activity {
     }
 
     public void onClickLogin(View view) {
-
         // Get email, password.
         EditText email = findViewById(R.id.enterEmail);
 
