@@ -8,12 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
-import com.spotify.protocol.client.Subscription;
-import com.spotify.protocol.types.PlayerState;
-import com.spotify.protocol.types.Track;
 
 
-public class MainActivity extends AppCompatActivity {
+public class SpotifyConnect extends AppCompatActivity {
 
     private static final String CLIENT_ID = "daa95815630947bd980906b32437654d";
     private static final String REDIRECT_URI = "com.example.breakout:/callback";
@@ -23,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_spotify_connect);
     }
 
     @Override
