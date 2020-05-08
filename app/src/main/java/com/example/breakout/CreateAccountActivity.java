@@ -39,16 +39,9 @@ public class CreateAccountActivity extends AppCompatActivity {
                 password = passwordInput.getText().toString();
                 emailAddress = emailAddressInput.getText().toString();
 
-                showToast(name);
-                showToast(emailAddress);
-                showToast(password);
+
             }
         });
     }
 
-    //just to make sure the input has been received
-    private void showToast(String input) {
-        Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
-
-    }
 }
