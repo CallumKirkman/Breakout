@@ -1,6 +1,7 @@
 package com.example.breakout;
 
 import android.os.Bundle;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,16 +19,14 @@ public class CreateAccountActivity extends AppCompatActivity {
     Button btnSubmit;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
         getUserInput();
     }
 
-    private void getUserInput()
-    {
+    private void getUserInput() {
         uNameInput = (EditText) findViewById(R.id.uNameInput);
         passwordInput = (EditText) findViewById(R.id.passwordInput);
         emailAddressInput = (EditText) findViewById(R.id.emailAdressInput);
@@ -44,14 +43,12 @@ public class CreateAccountActivity extends AppCompatActivity {
                 showToast(emailAddress);
                 showToast(password);
             }
-        } );
+        });
     }
 
     //just to make sure the input has been received
-    private void showToast(String input)
-    {
+    private void showToast(String input) {
         Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
 
     }
-
 }
