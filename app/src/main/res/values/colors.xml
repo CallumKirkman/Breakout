@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#6400D7</color>      <!-- 6200EE  Top Bar    -->
+    <color name="colorPrimaryDark">#464646</color>  <!-- 3700B3  Phone Bar  -->
+    <color name="colorAccent">#6400D7</color>       <!-- 03DAC5  Accents    -->
+    <color name="backgroundColor">#F0ECEC</color>
+    <color name="textColor">#464646</color>
+    <color name="textColorAlt">#F0ECEC</color>
 </resources>
