@@ -32,4 +32,9 @@ class Player : AppCompatActivity() {
             //Make pause
         }
     }
+
+
+
+
+
 }
