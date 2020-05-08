@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_player.*
 
-class Player : AppCompatActivity() {
+class PlayerActivity : AppCompatActivity() {
 
     private lateinit var mp: MediaPlayer
     private var totalTime: Int = 0
