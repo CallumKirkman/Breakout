@@ -4,6 +4,7 @@ package com.example.account_res;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 
 /** Utility class of static methods for salting and hashing passwords.
@@ -12,32 +13,36 @@ public class PasswordUtilities {
 
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
-    /** Securely generate and return a salt in bytes.
+    /** Securely generate and return a salt as a String.
      *
      * @param size - size of the salt to be generated.
-     * @return - the salt in bytes.
+     * @return - the salt.
      */
-    public static byte[] generateSalt(int size) {
-        byte[] saltBytes = new byte[size];
+    public static String generateSalt(int size) {
         SecureRandom random = new SecureRandom();
-        random.nextBytes(saltBytes);
-        return saltBytes;
+        StringBuilder sb = new StringBuilder();
+
+        for(int i=0; i < size; i++) {
+            sb.append((char) (random.nextInt(26) + 'a'));
+        }
+        return sb.toString();
     }
 
 
     /** Generate the hash of the supplied string and salt using the given algorithm.
      *
      * @param str - the string to be hashed.
-     * @param alg - the hashing algorithm to be used. I.E. "SHA-256".
      * @param salt - the salt to be used in the hash.
+     * @param alg - the hashing algorithm to be used. I.E. "SHA-256".
      * @return - the hash in bytes.
      * @throws NoSuchAlgorithmException - if the algorithm parameter isn't recognised.
      */
-    public static byte[] generateHash(String str, String alg, byte[] salt) throws NoSuchAlgorithmException {
+    public static byte[] generateHash(String str, String salt, String alg) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance(alg);
         digest.reset();
-        digest.update(salt);
-        return digest.digest(str.getBytes());
+        String hash = str + salt;
+
+        return digest.digest(hash.getBytes());
     }
 
 
