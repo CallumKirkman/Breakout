@@ -22,7 +22,7 @@
                   android:parentActivityName=".LoginActivity"/>
 
         <activity android:name=".SpotifyConnect" />
-        <activity android:name=".Player" />
+        <activity android:name=".PlayerActivity" />
     </application>
 
 </manifest>

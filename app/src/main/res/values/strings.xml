@@ -9,6 +9,8 @@
     <string name="create_account_link">New? Create an account</string>
     <string name="create_account_header">Create Account</string>
     <string name="login_button">Login</string>
+    <string name="remaining_time">-1:11</string>
+    <string name="elapsed_time">0:11</string>
 
 
     <!-- HEADER -->
