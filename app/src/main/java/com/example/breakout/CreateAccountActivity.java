@@ -5,14 +5,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Objects;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
     private String name, password, emailAddress;
 
-    EditText uNameInput;
+    EditText forename;
+    EditText surname;
     EditText passwordInput;
     EditText emailAddressInput;
 
@@ -21,27 +23,26 @@ public class CreateAccountActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       Objects.requireNonNull(getSupportActionBar()).setTitle("Create Account");
         setContentView(R.layout.activity_create_account);
 
         getUserInput();
     }
 
     private void getUserInput() {
-        uNameInput = (EditText) findViewById(R.id.uNameInput);
-        passwordInput = (EditText) findViewById(R.id.passwordInput);
-        emailAddressInput = (EditText) findViewById(R.id.emailAdressInput);
+        forename = (EditText) findViewById(R.id.enterForename);
+        surname = findViewById(R.id.enterSurname);
+        passwordInput = (EditText) findViewById(R.id.enterPassword);
+        emailAddressInput = (EditText) findViewById(R.id.enterEmail);
 
-        btnSubmit = (Button) findViewById(R.id.btnSubmit);
+        btnSubmit = (Button) findViewById(R.id.createAccountButton);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                name = uNameInput.getText().toString();
+                name = forename.getText().toString();
                 password = passwordInput.getText().toString();
                 emailAddress = emailAddressInput.getText().toString();
-
-
             }
         });
     }
-
 }

@@ -48,7 +48,7 @@ public class LoginActivity extends Activity {
 
         // Compare the two passwords. If equal, login.
 
-        Intent login = new Intent(this, SpotifyConnect.class);
+        Intent login = new Intent(this, PlayerActivity.class);
         startActivity(login);
     }
 }

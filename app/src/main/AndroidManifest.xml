@@ -19,7 +19,7 @@
         </activity>
 
         <activity android:name=".CreateAccountActivity"
-                  android:parentActivityName=".LoginActivity"/>
+                  android:parentActivityName=".LoginActivity" />
 
         <activity android:name=".SpotifyConnect" />
         <activity android:name=".PlayerActivity" />
