@@ -2,14 +2,15 @@
     <string name="app_name">Breakout</string>
     <string name="submit">Submit</string>
     <string name="account_creation">Account Creation</string>
-=======
+
     <!-- Account Information -->
     <string name="enter_email">Email</string>
     <string name="enter_password">Password</string>
     <string name="create_account_link">New? Create an account</string>
+    <string name="create_account_header">Create Account</string>
     <string name="login_button">Login</string>
+
 
     <!-- HEADER -->
 
->>>>>>> 6c3a1b669a1518a3c4a6f41ba8c60343a704bb6f
 </resources>

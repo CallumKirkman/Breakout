@@ -13,11 +13,12 @@ public class PasswordUtilities {
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     /** Securely generate and return a salt in bytes.
-     * @param byteSize - size of the salt to be generated.
+     *
+     * @param size - size of the salt to be generated.
      * @return - the salt in bytes.
      */
-    static public byte[] generateSalt(int byteSize) {
-        byte[] saltBytes = new byte[byteSize];
+    public static byte[] generateSalt(int size) {
+        byte[] saltBytes = new byte[size];
         SecureRandom random = new SecureRandom();
         random.nextBytes(saltBytes);
         return saltBytes;
@@ -32,7 +33,7 @@ public class PasswordUtilities {
      * @return - the hash in bytes.
      * @throws NoSuchAlgorithmException - if the algorithm parameter isn't recognised.
      */
-    static public byte[] generateHash(String str, String alg, byte[] salt) throws NoSuchAlgorithmException {
+    public static byte[] generateHash(String str, String alg, byte[] salt) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance(alg);
         digest.reset();
         digest.update(salt);
@@ -40,17 +41,17 @@ public class PasswordUtilities {
     }
 
 
-    /** Format the hash into a hexadecimal string.
+    /** Format the bytes into a hexadecimal string.
      *
-     * @param hash - the hash to be converted into the hex format.
+     * @param bytes - the hash to be converted into the hex format.
      * @return - A string of the hex-formatted hash.
      */
-    static public String hexHash(byte[] hash) {
+    public static String hexBytes(byte[] bytes) {
 
-        char[] hex = new char[hash.length*2];
+        char[] hex = new char[bytes.length*2];
 
-        for(int i=0; i < hash.length; i++) {
-            int j = hash[i] & 0xFF;
+        for(int i=0; i < bytes.length; i++) {
+            int j = bytes[i] & 0xFF;
             hex[i*2] = hexArray[j >>> 4];
             hex[i*2+1] = hexArray[j & 0x0F];
         }

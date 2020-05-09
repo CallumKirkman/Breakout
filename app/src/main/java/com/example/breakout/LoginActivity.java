@@ -24,11 +24,13 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 // Launch CreateAccountActivity from text link.
-                Intent createAccount = new Intent(getBaseContext(), CreateAccountActivity.class);
-                startActivity(createAccount);
+                startActivity(new Intent(getBaseContext(), CreateAccountActivity.class));
             }
         });
     }
+
+
+
 
     public void onClickLogin(View view) {
         // Get email, password.
