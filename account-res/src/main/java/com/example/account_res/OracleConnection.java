@@ -13,8 +13,8 @@ public class OracleConnection {
         // Create jdcb connection object and load class.
         Class.forName("oracle.jdbc.driver.OracleDriver");
         Connection con = DriverManager.getConnection(
-                "jdbc:oracle:thin:@192.168.0.22:1521:xe",
-                "system",
+                "jdbc:oracle:thin:@address:port:service",
+                "name",
                 "password"
         );
 
