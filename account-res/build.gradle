@@ -2,7 +2,7 @@ apply plugin: 'java-library'
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation files('C:/Users/Jay/git/Breakout/app/libs/ojdbc8.jar')
+    implementation files('../app/libs/ojdbc8.jar')
 }
 
 sourceCompatibility = "7"
