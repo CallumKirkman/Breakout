@@ -50,6 +50,14 @@ public class SpotifyConnect extends AppCompatActivity {
     private void connected() {
         // Play a playlist
         mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
+
+        //Spotify song request - uses 62 base ID number at end of URI ^
+
+        //Either: request based if Intent from Player
+        //Or merge two files. Pretty sure I can
+        //Avoids calling and inheritance on each new call
+
+        //Most likely not needed in any other file?
     }
 
     @Override
