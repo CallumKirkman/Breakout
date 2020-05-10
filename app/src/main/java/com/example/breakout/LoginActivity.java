@@ -27,6 +27,8 @@ public class LoginActivity extends Activity {
                 startActivity(new Intent(getBaseContext(), CreateAccountActivity.class));
             }
         });
+
+        // TODO: Make the new account link unfocusable.
     }
 
 

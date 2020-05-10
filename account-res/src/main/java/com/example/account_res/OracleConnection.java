@@ -8,6 +8,8 @@ import java.sql.Statement;
 
 public class OracleConnection {
 
+    /*
+
     public static void main(String[] args) throws Exception {
         // Create jdcb connection object and load class.
         Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -25,4 +27,6 @@ public class OracleConnection {
             System.out.println(rs.getString(1));
         }
     }
+
+     */
 }
