@@ -13,7 +13,6 @@
             <option value="$PROJECT_DIR$/account-res" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/spotify-app-remote" />
-            <option value="$PROJECT_DIR$/spotifyAppRemote" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
