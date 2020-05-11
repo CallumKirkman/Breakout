@@ -27,28 +27,13 @@ public class LoginActivity extends Activity {
                 startActivity(new Intent(getBaseContext(), CreateAccountActivity.class));
             }
         });
-
-        // TODO: Make the new account link unfocusable.
     }
-
-
 
 
     public void onClickLogin(View view) {
         // Get email, password.
         EditText email = findViewById(R.id.enterEmail);
-
-        String testEmail = email.getText().toString();
-
-        // Look up email in DB.
-
-        // If it doesn't exist, display error message.
-
-        // Else, get stored password, and salt.
-
-        // Salt and then hash the entered password.
-
-        // Compare the two passwords. If equal, login.
+        EditText p = findViewById(R.id.enterPassword);
 
         Intent login = new Intent(this, PlayerActivity.class);
         startActivity(login);
