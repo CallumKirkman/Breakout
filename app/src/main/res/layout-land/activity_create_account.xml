@@ -10,78 +10,79 @@
         android:id="@+id/enterConfirmPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="8dp"
         android:autofillHints="password"
         android:ems="10"
         android:hint="@string/enter_confirm_password"
         android:inputType="textPassword"
-        tools:layout_editor_absoluteX="259dp"
-        tools:layout_editor_absoluteY="289dp" />
+        app:layout_constraintStart_toEndOf="@+id/enterPassword"
+        app:layout_constraintTop_toBottomOf="@+id/enterSurname" />
 
     <Button
         android:id="@+id/createAccountButton"
         android:layout_width="109dp"
         android:layout_height="67dp"
-        android:layout_marginStart="108dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="36dp"
         android:background="@color/colorPrimaryDark"
         android:onClick="onClickLogin"
         android:text="@string/create_account_button"
         android:textColor="@color/textColorAlt"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/enterSurname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="69dp"
         android:autofillHints="surname"
         android:ems="10"
         android:hint="@string/enter_surname"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/enterForename"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.639" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/enterForename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="188dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="8dp"
         android:autofillHints="forename"
         android:ems="10"
         android:hint="@string/enter_forename"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/enterEmail" />
 
     <EditText
         android:id="@+id/enterEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="16dp"
         android:autofillHints="email"
         android:ems="10"
         android:hint="@string/enter_email"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.088"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.297" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/enterPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="8dp"
         android:autofillHints="password"
         android:ems="10"
         android:hint="@string/enter_password"
         android:inputType="textPassword"
-        tools:layout_editor_absoluteX="241dp"
-        tools:layout_editor_absoluteY="334dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enterForename" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
