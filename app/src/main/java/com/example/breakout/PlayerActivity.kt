@@ -16,54 +16,70 @@ import kotlinx.android.synthetic.main.activity_player.*
 
 class PlayerActivity : AppCompatActivity() {
 
-    private var mSpotifyAppRemote: SpotifyAppRemote? = null
+    private var spotifyAppRemote: SpotifyAppRemote? = null
+
+    private val clientId = "daa95815630947bd980906b32437654d"
+    private val redirectUri = "com.example.breakout:/callback"
+
 
     override fun onStart() {
         super.onStart()
+
         val connectionParams =
-            ConnectionParams.Builder(CLIENT_ID)
-                .setRedirectUri(REDIRECT_URI)
-                .showAuthView(true).build()
-        SpotifyAppRemote.connect(this, connectionParams,
-            object : ConnectionListener {
-                override fun onConnected(spotifyAppRemote: SpotifyAppRemote) {
-                    mSpotifyAppRemote = spotifyAppRemote
-                    Log.d("MainActivity", "Connected! Yay!")
+            ConnectionParams.Builder(clientId)
+                .setRedirectUri(redirectUri)
+                .showAuthView(true)
+                .build()
+
+        SpotifyAppRemote.connect(this, connectionParams, object : ConnectionListener {
+                override fun onConnected(appRemote: SpotifyAppRemote) {
+                    spotifyAppRemote = appRemote
+                    Log.d("PlayerActivity", "Connected! Yay!")
                     connected()
                 }
 
                 override fun onFailure(throwable: Throwable) {
-                    Log.e("MainActivity", throwable.message, throwable)
+                    Log.e("PlayerActivity", throwable.message, throwable)
+                    onStop()
                 }
             })
     }
 
     private fun connected() {
         // Play a playlist
-        mSpotifyAppRemote!!.playerApi.play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL")
+        spotifyAppRemote!!.playerApi.play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL")
+        // User will be given a pre-selected (or random) song for music preference, in case new
+        // If they look up a song, or have previous preference data those songs will be used
 
-        //Spotify song request - uses 62 base ID number at end of URI ^
+//        // Subscribe to PlayerState
+//        spotifyAppRemote!!.playerApi.playerState
+//            .setResultCallback {
+//                Log.d("PlayerActivity", "Connected")
+//            }
+//            .setErrorCallback {
+//                Log.e("PlayerActivity", "Fail")
+//            }
 
-        //Either: request based if Intent from Player
-        //Or merge two files. Pretty sure I can
-        //Avoids calling and inheritance on each new call
 
-        //Most likely not needed in any other file?
+//        // Subscribe to PlayerState
+//        spotifyAppRemote!!.playerApi.subscribeToPlayerState().setEventCallback {
+//            val track: Track = it.track
+//            Log.d("MainActivity", track.name + " by " + track.artist.name)
+//        }
     }
 
     override fun onStop() {
         super.onStop()
+        // Handle errors
+        spotifyAppRemote?.let {
+            SpotifyAppRemote.disconnect(it)
+        }
     }
-
-    companion object {
-        private const val CLIENT_ID = "daa95815630947bd980906b32437654d"
-        private const val REDIRECT_URI = "com.example.breakout:/callback"
-    }
-
 
 
     private lateinit var mp: MediaPlayer
     private var totalTime: Int = 0
+    private var playPause = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +91,7 @@ class PlayerActivity : AppCompatActivity() {
         totalTime = mp.duration
 
 
-        //Position bar
+        // Position bar
         positionBar.max = totalTime
         positionBar.setOnSeekBarChangeListener(
             object  : SeekBar.OnSeekBarChangeListener {
@@ -102,10 +118,10 @@ class PlayerActivity : AppCompatActivity() {
 
                 var currentPosition = msg.what
 
-                //Update position bar
+                // Update position bar
                 positionBar.progress = currentPosition
 
-                //Update Labels
+                // Update Labels
                 var elapsedTime = createTimeLabel(currentPosition)
                 elapsedTimeLabel.text = elapsedTime
 
@@ -126,7 +142,7 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        //Thread
+        // Thread
         Thread(Runnable {
             while (mp != null) {
                 try {
@@ -139,16 +155,21 @@ class PlayerActivity : AppCompatActivity() {
         }).start()
     }
 
+
     fun playButtonClick(view: View) {
 
-        if (mp.isPlaying) {
-            //Stop
-            mp.pause()
+        if (playPause) {
+            // Stop
+            //mp.pause()
+            playPause = false
             playButton.setBackgroundResource(R.drawable.play)
+            spotifyAppRemote!!.playerApi.pause()
         } else {
-            //Start
-            mp.start()
+            // Start
+            //mp.start()
+            playPause = true
             playButton.setBackgroundResource(R.drawable.stop)
+            spotifyAppRemote!!.playerApi.resume()
         }
     }
 }
