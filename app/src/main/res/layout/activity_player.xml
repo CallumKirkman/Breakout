@@ -40,6 +40,36 @@
         app:layout_constraintTop_toBottomOf="@+id/albumView"
         tools:visibility="visible" />
 
+    <ImageButton
+        android:id="@+id/likeButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="390dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginBottom="44dp"
+        android:background="@drawable/like"
+        android:onClick="likeButtonClick"
+        app:layout_constraintBottom_toTopOf="@+id/positionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/playButton"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/dislikeButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="390dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginBottom="44dp"
+        android:background="@drawable/dislike"
+        android:onClick="dislikeButtonClick"
+        app:layout_constraintBottom_toTopOf="@+id/positionBar"
+        app:layout_constraintEnd_toStartOf="@+id/playButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <SeekBar
         android:id="@+id/positionBar"
         android:layout_width="356dp"
@@ -50,7 +80,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playButton" />
+        app:layout_constraintTop_toBottomOf="@+id/playButton"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -69,16 +99,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
-            android:text="@string/elapsed_time" />
+            android:text="@string/elapsed_time"/>
 
         <TextView
             android:id="@+id/remainingTimeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="270dp"
-            android:text="@string/remaining_time" />
+            android:text="@string/remaining_time"/>
 
     </LinearLayout>
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_menu"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
