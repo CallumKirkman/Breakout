@@ -6,7 +6,6 @@
         android:id="@+id/navSettings"
         android:icon="@drawable/ic_settings_black"
         android:title="Settings"/>
-
     <item
         android:id="@+id/navHome"
         android:icon="@drawable/ic_play_arrow_black"

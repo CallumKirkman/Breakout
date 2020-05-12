@@ -5,31 +5,39 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class LikeActivity : AppCompatActivity() {
 
+    // Navigation Bar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_like)
+
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        bottomNavigation.setOnNavigationItemSelectedListener(bottomNav)
+        val menu: Menu = bottomNavigation.menu
+        val menuItem: MenuItem = menu.getItem(2)
+        menuItem.isChecked = true
     }
 
-    //Menu bar
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.side_menu, menu)
-        return true
-    }
+    private val bottomNav = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        when (item.itemId) {
+            R.id.navFavourites -> {
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navHome -> {
+                val intent = Intent(this, PlayerActivity::class.java)
+                startActivity(intent)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navSettings -> {
+                val intent = Intent(this, DislikeActivity::class.java)
+                startActivity(intent)
+                return@OnNavigationItemSelectedListener true
+            }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_return) { //To menu
-            returnToMain()
         }
-        return true
-    }
-
-    private fun returnToMain() {
-        val intent = Intent(this, PlayerActivity::class.java) //Starts Menu activity
-
-        startActivity(intent)
+        false
     }
 }

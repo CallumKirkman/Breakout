@@ -1,16 +1,11 @@
 package com.example.breakout
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.spotify.android.appremote.api.ConnectionParams
@@ -21,11 +16,11 @@ import kotlinx.android.synthetic.main.activity_player.*
 
 class PlayerActivity : AppCompatActivity() {
 
+    // Spotify connect
     private var spotifyAppRemote: SpotifyAppRemote? = null
 
     private val clientId = "daa95815630947bd980906b32437654d"
     private val redirectUri = "com.example.breakout:/callback"
-
 
     override fun onStart() {
         super.onStart()
@@ -53,6 +48,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun connected() {
         // Play a playlist
         //spotifyAppRemote!!.playerApi.play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL")
+
         // User will be given a pre-selected (or random) song for music preference, in case new
         // If they look up a song, or have previous preference data those songs will be used
     }
@@ -66,18 +62,31 @@ class PlayerActivity : AppCompatActivity() {
     }
 
 
-    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when(item.itemId){
+    // Navigation Bar
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_player)
+
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        bottomNavigation.setOnNavigationItemSelectedListener(bottomNav)
+        val menu: Menu = bottomNavigation.menu
+        val menuItem: MenuItem = menu.getItem(1)
+        menuItem.isChecked = true
+    }
+
+    private val bottomNav = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        when (item.itemId) {
             R.id.navHome -> {
-                println("Home clicked")
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navFavourites -> {
-                println("Favourites clicked")
+                val intent = Intent(this, LikeActivity::class.java)
+                startActivity(intent)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navSettings -> {
-                println("Settings clicked")
+            R.id.navSettings -> { // Settings/removed songs
+                val intent = Intent(this, DislikeActivity::class.java)
+                startActivity(intent)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -85,15 +94,8 @@ class PlayerActivity : AppCompatActivity() {
     }
 
 
+    // Song control
     private var playPause = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_player)
-
-        bottomNavigation.setOnNavigationItemReselectedListener { onNavigationItemSelectedListener }
-    }
-
 
     fun playButtonClick(view: View) {
 
@@ -114,15 +116,9 @@ class PlayerActivity : AppCompatActivity() {
 
     fun likeButtonClick(view: View) {
         // Add to favourite songs
-        val intent = Intent(this, LikeActivity::class.java) //Starts Like activity
-
-        startActivity(intent)
     }
 
     fun dislikeButtonClick(view: View) {
         // Remove from play list?
-        val intent = Intent(this, DislikeActivity::class.java) //Starts Dislike activity
-
-        startActivity(intent)
     }
 }
