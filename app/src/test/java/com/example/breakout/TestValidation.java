@@ -80,7 +80,7 @@ class TestValidation {
      *
      * @return - the array.
      */
-    private static String[] validPasswords() {
+     static String[] validPasswords() {
         return new String[] {
                 "aB34567%",
                 "12345567fffGGG%$",
