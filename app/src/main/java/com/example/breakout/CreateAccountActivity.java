@@ -1,8 +1,8 @@
 package com.example.breakout;
 
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 
-import android.renderscript.ScriptGroup;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,10 +16,10 @@ import java.util.Objects;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
-    private String name, password, emailAddress;
+    private String forename, surname, password, emailAddress;
 
-    EditText forename;
-    EditText surname;
+    EditText forenameInput;
+    EditText surnameInput;
     EditText passwordInput;
     EditText emailAddressInput;
 
@@ -35,8 +35,8 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private void getUserInput() {
-        forename = (EditText) findViewById(R.id.enterForename);
-        surname = findViewById(R.id.enterSurname);
+        forenameInput = (EditText) findViewById(R.id.enterForename);
+        surnameInput = findViewById(R.id.enterSurname);
         passwordInput = (EditText) findViewById(R.id.enterPassword);
         emailAddressInput = (EditText) findViewById(R.id.enterEmail);
 
@@ -44,7 +44,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                name = forename.getText().toString();
+                forename = forenameInput.getText().toString();
+                surname = surnameInput.getText().toString();
                 password = passwordInput.getText().toString();
                 emailAddress = emailAddressInput.getText().toString();
 
@@ -57,13 +58,19 @@ public class CreateAccountActivity extends AppCompatActivity {
                 else if (InputValidation.validatePassword(password) == false)
                 {
                     //user need to enter valid password to meet requirements
-                    Toast.makeText(CreateAccountActivity.this, "invalid ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateAccountActivity.this, "password invalid ", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                 //Continue to next page
-                    Boolean pass = true;
+                    // write data to database
+                    // Continue to next page
+
+
+                   
+
+
                 }
+
 
             }
         });

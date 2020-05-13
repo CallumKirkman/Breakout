@@ -21,7 +21,7 @@ public class InputValidation {
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
 
-        return matcher.matches();
+        return matcher.find();
     }
 
 
@@ -40,6 +40,6 @@ public class InputValidation {
         Pattern pattern = Pattern.compile(passwordRegex);
         Matcher matcher = pattern.matcher(password);
 
-        return matcher.matches();
+        return matcher.find();
     }
 }
