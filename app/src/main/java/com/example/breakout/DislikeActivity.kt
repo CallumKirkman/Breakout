@@ -24,7 +24,7 @@ class DislikeActivity : AppCompatActivity() {
     private val bottomNav = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navSettings -> {
-                return@OnNavigationItemSelectedListener true
+                return@OnNavigationItemSelectedListener false
             }
             R.id.navHome -> {
                 val intent = Intent(this, PlayerActivity::class.java)

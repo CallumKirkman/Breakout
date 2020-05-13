@@ -24,7 +24,7 @@ class LikeActivity : AppCompatActivity() {
     private val bottomNav = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navFavourites -> {
-                return@OnNavigationItemSelectedListener true
+                return@OnNavigationItemSelectedListener false
             }
             R.id.navHome -> {
                 val intent = Intent(this, PlayerActivity::class.java)
