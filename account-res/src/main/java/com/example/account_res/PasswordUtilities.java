@@ -45,6 +45,19 @@ public class PasswordUtilities {
         return digest.digest(hash.getBytes());
     }
 
+    /** Overloaded method. Generate hash without a salt.
+     *
+     * @param str - the string to be hashed.
+     * @param alg -  the hashing algorithm to be used. I.E. "SHA-256".
+     * @return - the hash in bytes.
+     * @throws NoSuchAlgorithmException - if the algorithm parameter isn't recognised.
+     */
+    public static byte[] generateHash(String str, String alg) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance(alg);
+        digest.reset();
+        return digest.digest(str.getBytes());
+    }
+
 
     /** Format the bytes into a hexadecimal string.
      *
