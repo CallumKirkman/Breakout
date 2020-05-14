@@ -11,6 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector.ConnectionListener
 import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.protocol.types.Track
 import kotlinx.android.synthetic.main.activity_player.*
 
 
@@ -46,11 +47,29 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun connected() {
-        // Play a playlist
-        //spotifyAppRemote!!.playerApi.play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL")
+        // Play a track
+        spotifyAppRemote!!.playerApi.play("spotify:track:2PpruBYCo4H7WOBJ7Q2EwM")
 
         // User will be given a pre-selected (or random) song for music preference, in case new
         // If they look up a song, or have previous preference data those songs will be used
+
+
+        spotifyAppRemote!!.playerApi.subscribeToPlayerState().setEventCallback {
+            val track: Track = it.track
+            println("Track = $track")
+            val songName = track.name
+            println("Song name = $songName")
+            val artistName = track.artist.name
+            println("Artist name = $artistName")
+            val albumCover = track.album
+            println("Album cover = $albumCover")
+            val uriForTrack = track.uri
+            println("Track URI = $uriForTrack")
+            val length = track.duration
+            println("Length = $length")
+            val image = track.imageUri
+            println("Image = $image")
+        }
     }
 
     override fun onStop() {
