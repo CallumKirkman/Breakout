@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/navSettings"
@@ -13,5 +14,9 @@
         android:id="@+id/navFavourites"
         android:icon="@drawable/ic_favorite_black"
         android:title="@string/favourites"/>
+    <item
+        android:id="@+id/navShop"
+        android:icon="@drawable/ic_monetization_on_black"
+        android:title="@string/shop" />
 
 </menu>

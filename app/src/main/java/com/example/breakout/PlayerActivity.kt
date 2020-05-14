@@ -48,12 +48,23 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun connected() {
         // Play a track
-        spotifyAppRemote!!.playerApi.play("spotify:track:2PpruBYCo4H7WOBJ7Q2EwM")
+        //spotifyAppRemote!!.playerApi.play("spotify:track:2PpruBYCo4H7WOBJ7Q2EwM")
 
         // User will be given a pre-selected (or random) song for music preference, in case new
         // If they look up a song, or have previous preference data those songs will be used
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Handle errors
+        spotifyAppRemote?.let {
+            SpotifyAppRemote.disconnect(it)
+        }
+    }
 
 
+    // Song information
+    fun songInfo() {
         spotifyAppRemote!!.playerApi.subscribeToPlayerState().setEventCallback {
             val track: Track = it.track
             println("Track = $track")
@@ -69,14 +80,6 @@ class PlayerActivity : AppCompatActivity() {
             println("Length = $length")
             val image = track.imageUri
             println("Image = $image")
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // Handle errors
-        spotifyAppRemote?.let {
-            SpotifyAppRemote.disconnect(it)
         }
     }
 
@@ -108,6 +111,11 @@ class PlayerActivity : AppCompatActivity() {
                 startActivity(intent)
                 return@OnNavigationItemSelectedListener true
             }
+            R.id.navShop -> { // Settings/removed songs
+                val intent = Intent(this, ShopActivity::class.java)
+                startActivity(intent)
+                return@OnNavigationItemSelectedListener true
+            }
         }
         false
     }
@@ -129,7 +137,8 @@ class PlayerActivity : AppCompatActivity() {
             //mp.start()
             playPause = true
             playButton.setBackgroundResource(R.drawable.stop)
-            spotifyAppRemote!!.playerApi.resume()
+            spotifyAppRemote!!.playerApi.play("spotify:track:2PpruBYCo4H7WOBJ7Q2EwM")
+            //spotifyAppRemote!!.playerApi.resume()
         }
     }
 

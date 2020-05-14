@@ -36,7 +36,11 @@ class DislikeActivity : AppCompatActivity() {
                 startActivity(intent)
                 return@OnNavigationItemSelectedListener true
             }
-
+            R.id.navShop -> { // Settings/removed songs
+                val intent = Intent(this, ShopActivity::class.java)
+                startActivity(intent)
+                return@OnNavigationItemSelectedListener true
+            }
         }
         false
     }
