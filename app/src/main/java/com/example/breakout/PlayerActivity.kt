@@ -131,12 +131,12 @@ class PlayerActivity : AppCompatActivity() {
         if (playPause) {
             // Stop
             playPause = false
-            playButton.setBackgroundResource(R.drawable.play)
+            playButton.setImageResource(R.drawable.ic_play_arrow)
             spotifyAppRemote!!.playerApi.pause()
         } else {
             // Start
             playPause = true
-            playButton.setBackgroundResource(R.drawable.stop)
+            playButton.setImageResource(R.drawable.ic_pause)
             spotifyAppRemote!!.playerApi.play("spotify:track:2PpruBYCo4H7WOBJ7Q2EwM")
             //spotifyAppRemote!!.playerApi.resume()
         }
@@ -157,5 +157,13 @@ class PlayerActivity : AppCompatActivity() {
         val dislikeAnimation = dislikeButton.background as AnimationDrawable?
         dislikeAnimation?.start()
         // Remove from play list?
+    }
+
+    fun skipButtonClick(view: View) {
+        // Skip song
+    }
+
+    fun previousButtonClick(view: View) {
+        // Previous song
     }
 }

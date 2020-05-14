@@ -23,13 +23,13 @@
 
     <ImageButton
         android:id="@+id/playButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
         android:layout_marginBottom="40dp"
-        android:background="@drawable/play"
         android:clickable="true"
         android:onClick="playButtonClick"
+        android:src="@drawable/ic_play_arrow"
         app:layout_constraintBottom_toTopOf="@+id/positionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -38,28 +38,28 @@
 
     <ImageButton
         android:id="@+id/likeButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="76dp"
-        android:layout_marginEnd="75dp"
-        android:layout_marginBottom="35dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="42dp"
         android:background="@drawable/like"
         android:onClick="likeButtonClick"
         app:layout_constraintBottom_toTopOf="@+id/positionBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/playButton" />
+        app:layout_constraintStart_toEndOf="@+id/skipButton" />
 
     <ImageButton
         android:id="@+id/dislikeButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="75dp"
-        android:layout_marginEnd="75dp"
-        android:layout_marginBottom="35dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/dislike"
         android:onClick="dislikeButtonClick"
         app:layout_constraintBottom_toTopOf="@+id/positionBar"
-        app:layout_constraintEnd_toStartOf="@+id/playButton"
+        app:layout_constraintEnd_toStartOf="@+id/previousButton"
         app:layout_constraintStart_toStartOf="parent" />
 
     <SeekBar
@@ -129,5 +129,27 @@
         app:layout_constraintBottom_toTopOf="@+id/textAtristName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/skipButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="40dp"
+        android:onClick="skipButtonClick"
+        android:src="@drawable/ic_skip_next"
+        app:layout_constraintBottom_toTopOf="@+id/positionBar"
+        app:layout_constraintStart_toEndOf="@+id/playButton" />
+
+    <ImageButton
+        android:id="@+id/previousButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="40dp"
+        android:onClick="previousButtonClick"
+        app:layout_constraintBottom_toTopOf="@+id/positionBar"
+        app:layout_constraintEnd_toStartOf="@+id/playButton"
+        app:srcCompat="@drawable/ic_skip_previous" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
