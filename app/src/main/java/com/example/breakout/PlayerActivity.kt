@@ -1,11 +1,13 @@
 package com.example.breakout
 
 import android.content.Intent
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.spotify.android.appremote.api.ConnectionParams
@@ -67,19 +69,19 @@ class PlayerActivity : AppCompatActivity() {
     fun songInfo() {
         spotifyAppRemote!!.playerApi.subscribeToPlayerState().setEventCallback {
             val track: Track = it.track
-            println("Track = $track")
+            //println("Track = $track")
             val songName = track.name
-            println("Song name = $songName")
+            //println("Song name = $songName")
             val artistName = track.artist.name
-            println("Artist name = $artistName")
+            //println("Artist name = $artistName")
             val albumCover = track.album
-            println("Album cover = $albumCover")
+            //println("Album cover = $albumCover")
             val uriForTrack = track.uri
-            println("Track URI = $uriForTrack")
+            //println("Track URI = $uriForTrack")
             val length = track.duration
-            println("Length = $length")
+            //println("Length = $length")
             val image = track.imageUri
-            println("Image = $image")
+            //println("Image = $image")
         }
     }
 
@@ -128,13 +130,11 @@ class PlayerActivity : AppCompatActivity() {
 
         if (playPause) {
             // Stop
-            //mp.pause()
             playPause = false
             playButton.setBackgroundResource(R.drawable.play)
             spotifyAppRemote!!.playerApi.pause()
         } else {
             // Start
-            //mp.start()
             playPause = true
             playButton.setBackgroundResource(R.drawable.stop)
             spotifyAppRemote!!.playerApi.play("spotify:track:2PpruBYCo4H7WOBJ7Q2EwM")
@@ -143,10 +143,19 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     fun likeButtonClick(view: View) {
+        val likeButton: ImageView = findViewById(R.id.likeButton)
+        likeButton.setBackgroundResource(R.drawable.like_button_flash);
+        val likeAnimation = likeButton.background as AnimationDrawable?
+        likeAnimation?.start()
+        // If not added?
         // Add to favourite songs
     }
 
     fun dislikeButtonClick(view: View) {
+        val dislikeButton: ImageView = findViewById(R.id.dislikeButton)
+        dislikeButton.setBackgroundResource(R.drawable.dislike_button_flash);
+        val dislikeAnimation = dislikeButton.background as AnimationDrawable?
+        dislikeAnimation?.start()
         // Remove from play list?
     }
 }
