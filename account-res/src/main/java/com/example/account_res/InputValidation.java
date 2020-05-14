@@ -17,11 +17,23 @@ public class InputValidation {
      * @return - true if it meets the regex, false otherwise.
      */
     public static boolean validateEmail(String email) {
-        String emailRegex ="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$" ;
+        String emailRegex ="^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@\" + \"[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$";
+               // ^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
 
-        return matcher.find();
+        boolean emailCheck = matcher.find();
+
+        if(emailCheck)
+        {
+            return true;
+        }
+        else
+            {
+            return false;
+        }
+
+
     }
 
 
@@ -31,6 +43,7 @@ public class InputValidation {
      *      - contains at least one lowercase letter.
      *      - contains at least one uppercase letter.
      *      - contains at least one special character [ @ # $ % ! . ].
+     *      - contains at least one numerical digit
      *
      * @param password - the password to be validated.
      * @return - true if it meets the constraints, false otherwise.

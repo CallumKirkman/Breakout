@@ -84,9 +84,9 @@ class TestValidation {
         return new String[] {
                 "aB34567%",
                 "12345567fffGGG%$",
-                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaB!",
-                "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!aB",
-                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAb$"};
+                "aaaa1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaB!",
+                "!2!!A!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!a",
+                "A2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAb$op"};
     }
 
 
