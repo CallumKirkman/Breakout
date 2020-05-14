@@ -30,6 +30,7 @@ public class InputValidation {
      *      - 8 to 40 characters long.
      *      - contains at least one lowercase letter.
      *      - contains at least one uppercase letter.
+     *      - contains at least one number.
      *      - contains at least one special character [ @ # $ % ! . ].
      *
      * @param password - the password to be validated.
@@ -41,5 +42,19 @@ public class InputValidation {
         Matcher matcher = pattern.matcher(password);
 
         return matcher.matches();
+    }
+
+
+    /**
+     * Check if the supplied String matches the following constraints:
+     *      - BETWEEN X AND Y CHARACTERS
+     *      - No numbers.
+     *      - No special characters.
+     *
+     * @param name - the name to be validated.
+     * @return - true if it meets the constraints, false otherwise.
+     */
+    public static boolean validateName(String name) {
+        return true;
     }
 }
