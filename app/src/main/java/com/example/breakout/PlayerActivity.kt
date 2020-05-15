@@ -1,6 +1,7 @@
 package com.example.breakout
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.spotify.android.appremote.api.ConnectionParams
@@ -50,10 +52,15 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun connected() {
         // Play a track
-        //spotifyAppRemote!!.playerApi.play("spotify:track:2PpruBYCo4H7WOBJ7Q2EwM")
+        spotifyAppRemote!!.playerApi.play("spotify:album:3T4tUhGYeRNVUGevb0wThu")
+        Thread.sleep(50)
+        spotifyAppRemote!!.playerApi.pause()
 
         // User will be given a pre-selected (or random) song for music preference, in case new
         // If they look up a song, or have previous preference data those songs will be used
+
+
+        songInfo("")
     }
 
     override fun onStop() {
@@ -65,24 +72,94 @@ class PlayerActivity : AppCompatActivity() {
     }
 
 
+    private var songName: String = ""
+    private var artistName: String = ""
+    private var albumCover: String = ""
+    private var length: String = ""
+
+
     // Song information
-    fun songInfo() {
+    private fun songInfo(info: String): String {
         spotifyAppRemote!!.playerApi.subscribeToPlayerState().setEventCallback {
             val track: Track = it.track
             //println("Track = $track")
-            val songName = track.name
-            //println("Song name = $songName")
-            val artistName = track.artist.name
+            songName = track.name.toString()
+            println("Song name = $songName")
+            artistName = track.artist.name.toString()
             //println("Artist name = $artistName")
-            val albumCover = track.album
+            albumCover = track.album.toString()
             //println("Album cover = $albumCover")
-            val uriForTrack = track.uri
-            //println("Track URI = $uriForTrack")
-            val length = track.duration
+            length = track.duration.toString()
             //println("Length = $length")
-            val image = track.imageUri
-            //println("Image = $image")
         }
+
+        return when (info) {
+            "artist" -> artistName
+            "album" -> albumCover
+            "length" -> length
+            else -> songName
+        }
+    }
+
+
+    // Song control
+    private var playPause = false
+
+    fun playButtonClick(view: View) {
+
+        if (playPause) {
+            // Stop
+            playPause = false
+            playButton.setImageResource(R.drawable.ic_play_arrow)
+            spotifyAppRemote!!.playerApi.pause()
+        } else {
+            // Start
+            playPause = true
+            playButton.setImageResource(R.drawable.ic_pause)
+            //spotifyAppRemote!!.playerApi.play("spotify:album:3T4tUhGYeRNVUGevb0wThu")
+            spotifyAppRemote!!.playerApi.resume()
+
+            // Get song name
+            songInfo("song")
+
+            val songText: TextView = findViewById(R.id.textSongName)
+            songText.text = songName
+
+            // Get artist name
+            songInfo("artist")
+
+            val artistText: TextView = findViewById(R.id.textAtristName)
+            artistText.text = artistName
+        }
+    }
+
+    fun likeButtonClick(view: View) {
+        val likeButton: ImageView = findViewById(R.id.likeButton)
+        likeButton.setBackgroundResource(R.drawable.like_button_flash);
+        val likeAnimation = likeButton.background as AnimationDrawable?
+        likeAnimation?.start()
+        // If not added?
+        // Add to favourite songs
+        //spotifyAppRemote!!.userApi.addToLibrary("Current Song")
+    }
+
+    fun dislikeButtonClick(view: View) {
+        val dislikeButton: ImageView = findViewById(R.id.dislikeButton)
+        dislikeButton.setBackgroundResource(R.drawable.dislike_button_flash);
+        val dislikeAnimation = dislikeButton.background as AnimationDrawable?
+        dislikeAnimation?.start()
+        // Remove from play list?
+        //spotifyAppRemote!!.userApi.removeFromLibrary("Current Song")
+    }
+
+    fun skipButtonClick(view: View) {
+        // Skip song
+        spotifyAppRemote!!.playerApi.skipNext()
+    }
+
+    fun previousButtonClick(view: View) {
+        // Previous song
+        spotifyAppRemote!!.playerApi.skipPrevious()
     }
 
 
@@ -120,50 +197,5 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
         false
-    }
-
-
-    // Song control
-    private var playPause = false
-
-    fun playButtonClick(view: View) {
-
-        if (playPause) {
-            // Stop
-            playPause = false
-            playButton.setImageResource(R.drawable.ic_play_arrow)
-            spotifyAppRemote!!.playerApi.pause()
-        } else {
-            // Start
-            playPause = true
-            playButton.setImageResource(R.drawable.ic_pause)
-            spotifyAppRemote!!.playerApi.play("spotify:track:2PpruBYCo4H7WOBJ7Q2EwM")
-            //spotifyAppRemote!!.playerApi.resume()
-        }
-    }
-
-    fun likeButtonClick(view: View) {
-        val likeButton: ImageView = findViewById(R.id.likeButton)
-        likeButton.setBackgroundResource(R.drawable.like_button_flash);
-        val likeAnimation = likeButton.background as AnimationDrawable?
-        likeAnimation?.start()
-        // If not added?
-        // Add to favourite songs
-    }
-
-    fun dislikeButtonClick(view: View) {
-        val dislikeButton: ImageView = findViewById(R.id.dislikeButton)
-        dislikeButton.setBackgroundResource(R.drawable.dislike_button_flash);
-        val dislikeAnimation = dislikeButton.background as AnimationDrawable?
-        dislikeAnimation?.start()
-        // Remove from play list?
-    }
-
-    fun skipButtonClick(view: View) {
-        // Skip song
-    }
-
-    fun previousButtonClick(view: View) {
-        // Previous song
     }
 }
