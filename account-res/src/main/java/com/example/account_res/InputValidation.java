@@ -17,21 +17,15 @@ public class InputValidation {
      * @return - true if it meets the regex, false otherwise.
      */
     public static boolean validateEmail(String email) {
-        String emailRegex ="^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@\" + \"[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$";
-               // ^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$
+        String emailRegex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+                //"^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@\" + \"[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$";
+               //
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
 
-        boolean emailCheck = matcher.find();
+        boolean emailCheck = matcher.matches();
 
-        if(emailCheck)
-        {
-            return true;
-        }
-        else
-            {
-            return false;
-        }
+        return emailCheck;
 
 
     }
@@ -68,6 +62,12 @@ public class InputValidation {
      * @return - true if it meets the constraints, false otherwise.
      */
     public static boolean validateName(String name) {
-        return true;
+
+        String usernameRegex = "^[\\p{L} .'-]+$";
+        Pattern pattern = Pattern.compile(usernameRegex);
+        Matcher matcher = pattern.matcher(name);
+
+
+        return matcher.find();
     }
 }

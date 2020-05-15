@@ -1,5 +1,7 @@
 package com.example.breakout;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 
@@ -16,6 +18,8 @@ import java.util.Objects;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
+    private SQLiteDatabase mDatabase;
+
     private String forename, surname, password, emailAddress;
 
     EditText forenameInput;
@@ -25,12 +29,16 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     Button btnSubmit;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Create Account");
         setContentView(R.layout.activity_create_account);
 
+        UserDBHelper dbHelper = new UserDBHelper(this);
+        mDatabase = dbHelper.getWritableDatabase();
         getUserInput();
     }
 
@@ -50,7 +58,13 @@ public class CreateAccountActivity extends AppCompatActivity {
                 emailAddress = emailAddressInput.getText().toString();
 
                 //Check user input
-                if (InputValidation.validateEmail(emailAddress) == false)
+                //if it's false the input is incorrect
+                if(InputValidation.validateName(forename) == false)
+                {
+                    Toast.makeText(CreateAccountActivity.this, "name invalid", Toast.LENGTH_SHORT).show();
+
+                }
+                else if (InputValidation.validateEmail(emailAddress) == false)
                 {
                     //user need to enter valid email
                     Toast.makeText(CreateAccountActivity.this, "Email invalid", Toast.LENGTH_SHORT).show();
@@ -65,8 +79,16 @@ public class CreateAccountActivity extends AppCompatActivity {
                     // write data to database
                     // Continue to next page
 
+                    ContentValues cV = new ContentValues();
+                    cV.put(UserDBContract.UserEntry.COLUMN_FORENAME,forename);
+                    cV.put(UserDBContract.UserEntry.COLUMN_SURNAME,surname);
+                    cV.put(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS,emailAddress);
+                    cV.put(UserDBContract.UserEntry.COLUMN_PASSWORD, password);
+                    cV.put(UserDBContract.UserEntry.COLUMN_SALT, 1234);
 
-                   
+                    mDatabase.insert(UserDBContract.UserEntry.TABLE_NAME, null, cV);
+
+
 
 
                 }
