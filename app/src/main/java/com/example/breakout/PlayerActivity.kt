@@ -104,7 +104,7 @@ class PlayerActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navSettings -> { // Settings/removed songs
-                val intent = Intent(this, DislikeActivity::class.java)
+                val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
                 return@OnNavigationItemSelectedListener true
             }

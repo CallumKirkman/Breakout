@@ -12,6 +12,7 @@
     <string name="login_button">Login</string>
     <string name="create_account_button">Create</string>
     <string name="account_creation">Account Creation</string>
+    <string name="version_history">Version History</string>
 
     <!-- Player -->
     <string name="remaining_time">-1:11</string>

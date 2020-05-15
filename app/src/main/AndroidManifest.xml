@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DislikeActivity"/>
+        <activity android:name=".SettingsActivity"/>
         <activity android:name=".LikeActivity"/>
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -23,6 +23,15 @@
         <activity
             android:name=".PlayerActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".SettingsActivity"/>
+
+        <activity android:name=".VersionHistoryActivity"
+            android:parentActivityName=".SettingsActivity">
+        </activity>
+
+
+
     </application>
 
 </manifest>

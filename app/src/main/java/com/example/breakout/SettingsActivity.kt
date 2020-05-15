@@ -1,18 +1,39 @@
 package com.example.breakout
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
 
-class DislikeActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.settings_top_menu, menu)
+        return true;
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+
+        if(item.itemId == R.id.versionHistory) {
+            startActivity(Intent(this, VersionHistoryActivity::class.java))
+        }
+        return true
+    }
+
+
+
 
     // Navigation Bar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dislike)
+        Objects.requireNonNull(supportActionBar)?.title = "Settings"
+
+        setContentView(R.layout.activity_settings)
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNavigation.setOnNavigationItemSelectedListener(bottomNav)
