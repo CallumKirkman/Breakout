@@ -18,9 +18,7 @@ class TestAccountRes {
      */
     @ParameterizedTest()
     @MethodSource("validEmails")
-    void testValidEmails(String email) {
-        assertTrue(InputValidation.validateEmail(email));
-    }
+    void testValidEmails(String email) { assertTrue(InputValidation.validateEmail(email)); }
 
 
     /**
@@ -29,9 +27,7 @@ class TestAccountRes {
      */
     @ParameterizedTest()
     @MethodSource("invalidEmails")
-    void testInvalidEmails(String email) {
-        assertFalse(InputValidation.validateEmail(email));
-    }
+    void testInvalidEmails(String email) { assertFalse(InputValidation.validateEmail(email)); }
 
 
     /**
@@ -40,9 +36,7 @@ class TestAccountRes {
      */
     @ParameterizedTest()
     @MethodSource("validPasswords")
-    void testValidPasswords(String password) {
-        assertTrue(InputValidation.validatePassword(password));
-    }
+    void testValidPasswords(String password) { assertTrue(InputValidation.validatePassword(password)); }
 
 
     /**
@@ -51,9 +45,7 @@ class TestAccountRes {
      */
     @ParameterizedTest()
     @MethodSource("invalidPasswords")
-    void testInvalidPasswords(String password) {
-        assertFalse(InputValidation.validatePassword(password));
-    }
+    void testInvalidPasswords(String password) { assertFalse(InputValidation.validatePassword(password)); }
 
     /**
      * Test the name regex on valid names.
@@ -61,9 +53,7 @@ class TestAccountRes {
      */
     @ParameterizedTest()
     @MethodSource("validNames")
-    void testValidNames(String name) {
-        assertTrue(InputValidation.validateName(name));
-    }
+    void testValidNames(String name) { assertTrue(InputValidation.validateName(name)); }
 
 
     /**
@@ -72,9 +62,7 @@ class TestAccountRes {
      */
     @ParameterizedTest()
     @MethodSource("invalidNames")
-    void testInvalidNames(String name) {
-        assertFalse(InputValidation.validateName(name));
-    }
+    void testInvalidNames(String name) { assertFalse(InputValidation.validateName(name)); }
 
 
     /**
@@ -157,7 +145,7 @@ class TestAccountRes {
                 "email@example.name", "email@example.museum",
                 "email@example.co.jp", "firstname-lastname@example.com",
                 "very.unusual.”@”.unusual.com@example.com",
-                "very.”(),:;<>[]”.VERY.”very@\\ \"very”.unusual@strange.example.com", "much.”more\\ unusual”@example.com"};
+                "very.”(),:;<>[]”.VERY.”very@\\\"very”.unusual@strange.example.com", "much.”more\\ unusual”@example.com"};
     }
 
 
@@ -239,16 +227,49 @@ class TestAccountRes {
     }
 
 
+    /**
+     * An array of valid names.
+     * Name constraints are defined in InputValidation.validateName().
+     * @return - the array.
+     */
     private static String[] validNames() {
         return new String[] {
-
+                "Alex",
+                "bob",
+                "JIM",
+                "mIxEdCaSe",
+                "",
+                "a",
+                "st. dot",
+                "st. dot-o",
+                "st. dot-o'name",
+                "one-two-three",
+                "O'O'O'O",
+                "Mary-Ann",
+                "O'Neil",
+                "Quite A Long Name With Spaces",
+                "James-Second O'Something"
         };
     }
 
+
+    /**
+     * An array of invalid names.
+     * Name constraints are defined in InputValidation.validateName().
+     * @return - the array.
+     */
     private static String[] invalidNames() {
         return new String[] {
-
+                "name1",
+                "NAME1",
+                "name!",
+                "nAmE%",
+                "123",
+                "2",
+                "$&*",
+                ".1",
+                "st. name-two O'1",
+                "john-0"
         };
     }
-
 }
