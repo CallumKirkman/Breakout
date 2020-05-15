@@ -47,14 +47,17 @@ public class InputValidation {
 
     /**
      * Check if the supplied String matches the following constraints:
-     *      - BETWEEN X AND Y CHARACTERS
      *      - No numbers.
-     *      - No special characters.
+     *      - No special characters EXCLUDING - . and '.
      *
      * @param name - the name to be validated.
      * @return - true if it meets the constraints, false otherwise.
      */
     public static boolean validateName(String name) {
-        return true;
+        String nameRegex = "^[a-zA-Z \\-.\']*$";
+        Pattern pattern = Pattern.compile(nameRegex);
+        Matcher matcher = pattern.matcher(name);
+
+        return matcher.matches();
     }
 }

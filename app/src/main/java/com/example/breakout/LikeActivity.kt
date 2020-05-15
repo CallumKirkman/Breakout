@@ -32,7 +32,7 @@ class LikeActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navSettings -> {
-                val intent = Intent(this, DislikeActivity::class.java)
+                val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
                 return@OnNavigationItemSelectedListener true
             }
