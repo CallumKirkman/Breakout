@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -51,15 +52,15 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun connected() {
         // Play a track
-        spotifyAppRemote!!.playerApi.play("spotify:album:3T4tUhGYeRNVUGevb0wThu")
-        Thread.sleep(50)
-        spotifyAppRemote!!.playerApi.pause()
+        //spotifyAppRemote!!.playerApi.play("spotify:album:3T4tUhGYeRNVUGevb0wThu")
+        //Thread.sleep(50)
+        //spotifyAppRemote!!.playerApi.pause()
 
         // User will be given a pre-selected (or random) song for music preference, in case new
         // If they look up a song, or have previous preference data those songs will be used
 
 
-        songInfo("")
+        songInfo()
     }
 
     override fun onStop() {
@@ -78,7 +79,7 @@ class PlayerActivity : AppCompatActivity() {
 
 
     // Song information
-    private fun songInfo(info: String): String {
+    private fun songInfo() {
         spotifyAppRemote!!.playerApi.subscribeToPlayerState().setEventCallback {
             val track: Track = it.track
             //println("Track = $track")
@@ -91,13 +92,6 @@ class PlayerActivity : AppCompatActivity() {
             length = track.duration.toString()
             //println("Length = $length")
         }
-
-        return when (info) {
-            "artist" -> artistName
-            "album" -> albumCover
-            "length" -> length
-            else -> songName
-        }
     }
 
 
@@ -109,27 +103,52 @@ class PlayerActivity : AppCompatActivity() {
         if (playPause) {
             // Stop
             playPause = false
-            playButton.setImageResource(R.drawable.ic_play_arrow)
+            playButton.setBackgroundResource(R.drawable.play)
             spotifyAppRemote!!.playerApi.pause()
         } else {
             // Start
             playPause = true
-            playButton.setImageResource(R.drawable.ic_pause)
+            playButton.setBackgroundResource(R.drawable.pause)
             //spotifyAppRemote!!.playerApi.play("spotify:album:3T4tUhGYeRNVUGevb0wThu")
             spotifyAppRemote!!.playerApi.resume()
 
-            // Get song name
-            songInfo("song")
+            // Get song data
+            songInfo()
 
             val songText: TextView = findViewById(R.id.textSongName)
             songText.text = songName
 
-            // Get artist name
-            songInfo("artist")
-
             val artistText: TextView = findViewById(R.id.textAtristName)
             artistText.text = artistName
         }
+    }
+
+    fun skipButtonClick(view: View) {
+        // Skip song
+        spotifyAppRemote!!.playerApi.skipNext()
+
+        // Get song data
+        songInfo()
+
+        val songText: TextView = findViewById(R.id.textSongName)
+        songText.text = songName
+
+        val artistText: TextView = findViewById(R.id.textAtristName)
+        artistText.text = artistName
+    }
+
+    fun previousButtonClick(view: View) {
+        // Previous song
+        spotifyAppRemote!!.playerApi.skipPrevious()
+
+        // Get song data
+        songInfo()
+
+        val songText: TextView = findViewById(R.id.textSongName)
+        songText.text = songName
+
+        val artistText: TextView = findViewById(R.id.textAtristName)
+        artistText.text = artistName
     }
 
     fun likeButtonClick(view: View) {
@@ -149,16 +168,6 @@ class PlayerActivity : AppCompatActivity() {
         dislikeAnimation?.start()
         // Remove from play list?
         //spotifyAppRemote!!.userApi.removeFromLibrary("Current Song")
-    }
-
-    fun skipButtonClick(view: View) {
-        // Skip song
-        spotifyAppRemote!!.playerApi.skipNext()
-    }
-
-    fun previousButtonClick(view: View) {
-        // Previous song
-        spotifyAppRemote!!.playerApi.skipPrevious()
     }
 
 

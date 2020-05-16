@@ -6,12 +6,15 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
 
 class ShopActivity : AppCompatActivity() {
 
     // Navigation Bar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Objects.requireNonNull(supportActionBar)?.title = "Shop"
+
         setContentView(R.layout.activity_shop)
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)

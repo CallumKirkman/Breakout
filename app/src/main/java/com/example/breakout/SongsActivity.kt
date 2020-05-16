@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
+import java.util.*
 
 
 class SongsActivity : AppCompatActivity() {
@@ -18,6 +19,8 @@ class SongsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Objects.requireNonNull(supportActionBar)?.title = "Songs"
+
         setContentView(R.layout.activity_song)
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
@@ -50,7 +53,6 @@ class SongsActivity : AppCompatActivity() {
 
             }
         })
-
     }
 
     // Navigation Bar

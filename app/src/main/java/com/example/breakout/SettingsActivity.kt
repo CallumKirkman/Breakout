@@ -26,8 +26,6 @@ class SettingsActivity : AppCompatActivity() {
     }
 
 
-
-
     // Navigation Bar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
