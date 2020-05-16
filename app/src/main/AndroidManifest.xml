@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ShopActivity"/>
         <activity android:name=".SettingsActivity"/>
-        <activity android:name=".LikeActivity"/>
+        <activity android:name=".SongsActivity"/>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

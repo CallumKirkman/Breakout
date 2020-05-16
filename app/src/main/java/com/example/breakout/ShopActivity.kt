@@ -23,7 +23,7 @@ class ShopActivity : AppCompatActivity() {
 
     private val bottomNav = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.navShop -> { // Settings/removed songs
+            R.id.navShop -> {
                 return@OnNavigationItemSelectedListener false
             }
             R.id.navHome -> {
@@ -31,12 +31,12 @@ class ShopActivity : AppCompatActivity() {
                 startActivity(intent)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navFavourites -> {
-                val intent = Intent(this, LikeActivity::class.java)
+            R.id.navSong -> {
+                val intent = Intent(this, SongsActivity::class.java)
                 startActivity(intent)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navSettings -> { // Settings/removed songs
+            R.id.navSettings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
                 return@OnNavigationItemSelectedListener true

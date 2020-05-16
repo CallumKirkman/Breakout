@@ -1,7 +1,6 @@
 package com.example.breakout
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
@@ -37,17 +36,17 @@ class PlayerActivity : AppCompatActivity() {
                 .build()
 
         SpotifyAppRemote.connect(this, connectionParams, object : ConnectionListener {
-                override fun onConnected(appRemote: SpotifyAppRemote) {
-                    spotifyAppRemote = appRemote
-                    Log.d("PlayerActivity", "Connected! Yay!")
-                    connected()
-                }
+            override fun onConnected(appRemote: SpotifyAppRemote) {
+                spotifyAppRemote = appRemote
+                Log.d("PlayerActivity", "Connected! Yay!")
+                connected()
+            }
 
-                override fun onFailure(throwable: Throwable) {
-                    Log.e("PlayerActivity", throwable.message, throwable)
-                    onStop()
-                }
-            })
+            override fun onFailure(throwable: Throwable) {
+                Log.e("PlayerActivity", throwable.message, throwable)
+                onStop()
+            }
+        })
     }
 
     private fun connected() {
@@ -84,7 +83,7 @@ class PlayerActivity : AppCompatActivity() {
             val track: Track = it.track
             //println("Track = $track")
             songName = track.name.toString()
-            println("Song name = $songName")
+            //println("Song name = $songName")
             artistName = track.artist.name.toString()
             //println("Artist name = $artistName")
             albumCover = track.album.toString()
@@ -180,17 +179,17 @@ class PlayerActivity : AppCompatActivity() {
             R.id.navHome -> {
                 return@OnNavigationItemSelectedListener false
             }
-            R.id.navFavourites -> {
-                val intent = Intent(this, LikeActivity::class.java)
+            R.id.navSong -> {
+                val intent = Intent(this, SongsActivity::class.java)
                 startActivity(intent)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navSettings -> { // Settings/removed songs
+            R.id.navSettings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navShop -> { // Settings/removed songs
+            R.id.navShop -> {
                 val intent = Intent(this, ShopActivity::class.java)
                 startActivity(intent)
                 return@OnNavigationItemSelectedListener true
