@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 
+import android.service.autofill.UserData;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -79,12 +80,17 @@ public class CreateAccountActivity extends AppCompatActivity {
                     // write data to database
                     // Continue to next page
 
+
+
+
                     ContentValues cV = new ContentValues();
                     cV.put(UserDBContract.UserEntry.COLUMN_FORENAME,forename);
                     cV.put(UserDBContract.UserEntry.COLUMN_SURNAME,surname);
                     cV.put(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS,emailAddress);
                     cV.put(UserDBContract.UserEntry.COLUMN_PASSWORD, password);
                     cV.put(UserDBContract.UserEntry.COLUMN_SALT, 1234);
+
+
 
                     mDatabase.insert(UserDBContract.UserEntry.TABLE_NAME, null, cV);
 

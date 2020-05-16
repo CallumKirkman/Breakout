@@ -55,6 +55,10 @@ public class InputValidation {
      * @return - true if it meets the constraints, false otherwise.
      */
     public static boolean validateName(String name) {
-        return true;
+        String nameRegex = "^[a-zA-Z \\-.\']*$";
+        Pattern pattern = Pattern.compile(nameRegex);
+        Matcher matcher = pattern.matcher(name);
+
+        return matcher.matches();
     }
 }
