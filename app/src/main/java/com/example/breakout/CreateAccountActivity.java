@@ -1,6 +1,7 @@
 package com.example.breakout;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
@@ -15,11 +16,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.account_res.InputValidation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
     private SQLiteDatabase mDatabase;
+    private SQLiteDatabase mRDatabase;
 
     private String forename, surname, password, emailAddress;
 
@@ -31,7 +35,6 @@ public class CreateAccountActivity extends AppCompatActivity {
     Button btnSubmit;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,8 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         UserDBHelper dbHelper = new UserDBHelper(this);
         mDatabase = dbHelper.getWritableDatabase();
+        mRDatabase = dbHelper.getReadableDatabase();
+
         getUserInput();
     }
 
@@ -60,42 +65,29 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                 //Check user input
                 //if it's false the input is incorrect
-                if(InputValidation.validateName(forename) == false)
-                {
+                if (InputValidation.validateName(forename) == false) {
                     Toast.makeText(CreateAccountActivity.this, "name invalid", Toast.LENGTH_SHORT).show();
 
-                }
-                else if (InputValidation.validateEmail(emailAddress) == false)
-                {
+                } else if (InputValidation.validateEmail(emailAddress) == false) {
                     //user need to enter valid email
                     Toast.makeText(CreateAccountActivity.this, "Email invalid", Toast.LENGTH_SHORT).show();
-                }
-                else if (InputValidation.validatePassword(password) == false)
-                {
+                } else if (InputValidation.validatePassword(password) == false) {
                     //user need to enter valid password to meet requirements
                     Toast.makeText(CreateAccountActivity.this, "password invalid ", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+                } else {
                     // write data to database
                     // Continue to next page
 
 
-
-
                     ContentValues cV = new ContentValues();
-                    cV.put(UserDBContract.UserEntry.COLUMN_FORENAME,forename);
-                    cV.put(UserDBContract.UserEntry.COLUMN_SURNAME,surname);
-                    cV.put(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS,emailAddress);
+                    cV.put(UserDBContract.UserEntry.COLUMN_FORENAME, forename);
+                    cV.put(UserDBContract.UserEntry.COLUMN_SURNAME, surname);
+                    cV.put(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS, emailAddress);
                     cV.put(UserDBContract.UserEntry.COLUMN_PASSWORD, password);
                     cV.put(UserDBContract.UserEntry.COLUMN_SALT, 1234);
 
 
-
                     mDatabase.insert(UserDBContract.UserEntry.TABLE_NAME, null, cV);
-
-
-
 
                 }
 
@@ -103,4 +95,41 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
         });
     }
+
+
+//    public boolean usernameExists(String username) {
+//
+//        String[] projection = {
+//                UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS
+//        };
+////
+//        String selection = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " = ?";
+//        String[] selectionArgs = {username};
+//
+//        //sorting the results
+//        String sortOrder = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " DESC";
+//
+//        try {
+//           Cursor cursor = mRDatabase.query(
+//                    UserDBContract.UserEntry.TABLE_NAME,    // Table to query
+//                    projection,                             // The array of columns to return
+//                    selection,                              // The columns for the WHERE clause
+//                    selectionArgs,                          // The values for the WHERE clause
+//                    null,                          // Don't group the rows
+//                    null,                           // Don't filter by teh row groups
+//                    sortOrder                              // Order to sort
+//            );
+//            List itemsIds = new ArrayList<>();
+//            while (cursor.moveToNext()) {
+//                long itemID = cursor.getLong(cursor.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_ID));
+//                itemsIds.add(itemID);
+//            }
+//        } catch (Error e) {
+//            System.out.println(e);
+//        }
+//        return false;
+//    };
+
+
+
 }
