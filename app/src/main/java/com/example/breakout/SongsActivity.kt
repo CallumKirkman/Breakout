@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabItem
@@ -44,6 +45,7 @@ class SongsActivity : AppCompatActivity() {
 
         tabLayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
+                val test = findViewById<RecyclerView>(R.id.genreList)
                 viewpager!!.currentItem = tab.position
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {
