@@ -84,7 +84,7 @@ public class LoginActivity extends Activity {
         // Sorting the results.
         String sortOrder = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " DESC";
 
-        List itemsIdsEmail = new ArrayList<>();
+        List itemsIds = new ArrayList<>();
 
         try (Cursor cursor = mDatabase.query(
                 UserDBContract.UserEntry.TABLE_NAME,    // Table to query
@@ -97,7 +97,7 @@ public class LoginActivity extends Activity {
 
             while (cursor.moveToNext()) {
                 long itemID = cursor.getLong(cursor.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS));
-                itemsIdsEmail.add(itemID);
+                itemsIds.add(itemID);
             }
         }
         catch (Error e) {
@@ -107,7 +107,7 @@ public class LoginActivity extends Activity {
 
         // If the table is larger than 0 the username is used within the db else it doesn't exist.
         // So its a new user without an account or inputted incorrectly.
-        return itemsIdsEmail.size() > 0;
+        return itemsIds.size() > 0;
     }
 
 }

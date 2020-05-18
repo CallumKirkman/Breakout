@@ -2,6 +2,7 @@ package com.example.breakout;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import com.example.account_res.InputValidation;
@@ -23,6 +26,7 @@ import com.example.account_res.PasswordUtilities;
 public class CreateAccountActivity extends AppCompatActivity {
 
     private SQLiteDatabase mDatabase;
+    private SQLiteDatabase mReadDatabase;
 
 
     private String forename, surname, password, confirmPassword, emailAddress; // Input Strings
@@ -45,6 +49,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         // TODO: Add popup for viewing password constraints.
         UserDBHelper dbHelper = new UserDBHelper(this);
         mDatabase = dbHelper.getWritableDatabase();
+        mReadDatabase = dbHelper.getReadableDatabase();
         getUserInput();
 
     }
@@ -75,12 +80,47 @@ public class CreateAccountActivity extends AppCompatActivity {
          */
     }
 
-    private void checkUserEmailExists(String userEmail)
+    private boolean checkUserEmailExists(String userEmail)
     {
+        // TODO: Check the password is correct against the stored password.
 
+        String[] projection = {
+                UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS};
 
+        String selection = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS +
+                " LIKE ? ";
 
+        String[] selectionArgs = {userEmail};
+
+        // Sorting the results.
+        String sortOrder = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " DESC";
+
+        List itemsIds = new ArrayList<>();
+
+        try (Cursor cursor = mReadDatabase.query(
+                UserDBContract.UserEntry.TABLE_NAME,    // Table to query
+                projection,                        // The array of columns to return
+                selection,                         // The columns for the WHERE clause
+                selectionArgs,                     // The values for the WHERE clause
+                null,                                   // Don't group the rows
+                null,                                   // Don't filter by the row groups
+                sortOrder)) {                           // Order to sort
+
+            while (cursor.moveToNext()) {
+                long itemID = cursor.getLong(cursor.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS));
+                itemsIds.add(itemID);
+            }
+        }
+        catch (Error e) {
+            // TODO: Something here.
+            System.out.println(e);
+        }
+
+        // If the table is larger than 0 the username is used within the db else it doesn't exist.
+        // So its a new user without an account or inputted incorrectly.
+        return itemsIds.size() > 0;
     }
+
 
 
 
@@ -119,24 +159,32 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
                 // Salt and hash the password. Store the account.
                 else {
-                    try {
-                        String salt = PasswordUtilities.generateSalt(4);
-                        byte[] hashBytes = PasswordUtilities.generateHash(password, salt, algorithm);
-                        String hash = PasswordUtilities.hexBytes(hashBytes);
+                    if(!checkUserEmailExists(emailAddress)) {
+                        try {
+                            String salt = PasswordUtilities.generateSalt(4);
+                            byte[] hashBytes = PasswordUtilities.generateHash(password, salt, algorithm);
+                            String hash = PasswordUtilities.hexBytes(hashBytes);
 
-                        ContentValues cV = new ContentValues();
-                        cV.put(UserDBContract.UserEntry.COLUMN_FORENAME, forename);
-                        cV.put(UserDBContract.UserEntry.COLUMN_SURNAME, surname);
-                        cV.put(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS, emailAddress);
-                        cV.put(UserDBContract.UserEntry.COLUMN_PASSWORD, hash);
-                        cV.put(UserDBContract.UserEntry.COLUMN_SALT, salt);
+                            ContentValues cV = new ContentValues();
+                            cV.put(UserDBContract.UserEntry.COLUMN_FORENAME, forename);
+                            cV.put(UserDBContract.UserEntry.COLUMN_SURNAME, surname);
+                            cV.put(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS, emailAddress);
+                            cV.put(UserDBContract.UserEntry.COLUMN_PASSWORD, hash);
+                            cV.put(UserDBContract.UserEntry.COLUMN_SALT, salt);
 
-                        mDatabase.insert(UserDBContract.UserEntry.TABLE_NAME, null, cV);
+                            mDatabase.insert(UserDBContract.UserEntry.TABLE_NAME, null, cV);
 
-                        startActivity(new Intent(CreateAccountActivity.this, PlayerActivity.class));
+                            startActivity(new Intent(CreateAccountActivity.this, PlayerActivity.class));
+                        }
+
+                        catch (NoSuchAlgorithmException exc) {
+                            Toast.makeText(CreateAccountActivity.this, "An error occurred.", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                    catch(NoSuchAlgorithmException exc) {
-                        Toast.makeText(CreateAccountActivity.this, "An error occurred.", Toast.LENGTH_SHORT).show();
+                    else
+                    {
+                        Toast.makeText(CreateAccountActivity.this, "Email is associated with another account", Toast.LENGTH_SHORT).show();
+
                     }
                 }
             }
