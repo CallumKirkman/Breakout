@@ -72,31 +72,31 @@ public class LoginActivity extends Activity {
 
         // TODO: Check the password is correct against the stored password.
 
-        String[] projectionEmail = {
+        String[] projection = {
                 UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS,
                 UserDBContract.UserEntry.COLUMN_PASSWORD };
 
-        String selectionEmail = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS +
+        String selection = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS +
                 " LIKE ? AND " + UserDBContract.UserEntry.COLUMN_PASSWORD + " LIKE ? ";
 
-        String[] selectionArgsEmail = {userEmail, password};
+        String[] selectionArgs = {userEmail, password};
 
         // Sorting the results.
         String sortOrder = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " DESC";
 
         List itemsIdsEmail = new ArrayList<>();
 
-        try (Cursor cursorEmail = mDatabase.query(
+        try (Cursor cursor = mDatabase.query(
                 UserDBContract.UserEntry.TABLE_NAME,    // Table to query
-                projectionEmail,                        // The array of columns to return
-                selectionEmail,                         // The columns for the WHERE clause
-                selectionArgsEmail,                     // The values for the WHERE clause
+                projection,                        // The array of columns to return
+                selection,                         // The columns for the WHERE clause
+                selectionArgs,                     // The values for the WHERE clause
                 null,                                   // Don't group the rows
                 null,                                   // Don't filter by the row groups
                 sortOrder)) {                           // Order to sort
 
-            while (cursorEmail.moveToNext()) {
-                long itemID = cursorEmail.getLong(cursorEmail.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS));
+            while (cursor.moveToNext()) {
+                long itemID = cursor.getLong(cursor.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS));
                 itemsIdsEmail.add(itemID);
             }
         }

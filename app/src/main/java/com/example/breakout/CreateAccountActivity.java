@@ -23,7 +23,7 @@ import com.example.account_res.PasswordUtilities;
 public class CreateAccountActivity extends AppCompatActivity {
 
     private SQLiteDatabase mDatabase;
-    private SQLiteDatabase mRDatabase;
+
 
     private String forename, surname, password, confirmPassword, emailAddress; // Input Strings
     private String algorithm = "SHA-256";
@@ -45,7 +45,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         // TODO: Add popup for viewing password constraints.
         UserDBHelper dbHelper = new UserDBHelper(this);
         mDatabase = dbHelper.getWritableDatabase();
-        mRDatabase = dbHelper.getReadableDatabase();
         getUserInput();
 
     }
@@ -75,6 +74,14 @@ public class CreateAccountActivity extends AppCompatActivity {
 
          */
     }
+
+    private void checkUserEmailExists(String userEmail)
+    {
+
+
+
+    }
+
 
 
 
