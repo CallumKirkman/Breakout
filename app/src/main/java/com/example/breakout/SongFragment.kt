@@ -18,12 +18,17 @@ class SongFragment : Fragment() {
     var genre:MutableList<String> = ArrayList()
     var displayList:MutableList<String> = ArrayList()
 
+    private val songList = listOf<String>("Pop", "Rock", "Indie", "K-pop", "Country", "Country rock", "Indie pop")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadData()
 
         val searchItem = searchBar.query as SearchView
-        genreList.layoutManager = GridLayoutManager(context, genre.count())
+
+        val adapter = SongsAdapter(songList)
+        genreList.adapter = adapter
+        genreList.layoutManager = LinearLayoutManager(context)
 
 
         //abstract class Adapter<VH : RecyclerView.ViewHolder>
@@ -49,6 +54,5 @@ class SongFragment : Fragment() {
     }
 
     private fun loadData() {
-
     }
 }
