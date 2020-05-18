@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
+    <TextView
+        android:id="@+id/termsLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:focusable="false"
+        android:onClick="onClickTerms"
+        android:text="@string/terms_link"
+        android:textColor="@color/textColor"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/createAccountButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <EditText
         android:id="@+id/enterConfirmPassword"
         android:layout_width="wrap_content"

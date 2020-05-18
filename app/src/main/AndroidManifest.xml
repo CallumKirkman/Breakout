@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DislikeActivity"/>
-        <activity android:name=".LikeActivity"/>
+        <activity android:name=".ShopActivity"/>
+        <activity android:name=".SettingsActivity"/>
+        <activity android:name=".SongsActivity"/>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -23,6 +24,8 @@
         <activity
             android:name=".PlayerActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".VersionHistoryActivity"
+            android:parentActivityName=".SettingsActivity"/>
     </application>
 
 </manifest>

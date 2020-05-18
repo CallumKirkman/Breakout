@@ -12,12 +12,41 @@
     <string name="login_button">Login</string>
     <string name="create_account_button">Create</string>
     <string name="account_creation">Account Creation</string>
+    <string name="version_history">Version History</string>
+    <string name="terms_link">I have read and accept the <u>Terms and Conditions</u>.</string>
+    <string name="close_terms_button">Close></string>
 
     <!-- Player -->
     <string name="remaining_time">-1:11</string>
     <string name="elapsed_time">0:11</string>
     <string name="settings">Settings</string>
     <string name="home">Home</string>
-    <string name="favourites">Favourites</string>
+    <string name="songs">Songs</string>
+    <string name="shop">Shop</string>
+
+
+    <!-- Long Text -->
+    <string name="terms">
+
+    Consequatur quam eum labore corrupti fuga odit rerum ab. Molestiae vitae accusantium voluptatem. Quaerat sequi unde iusto ut. Blanditiis ut vitae dignissimos nisi deleniti. Hic reprehenderit sint qui vitae expedita.
+
+    Nisi qui enim sint praesentium veniam dolorum est. Minus ut earum inventore consectetur nesciunt tempora vitae sunt. Consequatur facere fugiat id repudiandae velit vitae pariatur non. Excepturi blanditiis eaque ut. Veritatis corrupti doloribus modi saepe amet dolorum nulla.
+
+    Est provident nostrum mollitia saepe. Est nam recusandae et reiciendis soluta. Reiciendis maxime quidem quo et odit error velit aut. In explicabo commodi autem et non provident. Facere repellat veritatis velit. Commodi minima non blanditiis accusamus harum eius nesciunt.
+
+    Quod tenetur quidem eius. Quisquam sit corporis aperiam et magni. Occaecati et ut assumenda fugit neque ut dignissimos. Incidunt cumque ut error accusantium quidem corporis. Vel doloremque aut deleniti iusto qui et aspernatur sunt. Consequuntur dolore et deleniti.
+
+    Rem sit aliquam laudantium et quis consectetur. Aliquid et nihil quis fugit. Corrupti itaque et iusto veritatis totam blanditiis error quia. Harum quidem rerum deleniti. Rerum recusandae et velit laborum. Eveniet atque aspernatur quasi culpa fugiat.
+    Consequatur quam eum labore corrupti fuga odit rerum ab. Molestiae vitae accusantium voluptatem. Quaerat sequi unde iusto ut. Blanditiis ut vitae dignissimos nisi deleniti. Hic reprehenderit sint qui vitae expedita.
+
+    Nisi qui enim sint praesentium veniam dolorum est. Minus ut earum inventore consectetur nesciunt tempora vitae sunt. Consequatur facere fugiat id repudiandae velit vitae pariatur non. Excepturi blanditiis eaque ut. Veritatis corrupti doloribus modi saepe amet dolorum nulla.
+
+    Est provident nostrum mollitia saepe. Est nam recusandae et reiciendis soluta. Reiciendis maxime quidem quo et odit error velit aut. In explicabo commodi autem et non provident. Facere repellat veritatis velit. Commodi minima non blanditiis accusamus harum eius nesciunt.
+
+    Quod tenetur quidem eius. Quisquam sit corporis aperiam et magni. Occaecati et ut assumenda fugit neque ut dignissimos. Incidunt cumque ut error accusantium quidem corporis. Vel doloremque aut deleniti iusto qui et aspernatur sunt. Consequuntur dolore et deleniti.
+
+    Rem sit aliquam laudantium et quis consectetur. Aliquid et nihil quis fugit. Corrupti itaque et iusto veritatis totam blanditiis error quia. Harum quidem rerum deleniti. Rerum recusandae et velit laborum. Eveniet atque aspernatur quasi culpa fugiat.
+    </string>
+
 
 </resources>
