@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,78 +34,80 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 // Launch CreateAccountActivity from text link.
-                startActivity(new Intent(getBaseContext(), CreateAccountActivity.class));
+                startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
             }
         });
     }
 
-    // Check if email used has an account
+
+    /**
+     * The login button. Check user input, look for the account.
+     * If the account exists, log the user in and display the song player.
+     *
+     * @param view - view.
+     */
     public void onClickLogin(View view) {
-        // Get email, password.
-        EditText email = findViewById(R.id.enterEmail);
+        // Input
+        EditText e = findViewById(R.id.enterEmail);
         EditText p = findViewById(R.id.enterPassword);
 
-        if (checkLoginCreds(email.getText().toString(), p.getText().toString()) == true) {
-            Intent login = new Intent(this, PlayerActivity.class);
-            startActivity(login);
-        } else {
-            Toast.makeText(LoginActivity.this, "Enter Valid username", Toast.LENGTH_SHORT).show();
+        // Check if the email entered is a registered account.
+        if (checkLoginCreds(e.getText().toString(), p.getText().toString())) {
+            startActivity(new Intent(this, PlayerActivity.class));
         }
-
+        else {
+            Toast.makeText(LoginActivity.this, "Account Not Found", Toast.LENGTH_SHORT).show();
+        }
     }
 
+
+    /**
+     * Check the user input to see if the account exists.
+     *
+     * @param userEmail - the entered email address.
+     * @param password - the entered password.
+     * @return - true if the account exists and the password is correct, false otherwise.
+     */
     private boolean checkLoginCreds(String userEmail, String password) {
+
+        // TODO: Check the password is correct against the stored password.
 
         String[] projectionEmail = {
                 UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS,
-                UserDBContract.UserEntry.COLUMN_PASSWORD
-        };
+                UserDBContract.UserEntry.COLUMN_PASSWORD };
 
-//
-        String selectionEmail = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " LIKE ? AND " + UserDBContract.UserEntry.COLUMN_PASSWORD + " LIKE ? ";
+        String selectionEmail = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS +
+                " LIKE ? AND " + UserDBContract.UserEntry.COLUMN_PASSWORD + " LIKE ? ";
+
         String[] selectionArgsEmail = {userEmail, password};
 
-        //sorting the results
+        // Sorting the results.
         String sortOrder = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " DESC";
 
         List itemsIdsEmail = new ArrayList<>();
-        Cursor cursorEmail = null;
 
-        try {
-            cursorEmail = mDatabase.query(
-                    UserDBContract.UserEntry.TABLE_NAME,    // Table to query
-                    projectionEmail,                             // The array of columns to return
-                    selectionEmail,                              // The columns for the WHERE clause
-                    selectionArgsEmail,                          // The values for the WHERE clause
-                    null,                          // Don't group the rows
-                    null,                           // Don't filter by teh row groups
-                    sortOrder                              // Order to sort
-            );
-
-
+        try (Cursor cursorEmail = mDatabase.query(
+                UserDBContract.UserEntry.TABLE_NAME,    // Table to query
+                projectionEmail,                        // The array of columns to return
+                selectionEmail,                         // The columns for the WHERE clause
+                selectionArgsEmail,                     // The values for the WHERE clause
+                null,                                   // Don't group the rows
+                null,                                   // Don't filter by the row groups
+                sortOrder)) {                           // Order to sort
 
             while (cursorEmail.moveToNext()) {
                 long itemID = cursorEmail.getLong(cursorEmail.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS));
                 itemsIdsEmail.add(itemID);
             }
-
-
-
-
-        } catch (Error e) {
+        }
+        catch (Error e) {
+            // TODO: Something here.
             System.out.println(e);
-        } finally {
-            cursorEmail.close();
         }
 
-        // If the table is larger than 0 the username is used within the db else it doesn't exist
-        // so its a new user without an account or inputted incorrectly
-        if (itemsIdsEmail.size() > 0 ) {
-            return true;
-        } else {
-            return false;
-        }
+        // If the table is larger than 0 the username is used within the db else it doesn't exist.
+        // So its a new user without an account or inputted incorrectly.
+        return itemsIdsEmail.size() > 0;
     }
-
 
 }

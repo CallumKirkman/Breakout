@@ -1,47 +1,38 @@
 package com.example.breakout;
 
 import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-
-
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.PopupWindow;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.account_res.InputValidation;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
+
+import com.example.account_res.InputValidation;
+import com.example.account_res.PasswordUtilities;
+
 
 public class CreateAccountActivity extends AppCompatActivity {
 
     private SQLiteDatabase mDatabase;
     private SQLiteDatabase mRDatabase;
 
-    private String forename, surname, password, emailAddress;
+    private String forename, surname, password, confirmPassword, emailAddress; // Input Strings
+    private String algorithm = "SHA-256";
 
     EditText forenameInput;
     EditText surnameInput;
     EditText passwordInput;
+    EditText confirmPasswordInput;
     EditText emailAddressInput;
-
     Button btnSubmit;
 
 
@@ -51,6 +42,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.account_creation);
         setContentView(R.layout.activity_create_account);
 
+        // TODO: Add popup for viewing password constraints.
         UserDBHelper dbHelper = new UserDBHelper(this);
         mDatabase = dbHelper.getWritableDatabase();
         mRDatabase = dbHelper.getReadableDatabase();
@@ -65,7 +57,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         View popupView = inflater.inflate(R.layout.popup_terms, null);
 
 
-        // TODO: Difference popup dimensions depending on screen orientation.
+        // TODO: Different popup dimensions depending on screen orientation.
         int popupWidth = 600;
         int popupHeight = 850;
         final PopupWindow popupWindow = new PopupWindow(popupView, popupWidth, popupHeight, true);
@@ -91,45 +83,59 @@ public class CreateAccountActivity extends AppCompatActivity {
         forenameInput = (EditText) findViewById(R.id.enterForename);
         surnameInput = findViewById(R.id.enterSurname);
         passwordInput = (EditText) findViewById(R.id.enterPassword);
+        confirmPasswordInput = findViewById(R.id.enterConfirmPassword);
         emailAddressInput = (EditText) findViewById(R.id.enterEmail);
 
         btnSubmit = findViewById(R.id.createAccountButton);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Get input values.
                 forename = forenameInput.getText().toString();
                 surname = surnameInput.getText().toString();
                 password = passwordInput.getText().toString();
+                confirmPassword = confirmPasswordInput.getText().toString();
                 emailAddress = emailAddressInput.getText().toString();
 
-                //Check user input
-                if (!InputValidation.validateEmail(emailAddress))
-                {
-                    //user need to enter valid email
-                    Toast.makeText(CreateAccountActivity.this, "Email invalid", Toast.LENGTH_SHORT).show();
+                // Validate input - Email, Password, and Names.
+                if (!InputValidation.validateEmail(emailAddress)) {
+                    Toast.makeText(CreateAccountActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
                 }
-                else if (!InputValidation.validatePassword(password))
-                {
-                    //user need to enter valid password to meet requirements
-                    Toast.makeText(CreateAccountActivity.this, "password invalid ", Toast.LENGTH_SHORT).show();
-                } else {
-                    // write data to database
-                    // Continue to next page
-
-
-                    ContentValues cV = new ContentValues();
-                    cV.put(UserDBContract.UserEntry.COLUMN_FORENAME, forename);
-                    cV.put(UserDBContract.UserEntry.COLUMN_SURNAME, surname);
-                    cV.put(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS, emailAddress);
-                    cV.put(UserDBContract.UserEntry.COLUMN_PASSWORD, password);
-                    cV.put(UserDBContract.UserEntry.COLUMN_SALT, 1234);
-
-
-                    mDatabase.insert(UserDBContract.UserEntry.TABLE_NAME, null, cV);
-
+                else if (!InputValidation.validatePassword(password)) {
+                    Toast.makeText(CreateAccountActivity.this, "Invalid Password", Toast.LENGTH_SHORT).show();
                 }
+                else if(!InputValidation.validateName(forename) && !InputValidation.validateName(surname)) {
+                    Toast.makeText(CreateAccountActivity.this, "Invalid Name", Toast.LENGTH_SHORT).show();
+                }
+                else if(!password.equals(confirmPassword)) {
+                    Toast.makeText(CreateAccountActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                }
+                // Salt and hash the password. Store the account.
+                else {
+                    try {
+                        String salt = PasswordUtilities.generateSalt(4);
+                        byte[] hashBytes = PasswordUtilities.generateHash(password, salt, algorithm);
+                        String hash = PasswordUtilities.hexBytes(hashBytes);
 
+                        ContentValues cV = new ContentValues();
+                        cV.put(UserDBContract.UserEntry.COLUMN_FORENAME, forename);
+                        cV.put(UserDBContract.UserEntry.COLUMN_SURNAME, surname);
+                        cV.put(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS, emailAddress);
+                        cV.put(UserDBContract.UserEntry.COLUMN_PASSWORD, hash);
+                        cV.put(UserDBContract.UserEntry.COLUMN_SALT, salt);
+
+                        mDatabase.insert(UserDBContract.UserEntry.TABLE_NAME, null, cV);
+
+                        startActivity(new Intent(CreateAccountActivity.this, PlayerActivity.class));
+                    }
+                    catch(NoSuchAlgorithmException exc) {
+                        Toast.makeText(CreateAccountActivity.this, "An error occurred.", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
+
+
     }
+
 }
