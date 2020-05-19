@@ -1,5 +1,6 @@
 package com.example.breakout;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -78,6 +79,20 @@ public class CreateAccountActivity extends AppCompatActivity {
         });
 
          */
+    }
+
+
+    public void onClickPasswordHelp(View view) {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        assert inflater != null;
+        View popupView = inflater.inflate(R.layout.popup_password_help, null);
+        // TODO: Different popup dimensions depending on screen orientation.
+        int popupWidth = 500;
+        int popupHeight = 200;
+        final PopupWindow popupWindow = new PopupWindow(popupView, popupWidth, popupHeight, true);
+
+        popupWindow.showAtLocation(view, Gravity.CENTER, Gravity.START, 0);
+
     }
 
     private boolean checkUserEmailExists(String userEmail)

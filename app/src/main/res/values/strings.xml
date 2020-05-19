@@ -48,5 +48,7 @@
     Rem sit aliquam laudantium et quis consectetur. Aliquid et nihil quis fugit. Corrupti itaque et iusto veritatis totam blanditiis error quia. Harum quidem rerum deleniti. Rerum recusandae et velit laborum. Eveniet atque aspernatur quasi culpa fugiat.
     </string>
 
+    <string name="password_help">- Between 8 and 40 characters\n- Contain a lowercase character\n- Contain an uppercase character\n- Contain a number\n- Contain a special character [ @ # $ % ! . ]</string>
+
 
 </resources>

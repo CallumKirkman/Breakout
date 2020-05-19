@@ -100,4 +100,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enterEmail" />
 
+    <Button
+        android:id="@+id/passwordHelpButton"
+        android:layout_width="27dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:drawable/ic_lock_idle_lock"
+        android:onClick="onClickPasswordHelp"
+        app:layout_constraintEnd_toStartOf="@+id/enterPassword"
+        app:layout_constraintTop_toTopOf="@+id/enterPassword" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
