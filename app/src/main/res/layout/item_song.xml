@@ -9,11 +9,10 @@
     >
 
     <TextView
-        android:id="@+id/contact_name"
+        android:id="@+id/songName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        />
+        android:layout_weight="1"/>
 
     <!--<Button
         android:id="@+id/message_button"
@@ -21,6 +20,5 @@
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:textSize="10sp"
-        />-->
+        android:textSize="10sp"/>-->
 </LinearLayout>

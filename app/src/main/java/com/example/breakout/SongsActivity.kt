@@ -44,7 +44,6 @@ class SongsActivity : AppCompatActivity() {
 
         tabLayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                val test = findViewById<RecyclerView>(R.id.genreList)
                 viewpager!!.currentItem = tab.position
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {

@@ -6,53 +6,44 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_song.*
 
 
-class SongFragment : Fragment() {
+class SongFragment : Fragment(){
 
-    lateinit var genreList : RecyclerView //.Adapter<RecyclerView.ViewHolder>
-    var genre:MutableList<String> = ArrayList()
-    var displayList:MutableList<String> = ArrayList()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    private val songList = listOf<String>("Pop", "Rock", "Indie", "K-pop", "Country", "Country rock", "Indie pop")
+        val searchView = view.findViewById<SearchView>(R.id.searchBar)
+        val genreList = view.findViewById<RecyclerView>(R.id.songList)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        loadData()
+        val genres = listOf("Pop", "Rock", "Indie", "Country", "Jazz", "Indie Rock","K-pop",
+            "Classical", "Classical Rock", "Pop Rock", "Indie pop", "Smooth Jazz", "Punk Rock")
 
-        val searchItem = searchBar.query as SearchView
-
-        val adapter = SongsAdapter(songList)
+        val adapter = SongsAdapter(genres)
         genreList.adapter = adapter
+
         genreList.layoutManager = LinearLayoutManager(context)
+        genreList.itemAnimator = DefaultItemAnimator()
 
-
-        //abstract class Adapter<VH : RecyclerView.ViewHolder>
-        //genreList.adapter
-
-
-        searchItem.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                println("Testing2 $query")
-                return true
+                // Give to player
+                return false
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapter.filter(newText)
+                return false
             }
         })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_song, container, false)
-    }
-
-    private fun loadData() {
     }
 }
