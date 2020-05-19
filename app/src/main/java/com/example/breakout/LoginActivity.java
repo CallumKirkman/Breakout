@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.account_res.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import java.util.List;
 public class LoginActivity extends Activity {
 
     private SQLiteDatabase mDatabase;
+    private final String algorithm = "SHA-256";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,20 +73,19 @@ public class LoginActivity extends Activity {
     private boolean checkLoginCreds(String userEmail, String password) {
 
         // TODO: Check the password is correct against the stored password.
-
+        boolean retVal = false;
         String[] projection = {
                 UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS,
-                UserDBContract.UserEntry.COLUMN_PASSWORD };
+                UserDBContract.UserEntry.COLUMN_PASSWORD, UserDBContract.UserEntry.COLUMN_SALT };
 
-        String selection = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS +
-                " LIKE ? AND " + UserDBContract.UserEntry.COLUMN_PASSWORD + " LIKE ? ";
+        String selection = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " LIKE ? ";
 
-        String[] selectionArgs = {userEmail, password};
+        String[] selectionArgs = {userEmail};
 
         // Sorting the results.
         String sortOrder = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " DESC";
 
-        List itemsIds = new ArrayList<>();
+        List databaseRecords = new ArrayList<>();
 
         try (Cursor cursor = mDatabase.query(
                 UserDBContract.UserEntry.TABLE_NAME,    // Table to query
@@ -94,11 +95,36 @@ public class LoginActivity extends Activity {
                 null,                                   // Don't group the rows
                 null,                                   // Don't filter by the row groups
                 sortOrder)) {                           // Order to sort
+            int itemIDIndex = -1 ;
+            String stringItemPassword="";
+            String stringItemSalt="";
 
             while (cursor.moveToNext()) {
-                long itemID = cursor.getLong(cursor.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS));
-                itemsIds.add(itemID);
+               itemIDIndex = cursor.getInt(cursor.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS));
+               stringItemPassword = cursor.getString(cursor.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_PASSWORD));
+               stringItemSalt       = cursor.getString(cursor.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_SALT));
+
+                databaseRecords.add(itemIDIndex);
+                databaseRecords.add(stringItemPassword);
+                databaseRecords.add(stringItemSalt);
             }
+            if(itemIDIndex != -1)
+            {
+                try {
+                    byte[] byteHash = PasswordUtilities.generateHash(password, stringItemSalt, algorithm);
+                    String hashedPw = PasswordUtilities.hexBytes(byteHash);
+
+                    retVal = stringItemPassword.equals(hashedPw);
+                    return retVal;
+
+                }
+                catch(NoSuchAlgorithmException exc)
+                {
+
+                }
+            }
+
+            System.out.println(databaseRecords);
         }
         catch (Error e) {
             // TODO: Something here.
@@ -107,7 +133,7 @@ public class LoginActivity extends Activity {
 
         // If the table is larger than 0 the username is used within the db else it doesn't exist.
         // So its a new user without an account or inputted incorrectly.
-        return itemsIds.size() > 0;
+       return retVal;
     }
 
 }
