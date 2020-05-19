@@ -47,8 +47,9 @@ public class InputValidation {
 
     /**
      * Check if the supplied String matches the following constraints:
+     *      - BETWEEN X AND Y CHARACTERS
      *      - No numbers.
-     *      - No special characters EXCLUDING - . and '.
+     *      - No special characters.
      *
      * @param name - the name to be validated.
      * @return - true if it meets the constraints, false otherwise.

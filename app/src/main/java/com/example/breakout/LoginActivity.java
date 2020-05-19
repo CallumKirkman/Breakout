@@ -2,40 +2,112 @@ package com.example.breakout;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.example.account_res.*;
 
-
 public class LoginActivity extends Activity {
+
+    private SQLiteDatabase mDatabase;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        TextView createAccountLink = findViewById(R.id.createAccountLink);
+        UserDBHelper dbHelper = new UserDBHelper(this);
+        mDatabase = dbHelper.getReadableDatabase();
 
+        TextView createAccountLink = findViewById(R.id.createAccountLink);
         createAccountLink.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Launch CreateAccountActivity from text link.
-                startActivity(new Intent(getBaseContext(), CreateAccountActivity.class));
+                startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
             }
         });
     }
 
 
+    /**
+     * The login button. Check user input, look for the account.
+     * If the account exists, log the user in and display the song player.
+     *
+     * @param view - view.
+     */
     public void onClickLogin(View view) {
-        // Get email, password.
-        EditText email = findViewById(R.id.enterEmail);
+        EditText e = findViewById(R.id.enterEmail);
         EditText p = findViewById(R.id.enterPassword);
 
-        Intent login = new Intent(this, PlayerActivity.class);
-        startActivity(login);
+        // Check if the email entered is a registered account and the password is correct.
+        if (checkLoginCreds(e.getText().toString(), p.getText().toString())) {
+            startActivity(new Intent(this, PlayerActivity.class));
+        }
+        else {
+            Toast.makeText(LoginActivity.this, "Incorrect Details", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    /**
+     * Check the user input to see if the account exists and the password is correct.
+     *
+     * @param userEmail - the entered email address.
+     * @param password - the entered password.
+     * @return - true if the account exists and the password is correct, false otherwise.
+     */
+    private boolean checkLoginCreds(String userEmail, String password) {
+        String[] projection = {
+                UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS,
+                UserDBContract.UserEntry.COLUMN_PASSWORD, UserDBContract.UserEntry.COLUMN_SALT };
+
+        String selection = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " LIKE ? ";
+
+        String[] selectionArgs = {userEmail};
+
+        // Sorting the results.
+        String sortOrder = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " DESC";
+
+        try (Cursor cursor = mDatabase.query(
+                UserDBContract.UserEntry.TABLE_NAME,    // Table to query
+                projection,                             // The array of columns to return
+                selection,                              // The columns for the WHERE clause
+                selectionArgs,                          // The values for the WHERE clause
+                null,                                   // Don't group the rows
+                null,                                   // Don't filter by the row groups
+                sortOrder)) {                           // Order to sort
+
+            String storedPassword = null;
+            String storedSalt = null;
+
+            // Query should give only 1 response - assuming emails are unique.
+            while(cursor.moveToNext()) {
+                storedPassword = cursor.getString(cursor.getColumnIndex(UserDBContract.UserEntry.COLUMN_PASSWORD));
+                storedSalt = cursor.getString(cursor.getColumnIndex(UserDBContract.UserEntry.COLUMN_SALT));
+            }
+            // Account exists. Check that the passwords are the same.
+            if(storedPassword != null) {
+                try {
+                    byte[] byteHash = PasswordUtilities.generateHash(password, storedSalt, "SHA-256");
+                    String hash = PasswordUtilities.hexBytes(byteHash);
+                    return hash.equals(storedPassword);
+                }
+                // Fail Condition. Keep the algorithm hard-coded.
+                catch(NoSuchAlgorithmException exc) { return false; }
+            }
+            // No account found.
+            else { return false; }
+        }
     }
 }
