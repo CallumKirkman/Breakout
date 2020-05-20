@@ -1,6 +1,6 @@
 package com.example.breakout;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import com.example.account_res.InputValidation;
 import com.example.account_res.PasswordUtilities;
 
 
-public class CreateAccountActivity extends AppCompatActivity {
+public class CreateAccountActivity extends Activity {
 
     private SQLiteDatabase mDatabase;
     private SQLiteDatabase mReadDatabase;
@@ -44,7 +43,6 @@ public class CreateAccountActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.account_creation);
         setContentView(R.layout.activity_create_account);
 
         // TODO: Add popup for viewing password constraints.
@@ -55,6 +53,10 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     }
 
+
+    public void onClickReturn(View view) {
+        startActivity(new Intent(this, LoginActivity.class));
+    }
 
     public void onClickTerms(View view) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
