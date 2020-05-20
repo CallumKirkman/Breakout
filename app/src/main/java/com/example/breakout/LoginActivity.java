@@ -73,7 +73,9 @@ public class LoginActivity extends Activity {
     private boolean checkLoginCreds(String userEmail, String password) {
 
         // TODO: Check the password is correct against the stored password.
-        boolean retVal = false;
+
+        boolean retVal = false;// Return value
+
         String[] projection = {
                 UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS,
                 UserDBContract.UserEntry.COLUMN_PASSWORD, UserDBContract.UserEntry.COLUMN_SALT };
@@ -123,6 +125,7 @@ public class LoginActivity extends Activity {
 
                 }
             }
+
 
             System.out.println(databaseRecords);
         }
