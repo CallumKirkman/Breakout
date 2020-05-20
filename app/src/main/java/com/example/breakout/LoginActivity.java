@@ -11,17 +11,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.account_res.*;
-
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.account_res.*;
 
 public class LoginActivity extends Activity {
 
     private SQLiteDatabase mDatabase;
-    private final String algorithm = "SHA-256";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,8 +28,8 @@ public class LoginActivity extends Activity {
 
         UserDBHelper dbHelper = new UserDBHelper(this);
         mDatabase = dbHelper.getReadableDatabase();
-        TextView createAccountLink = findViewById(R.id.createAccountLink);
 
+        TextView createAccountLink = findViewById(R.id.createAccountLink);
         createAccountLink.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,33 +47,27 @@ public class LoginActivity extends Activity {
      * @param view - view.
      */
     public void onClickLogin(View view) {
-        // Input
         EditText e = findViewById(R.id.enterEmail);
         EditText p = findViewById(R.id.enterPassword);
 
-        // Check if the email entered is a registered account.
+        // Check if the email entered is a registered account and the password is correct.
         if (checkLoginCreds(e.getText().toString(), p.getText().toString())) {
             startActivity(new Intent(this, PlayerActivity.class));
         }
         else {
-            Toast.makeText(LoginActivity.this, "Account Not Found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Incorrect Details", Toast.LENGTH_SHORT).show();
         }
     }
 
 
     /**
-     * Check the user input to see if the account exists.
+     * Check the user input to see if the account exists and the password is correct.
      *
      * @param userEmail - the entered email address.
      * @param password - the entered password.
      * @return - true if the account exists and the password is correct, false otherwise.
      */
     private boolean checkLoginCreds(String userEmail, String password) {
-
-        // TODO: Check the password is correct against the stored password.
-
-        boolean retVal = false;// Return value
-
         String[] projection = {
                 UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS,
                 UserDBContract.UserEntry.COLUMN_PASSWORD, UserDBContract.UserEntry.COLUMN_SALT };
@@ -87,56 +79,35 @@ public class LoginActivity extends Activity {
         // Sorting the results.
         String sortOrder = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " DESC";
 
-        List databaseRecords = new ArrayList<>();
-
         try (Cursor cursor = mDatabase.query(
                 UserDBContract.UserEntry.TABLE_NAME,    // Table to query
-                projection,                        // The array of columns to return
-                selection,                         // The columns for the WHERE clause
-                selectionArgs,                     // The values for the WHERE clause
+                projection,                             // The array of columns to return
+                selection,                              // The columns for the WHERE clause
+                selectionArgs,                          // The values for the WHERE clause
                 null,                                   // Don't group the rows
                 null,                                   // Don't filter by the row groups
                 sortOrder)) {                           // Order to sort
-            int itemIDIndex = -1 ;
-            String stringItemPassword="";
-            String stringItemSalt="";
 
-            while (cursor.moveToNext()) {
-               itemIDIndex = cursor.getInt(cursor.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS));
-               stringItemPassword = cursor.getString(cursor.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_PASSWORD));
-               stringItemSalt       = cursor.getString(cursor.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_SALT));
+            String storedPassword = null;
+            String storedSalt = null;
 
-                databaseRecords.add(itemIDIndex);
-                databaseRecords.add(stringItemPassword);
-                databaseRecords.add(stringItemSalt);
+            // Query should give only 1 response - assuming emails are unique.
+            while(cursor.moveToNext()) {
+                storedPassword = cursor.getString(cursor.getColumnIndex(UserDBContract.UserEntry.COLUMN_PASSWORD));
+                storedSalt = cursor.getString(cursor.getColumnIndex(UserDBContract.UserEntry.COLUMN_SALT));
             }
-            if(itemIDIndex != -1)
-            {
+            // Account exists. Check that the passwords are the same.
+            if(storedPassword != null) {
                 try {
-                    byte[] byteHash = PasswordUtilities.generateHash(password, stringItemSalt, algorithm);
-                    String hashedPw = PasswordUtilities.hexBytes(byteHash);
-
-                    retVal = stringItemPassword.equals(hashedPw);
-                    return retVal;
-
+                    byte[] byteHash = PasswordUtilities.generateHash(password, storedSalt, "SHA-256");
+                    String hash = PasswordUtilities.hexBytes(byteHash);
+                    return hash.equals(storedPassword);
                 }
-                catch(NoSuchAlgorithmException exc)
-                {
-
-                }
+                // Fail Condition. Keep the algorithm hard-coded.
+                catch(NoSuchAlgorithmException exc) { return false; }
             }
-
-
-            System.out.println(databaseRecords);
+            // No account found.
+            else { return false; }
         }
-        catch (Error e) {
-            // TODO: Something here.
-            System.out.println(e);
-        }
-
-        // If the table is larger than 0 the username is used within the db else it doesn't exist.
-        // So its a new user without an account or inputted incorrectly.
-       return retVal;
     }
-
 }
