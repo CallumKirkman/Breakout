@@ -136,11 +136,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         return itemsIds.size() > 0;
     }
 
-
-
-
-
-
     private void getUserInput() {
         forenameInput = (EditText) findViewById(R.id.enterForename);
         surnameInput = findViewById(R.id.enterSurname);

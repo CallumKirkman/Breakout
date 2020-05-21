@@ -3,6 +3,7 @@ package com.example.breakout
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.os.CpuUsageInfo
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -16,6 +17,8 @@ import com.spotify.android.appremote.api.Connector.ConnectionListener
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.protocol.types.Track
 import kotlinx.android.synthetic.main.activity_player.*
+
+import com.example.breakout.SavingSongToDB;
 
 
 class PlayerActivity : AppCompatActivity() {
@@ -158,6 +161,10 @@ class PlayerActivity : AppCompatActivity() {
         // If not added?
         // Add to favourite songs
         //spotifyAppRemote!!.userApi.addToLibrary("Current Song")
+        val song_uri:String = ""// temp place holder
+        val image_uri:String = ""// temp palce holder
+       SavingSongToDB.saveLikedSong(songName, 1, artistName, song_uri, image_uri);
+
     }
 
     fun dislikeButtonClick(view: View) {
@@ -167,6 +174,8 @@ class PlayerActivity : AppCompatActivity() {
         dislikeAnimation?.start()
         // Remove from play list?
         //spotifyAppRemote!!.userApi.removeFromLibrary("Current Song")
+        SavingSongToDB.saveDislikedSong()
+
     }
 
 
@@ -205,4 +214,9 @@ class PlayerActivity : AppCompatActivity() {
         }
         false
     }
+
+
+
+
+
 }
