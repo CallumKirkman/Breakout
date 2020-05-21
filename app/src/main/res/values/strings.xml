@@ -12,7 +12,7 @@
     <string name="login_button">Login</string>
     <string name="create_account_button">Create</string>
     <string name="account_creation">Account Creation</string>
-    <string name="version_history">Version History</string>
+    <string name="changelog">Changelog</string>
     <string name="terms_link">I have read and accept the <u>Terms and Conditions</u></string>
     <string name="close_terms_button">Close></string>
 
@@ -27,7 +27,6 @@
 
     <!-- Long Text -->
     <string name="terms">
-
     Consequatur quam eum labore corrupti fuga odit rerum ab. Molestiae vitae accusantium voluptatem. Quaerat sequi unde iusto ut. Blanditiis ut vitae dignissimos nisi deleniti. Hic reprehenderit sint qui vitae expedita.
 
     Nisi qui enim sint praesentium veniam dolorum est. Minus ut earum inventore consectetur nesciunt tempora vitae sunt. Consequatur facere fugiat id repudiandae velit vitae pariatur non. Excepturi blanditiis eaque ut. Veritatis corrupti doloribus modi saepe amet dolorum nulla.
@@ -49,6 +48,32 @@
     </string>
 
     <string name="password_help">- Between 8 and 40 characters\n- Contain a lowercase character\n- Contain an uppercase character\n- Contain a number\n- Contain a special character [ @ # $ % ! . ]</string>
+
+
+    <string name="changelog_content">
+        <b>May 21, 2020</b>\n- Some visual updates.
+        \n\n
+        <b>May 17, 2020</b>\n- Terms and Conditions.
+        \n\n
+        <b>May 16, 2020</b>\n- Database and account integration.
+        \n\n
+        <b>May 14, 2020</b>\n- Added the shop and settings pages. Some visual tweaks.
+        \n\n
+        <b>May 11, 2020</b>\n- Improved the audio player. Some layout changes.
+        \n\n
+        <b>May 9, 2020</b>\n- Security update.
+        \n\n
+        <b>May 8, 2020</b>\n- Added the audio player.
+        \n\n
+        <b>May 6, 2020</b>\n- Added login and create account pages.
+        \n\n
+        <b>May 4, 2020</b>\n- Spotify account integration.
+        \n\n
+        <b>Apr 21, 2020</b>\n- The beginning!
+        \n\n
+    </string>
+
+
 
 
 </resources>
