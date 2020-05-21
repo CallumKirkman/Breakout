@@ -7,9 +7,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
-class SongsAdapter(private val songs: List<String>) : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
+class SongsAdapter(private val songs: List<String>, var clickListener: OnSongClickListener) : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
 
     var filteredSongs = songs
+
+    interface OnSongClickListener {
+        fun onSongClick(songs: String, position: Int) {
+        }
+    }
+
 
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
@@ -17,6 +23,14 @@ class SongsAdapter(private val songs: List<String>) : RecyclerView.Adapter<Songs
         // Your holder should contain and initialize a member variable
         // for any view that will be set as you render a row
         val songText: TextView = itemView.findViewById(R.id.songName)
+
+        fun clickAction(songs: String, action: OnSongClickListener) {
+            songText.text = songs
+
+            itemView.setOnClickListener {
+                action.onSongClick(songs, adapterPosition)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongsAdapter.ViewHolder {
@@ -33,11 +47,8 @@ class SongsAdapter(private val songs: List<String>) : RecyclerView.Adapter<Songs
     }
 
     override fun onBindViewHolder(holder: SongsAdapter.ViewHolder, position: Int) {
-        // Get the data model based on position
-        val song = filteredSongs[position]
-        // Set item views based on your views and data model
-        val textView = holder.songText
-        textView.text = song
+
+        holder.clickAction(filteredSongs[position], clickListener)
     }
 
     fun filter(newText: String) {
