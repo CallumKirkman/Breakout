@@ -24,7 +24,7 @@
         <activity
             android:name=".PlayerActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".VersionHistoryActivity"
+        <activity android:name=".ChangelogActivity"
             android:parentActivityName=".SettingsActivity"/>
     </application>
 

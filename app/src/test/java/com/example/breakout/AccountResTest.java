@@ -10,7 +10,7 @@ import com.example.account_res.*;
 /**
  * Test class for testing the account-res module.
  */
-class TestAccountRes {
+class AccountResTest {
 
     /**
      * Test the email regex on valid email addresses.

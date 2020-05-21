@@ -28,8 +28,10 @@
         android:layout_marginTop="8dp"
         android:autofillHints="password"
         android:ems="10"
+        android:fontFamily="monospace"
         android:hint="@string/enter_confirm_password"
         android:inputType="textPassword"
+        android:typeface="monospace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enterPassword" />
@@ -40,10 +42,12 @@
         android:layout_height="67dp"
         android:layout_marginBottom="48dp"
         android:background="@color/colorPrimaryDark"
+        android:fontFamily="monospace"
         android:onClick="onClickLogin"
         android:text="@string/create_account_button"
         android:textColor="@color/textColorAlt"
         android:textSize="18sp"
+        android:typeface="monospace"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -55,8 +59,10 @@
         android:layout_marginTop="8dp"
         android:autofillHints="surname"
         android:ems="10"
+        android:fontFamily="monospace"
         android:hint="@string/enter_surname"
         android:inputType="textPersonName"
+        android:typeface="monospace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enterForename" />
@@ -68,8 +74,10 @@
         android:layout_marginTop="56dp"
         android:autofillHints="forename"
         android:ems="10"
+        android:fontFamily="monospace"
         android:hint="@string/enter_forename"
         android:inputType="textPersonName"
+        android:typeface="monospace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -81,8 +89,10 @@
         android:layout_marginTop="8dp"
         android:autofillHints="email"
         android:ems="10"
+        android:fontFamily="monospace"
         android:hint="@string/enter_email"
         android:inputType="textEmailAddress"
+        android:typeface="monospace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enterSurname" />
@@ -94,8 +104,10 @@
         android:layout_marginTop="8dp"
         android:autofillHints="password"
         android:ems="10"
+        android:fontFamily="monospace"
         android:hint="@string/enter_password"
         android:inputType="textPassword"
+        android:typeface="monospace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enterEmail" />
@@ -110,5 +122,16 @@
         android:onClick="onClickPasswordHelp"
         app:layout_constraintEnd_toStartOf="@+id/enterPassword"
         app:layout_constraintTop_toTopOf="@+id/enterPassword" />
+
+    <Button
+        android:id="@+id/returnToLogin"
+        android:layout_width="43dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/ic_arrow_back_black"
+        android:onClick="onClickReturn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

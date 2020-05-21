@@ -1,54 +1,71 @@
 package com.example.breakout
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_song.*
 
+const val GENRE = "com.example.breakout.GENRE"
 
-class SongFragment : Fragment() {
+class SongFragment : Fragment(), SongsAdapter.OnSongClickListener{
 
-    lateinit var genreList : RecyclerView //.Adapter<RecyclerView.ViewHolder>
-    var genre:MutableList<String> = ArrayList()
-    var displayList:MutableList<String> = ArrayList()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        loadData()
+        val searchView = view.findViewById<SearchView>(R.id.searchBar)
+        val genreList = view.findViewById<RecyclerView>(R.id.songList)
 
-        val searchItem = searchBar.query as SearchView
-        genreList.layoutManager = GridLayoutManager(context, genre.count())
+        val genres = listOf("Pop", "Dance pop", "Rap", "Pop rap", "Post-teen pop", "Rock", "Latin",
+            "Hip hop", "Trap", "Modern rock", "Electronic dance music", "Pop rock", "Tropical house",
+            "Reggaeton", "Melodic rap", "Electropop", "Latin pop", "Classic rock", "Soft rock",
+            "Southern hip hop", "Post-grunge", "Indie pop", "Alternative metal", "Metal",
+            "Permanent wave", "R&B", "Neo mellow", "Contemporary country", "Canadian pop",
+            "Electro house", "Contemporary", "Alternative rock", "Hard rock",
+            "Folk rock", "Nu metal", "K-pop", "Country", "Grupera", "Trap Latino",
+            "Spanish rock", "Adult standards", "Urban", "Alternative hip hop",
+            "German hip hop", "Indietronica", "Gangster rap", "Regional Mexican", "Big room",
+            "Indie rock", "Latin hip hop", "Underground hip hop", "Art rock", "Banda", "Euro pop",
+            "Dance rock", "Reggae", "Country rock", "Soul", "Blues", "Jazz",
+            "Funk", "Spanish dance", "Film", "Video game")
 
+        val adapter = SongsAdapter(genres, this)
+        genreList.adapter = adapter
 
-        //abstract class Adapter<VH : RecyclerView.ViewHolder>
-        //genreList.adapter
+        genreList.layoutManager = LinearLayoutManager(context)
+        genreList.itemAnimator = DefaultItemAnimator()
 
-
-        searchItem.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                println("Testing2 $query")
-                return true
+                // Give to player
+                return false
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapter.filter(newText)
+                return false
             }
         })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_song, container, false)
     }
 
-    private fun loadData() {
+    override fun onSongClick(songs: String, position: Int) {
+        super.onSongClick(songs, position)
+        //Intent to player
+        val intent = Intent(context, PlayerActivity::class.java).apply {
+            putExtra(GENRE, songs)
+        }
 
+        context?.startActivity(intent)
     }
 }

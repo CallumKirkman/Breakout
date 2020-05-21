@@ -20,7 +20,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onOptionsItemSelected(item)
 
         if(item.itemId == R.id.versionHistory) {
-            startActivity(Intent(this, VersionHistoryActivity::class.java))
+            startActivity(Intent(this, ChangelogActivity::class.java))
         }
         return true
     }
