@@ -1,9 +1,10 @@
 package com.example.breakout
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
+import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
@@ -62,5 +63,36 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
         false
+    }
+
+
+    fun onAccountClick(view: View) {
+        val intent = Intent(this, AccountActivity::class.java)
+
+        startActivity(intent)
+    }
+
+    fun onTermsClick(view: View) {
+        val inflater = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+        val popupView = inflater.inflate(R.layout.popup_terms, null)
+
+
+        val popupWidth = 700
+        val popupHeight = 900
+        val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
+
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+    }
+
+    fun onLogoutClick(view: View) {
+        // Log out THEN
+
+        val intent = Intent(this, LoginActivity::class.java)
+
+        startActivity(intent)
+    }
+
+    fun onDeleteClick(view: View) {
+        // Delete account
     }
 }

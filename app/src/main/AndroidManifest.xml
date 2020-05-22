@@ -4,28 +4,34 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/app_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/app_logo_round"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ShopActivity"/>
-        <activity android:name=".SettingsActivity"/>
-        <activity android:name=".SongsActivity"/>
+        <activity android:name=".ShopActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".SongsActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".CreateAccountActivity"
-            android:parentActivityName=".LoginActivity"/>
+            android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".PlayerActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ChangelogActivity"
-            android:parentActivityName=".SettingsActivity"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ChangelogActivity"
+            android:parentActivityName=".SettingsActivity" />
+        <activity
+            android:name=".AccountActivity"
+            android:parentActivityName=".SongsActivity" />
     </application>
 
 </manifest>

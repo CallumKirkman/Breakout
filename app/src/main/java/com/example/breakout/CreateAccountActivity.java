@@ -65,23 +65,11 @@ public class CreateAccountActivity extends Activity {
         View popupView = inflater.inflate(R.layout.popup_terms, null);
 
 
-        // TODO: Different popup dimensions depending on screen orientation.
         int popupWidth = 600;
         int popupHeight = 850;
         final PopupWindow popupWindow = new PopupWindow(popupView, popupWidth, popupHeight, true);
 
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-
-        /*
-        popupView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                popupWindow.dismiss();
-                return true;
-            }
-        });
-
-         */
     }
 
 

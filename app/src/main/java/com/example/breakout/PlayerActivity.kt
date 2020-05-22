@@ -1,8 +1,6 @@
 package com.example.breakout
 
-import android.content.ContentValues
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
@@ -13,7 +11,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.breakout.UserDBContract.SongStorage
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector.ConnectionListener
@@ -22,6 +19,7 @@ import com.spotify.protocol.types.Image
 import com.spotify.protocol.types.ImageUri
 import com.spotify.protocol.types.Track
 import kotlinx.android.synthetic.main.activity_player.*
+
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -170,8 +168,6 @@ class PlayerActivity : AppCompatActivity() {
         artistText.text = artistName
     }
 
-
-
     fun likeButtonClick(view: View) {
         val likeButton: ImageView = findViewById(R.id.likeButton)
         likeButton.setBackgroundResource(R.drawable.like_button_flash);
@@ -179,8 +175,7 @@ class PlayerActivity : AppCompatActivity() {
         likeAnimation?.start()
         // If not added?
         // Add to favourite songs
-        //spotifyAppRemote!!.userApi.addToLibrary("Current Song")
-
+        //spotifyAppRemote!!.userApi.addToLibrary(trackLink)
     }
 
     fun dislikeButtonClick(view: View) {
@@ -189,17 +184,14 @@ class PlayerActivity : AppCompatActivity() {
         val dislikeAnimation = dislikeButton.background as AnimationDrawable?
         dislikeAnimation?.start()
         // Remove from play list?
-        //spotifyAppRemote!!.userApi.removeFromLibrary("Current Song")
-
-        //SavingSongToDB.saveDislikedSong(songName, 0, artistName, trackLink, imageUri);
-
+        //spotifyAppRemote!!.userApi.removeFromLibrary(trackLink)
     }
+
 
     // Navigation Bar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
-
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNavigation.setOnNavigationItemSelectedListener(bottomNav)
@@ -315,10 +307,4 @@ class PlayerActivity : AppCompatActivity() {
         val artistText: TextView = findViewById(R.id.textAtristName)
         artistText.text = artistName
     }
-
-
-
-
-
-
 }
