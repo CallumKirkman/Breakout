@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.example.breakout.adapters.PageAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import java.util.*
@@ -36,7 +37,11 @@ class SongsActivity : AppCompatActivity() {
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Favourites"))
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Disliked"))
 
-        val adapter = PageAdapter(this, supportFragmentManager, tabLayout!!.tabCount)
+        val adapter = PageAdapter(
+            this,
+            supportFragmentManager,
+            tabLayout!!.tabCount
+        )
         viewpager!!.adapter = adapter
 
         viewpager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))

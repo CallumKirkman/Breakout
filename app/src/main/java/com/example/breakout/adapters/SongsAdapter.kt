@@ -1,10 +1,11 @@
-package com.example.breakout
+package com.example.breakout.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.breakout.R
 import java.util.*
 
 class SongsAdapter(private val songs: List<String>, var clickListener: OnSongClickListener) : RecyclerView.Adapter<SongsAdapter.ViewHolder>() {
@@ -17,11 +18,8 @@ class SongsAdapter(private val songs: List<String>, var clickListener: OnSongCli
     }
 
 
-    // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
-        // Your holder should contain and initialize a member variable
-        // for any view that will be set as you render a row
+
         val songText: TextView = itemView.findViewById(R.id.songName)
 
         fun clickAction(songs: String, action: OnSongClickListener) {
@@ -33,7 +31,7 @@ class SongsAdapter(private val songs: List<String>, var clickListener: OnSongCli
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongsAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         // Inflate the custom layout
@@ -46,7 +44,7 @@ class SongsAdapter(private val songs: List<String>, var clickListener: OnSongCli
         return filteredSongs.size
     }
 
-    override fun onBindViewHolder(holder: SongsAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.clickAction(filteredSongs[position], clickListener)
     }

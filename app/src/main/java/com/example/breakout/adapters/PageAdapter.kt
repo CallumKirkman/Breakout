@@ -1,9 +1,12 @@
-package com.example.breakout
+package com.example.breakout.adapters
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.example.breakout.fragments.DislikeFragment
+import com.example.breakout.fragments.FavouriteFragment
+import com.example.breakout.fragments.SongFragment
 
 class PageAdapter (private val context: Context, fm: FragmentManager, private var totalTabs: Int) : FragmentPagerAdapter(fm) {
 

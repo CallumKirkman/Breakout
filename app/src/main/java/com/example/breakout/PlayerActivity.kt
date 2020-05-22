@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.breakout.fragments.GENRE
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector.ConnectionListener
@@ -97,7 +98,6 @@ class PlayerActivity : AppCompatActivity() {
             albumCover = track.album.toString()
             length = track.duration.toString()
             imageUri = track.imageUri
-            println("Getting $imageUri")
             trackLink = track.uri
         }
     }
@@ -226,7 +226,6 @@ class PlayerActivity : AppCompatActivity() {
 
 
     private fun playGenre(genre: String) {
-        println("Genre selected")
         when (genre) {
             "Pop" -> spotifyAppRemote!!.playerApi.play("spotify:playlist:03Wky4J3HehgLEqgkYmia6")
             "Dance pop" -> spotifyAppRemote!!.playerApi.play("spotify:playlist:37i9dQZF1DWZQaaqNMbbXa")

@@ -1,4 +1,4 @@
-package com.example.breakout
+package com.example.breakout.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,8 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.breakout.PlayerActivity
+import com.example.breakout.R
+import com.example.breakout.adapters.SongsAdapter
 
-const val GENRE = "com.example.breakout.GENRE"
+const val GENRE = "com.example.breakout.fragments.GENRE"
 
 class SongFragment : Fragment(), SongsAdapter.OnSongClickListener{
 
