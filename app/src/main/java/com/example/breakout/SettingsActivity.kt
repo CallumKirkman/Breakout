@@ -1,19 +1,15 @@
 package com.example.breakout
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Toast
+import android.view.*
+import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.breakout.adapters.SettingsAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
 
-class SettingsActivity : AppCompatActivity(), SettingsAdapter.OnSettingClickListener {
+class SettingsActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
@@ -43,17 +39,6 @@ class SettingsActivity : AppCompatActivity(), SettingsAdapter.OnSettingClickList
         val menu: Menu = bottomNavigation.menu
         val menuItem: MenuItem = menu.getItem(0)
         menuItem.isChecked = true
-
-
-        val settingList = findViewById<RecyclerView>(R.id.settingsList)
-
-        val settings = listOf("Name", "Second name", "Email", "Password", "Logout")
-
-        val adapter = SettingsAdapter(settings, this)
-        settingList.adapter = adapter
-
-        settingList.layoutManager = LinearLayoutManager(this)
-        settingList.itemAnimator = DefaultItemAnimator()
     }
 
     private val bottomNav = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -80,9 +65,34 @@ class SettingsActivity : AppCompatActivity(), SettingsAdapter.OnSettingClickList
         false
     }
 
-    override fun onSettingClick(setting: String, position: Int) {
-        super.onSettingClick(setting, position)
 
-        Toast.makeText(applicationContext, setting, Toast.LENGTH_SHORT).show()
+    fun onAccountClick(view: View) {
+        val intent = Intent(this, AccountActivity::class.java)
+
+        startActivity(intent)
+    }
+
+    fun onTermsClick(view: View) {
+        val inflater = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+        val popupView = inflater.inflate(R.layout.popup_terms, null)
+
+
+        val popupWidth = 700
+        val popupHeight = 900
+        val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
+
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+    }
+
+    fun onLogoutClick(view: View) {
+        // Log out THEN
+
+        val intent = Intent(this, LoginActivity::class.java)
+
+        startActivity(intent)
+    }
+
+    fun onDeleteClick(view: View) {
+        // Delete account
     }
 }
