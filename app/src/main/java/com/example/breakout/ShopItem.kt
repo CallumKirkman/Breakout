@@ -2,11 +2,11 @@ package com.example.breakout
 
 class ShopItem {
 
-    var offers: Int ? = 0
-    var name: String ? = null
+    var offer: Int ? = 0
+    var price: String ? = null
 
-    constructor(offers: Int?, name: String?) {
-        this.offers = offers
-        this.name = name
+    constructor(offer: Int?, price: String?) {
+        this.offer = offer
+        this.price = price
     }
 }

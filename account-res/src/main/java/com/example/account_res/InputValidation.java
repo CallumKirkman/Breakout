@@ -17,7 +17,7 @@ public class InputValidation {
      * @return - true if it meets the regex, false otherwise.
      */
     public static boolean validateEmail(String email) {
-        String emailRegex ="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$" ;
+        String emailRegex ="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
 
@@ -58,6 +58,54 @@ public class InputValidation {
         String nameRegex = "^[a-zA-Z \\-.\']*$";
         Pattern pattern = Pattern.compile(nameRegex);
         Matcher matcher = pattern.matcher(name);
+
+        return matcher.matches();
+    }
+
+
+    /**
+     * Check if the supplied String is 16 numbers
+     *
+     * @param number - the number to validate
+     * @return - true if it meets the constraints, false otherwise.
+     */
+    public static boolean validateCard(String number) {
+        String numberRegex = "^(?:(?<visa>4[0-9]{12}(?:[0-9]{3})?)|\n" +
+                "\t\t(?<mastercard>5[1-5][0-9]{14})|\n" +
+                "\t\t(?<discover>6(?:011|5[0-9]{2})[0-9]{12})|\n" +
+                "\t\t(?<amex>3[47][0-9]{13})|\n" +
+                "\t\t(?<diners>3(?:0[0-5]|[68][0-9])?[0-9]{11})|\n" +
+                "\t\t(?<jcb>(?:2131|1800|35[0-9]{3})[0-9]{11}))$";
+        Pattern pattern = Pattern.compile(numberRegex);
+        Matcher matcher = pattern.matcher(number);
+
+        return matcher.matches();
+    }
+
+
+    /**
+     * Check if the supplied String is 3 numbers
+     * @param number - the number to validate
+     * @return - true if it meets the constraints, false otherwise.
+     */
+    public static boolean validateCVV(String number) {
+        String numberRegex = "[0-9]{3,4}";
+        Pattern pattern = Pattern.compile(numberRegex);
+        Matcher matcher = pattern.matcher(number);
+
+        return matcher.matches();
+    }
+
+
+    /**
+     * Check if the supplied String is the correct date format
+     * @param number - the number to validate
+     * @return - true if it meets the constraints, false otherwise.
+     */
+    public static boolean validateDate(String number) {
+        String numberRegex = "^(0[1-9]|1[0-2])\\/?([0-9]{4}|[0-9]{2})$";
+        Pattern pattern = Pattern.compile(numberRegex);
+        Matcher matcher = pattern.matcher(number);
 
         return matcher.matches();
     }

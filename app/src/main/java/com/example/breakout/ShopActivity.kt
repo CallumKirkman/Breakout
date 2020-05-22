@@ -1,14 +1,12 @@
 package com.example.breakout
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.AdapterView
-import android.widget.GridView
-import android.widget.Toast
+import android.view.*
+import android.widget.*
+import com.example.account_res.InputValidation
 import com.example.breakout.adapters.ShopAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
@@ -16,7 +14,17 @@ import kotlin.collections.ArrayList
 
 class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
+    //Pull from database
+    private var totalCurrency: Int = 0
+
+    private var price: Int = 0
     private var offers: ArrayList<ShopItem> ? = null
+
+    private var popupView: View ? = null
+
+    private var cardNumber: String = ""
+    private var expiryDate: String = ""
+    private var CVV: String = ""
 
     // Navigation Bar
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,26 +78,58 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
         var offers: ArrayList<ShopItem> = ArrayList()
 
-        offers.add(ShopItem(R.drawable.unknown_image, "1"))
-        offers.add(ShopItem(R.drawable.unknown_image, "2"))
-        offers.add(ShopItem(R.drawable.unknown_image, "3"))
-        offers.add(ShopItem(R.drawable.unknown_image, "4"))
         offers.add(ShopItem(R.drawable.unknown_image, "5"))
-        offers.add(ShopItem(R.drawable.unknown_image, "6"))
-        offers.add(ShopItem(R.drawable.unknown_image, "7"))
-        offers.add(ShopItem(R.drawable.unknown_image, "8"))
-        offers.add(ShopItem(R.drawable.unknown_image, "9"))
         offers.add(ShopItem(R.drawable.unknown_image, "10"))
-        offers.add(ShopItem(R.drawable.unknown_image, "11"))
-        offers.add(ShopItem(R.drawable.unknown_image, "12"))
+        offers.add(ShopItem(R.drawable.unknown_image, "15"))
+        offers.add(ShopItem(R.drawable.unknown_image, "20"))
+        offers.add(ShopItem(R.drawable.unknown_image, "25"))
+        offers.add(ShopItem(R.drawable.unknown_image, "40"))
+        offers.add(ShopItem(R.drawable.unknown_image, "60"))
+        offers.add(ShopItem(R.drawable.unknown_image, "80"))
+        offers.add(ShopItem(R.drawable.unknown_image, "100"))
+        offers.add(ShopItem(R.drawable.unknown_image, "120"))
 
         return offers
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
-        //Buy it
+        val inflater = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+        popupView = inflater.inflate(R.layout.popup_payment, null)
+
+        val popupWidth = 1000
+        val popupHeight = 600
+        val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+
         var item: ShopItem = offers!![position]
-        Toast.makeText(applicationContext, item.name, Toast.LENGTH_SHORT).show()
+
+        price = item.price!!.toInt()
+//        Toast.makeText(applicationContext, item.price, Toast.LENGTH_SHORT).show()
+    }
+
+    // Give button on click
+    fun onPurchaseClick(view: View) {
+
+        cardNumber = popupView?.findViewById<EditText>(R.id.cardNumber)?.text.toString()
+        expiryDate = popupView?.findViewById<EditText>(R.id.expiryDate)?.text.toString()
+        CVV = popupView?.findViewById<EditText>(R.id.CVV)?.text.toString()
+
+//        println("Car number $cardNumber")
+//        println("Date $expiryDate")
+//        println("CVV $CVV")
+
+        if (!InputValidation.validateCard(cardNumber)) {
+            Toast.makeText(this.application, "Invalid Card Number", Toast.LENGTH_SHORT).show()
+        } else if (!InputValidation.validateCVV(CVV)) {
+            Toast.makeText(this.application, "Invalid CVV", Toast.LENGTH_SHORT).show()
+        } else if (!InputValidation.validateDate(expiryDate)) {
+            Toast.makeText(this.application, "Invalid Date", Toast.LENGTH_SHORT).show()
+        }
+        else {
+            totalCurrency = totalCurrency.plus(price)
+//            println("Total price is $totalCurrency")
+            // Lower keyboard
+        }
     }
 }
