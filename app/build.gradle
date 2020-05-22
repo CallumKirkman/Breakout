@@ -46,16 +46,26 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+
+    //---------- Testing ----------/
+
+    // JUnit
     testImplementation 'junit:junit:4.12'
     testImplementation "org.junit.jupiter:junit-jupiter:5.5.2"
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.5.2"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 
-    // Testing
+    // Espresso
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.google.android.material:material:1.1.0'
+    testImplementation 'com.android.support.test:runner:1.0.2'
 
+    implementation 'com.google.android.material:material:1.1.0'
     implementation 'com.android.support:design:29.0.0'
 }
