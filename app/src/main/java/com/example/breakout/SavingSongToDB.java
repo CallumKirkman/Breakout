@@ -4,18 +4,22 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import com.example.breakout.UserDBContract.*;
+import com.spotify.protocol.types.ImageUri;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 class SavingSongToDB extends AppCompatActivity {
-
 
     private static SQLiteDatabase mDatabase;
 
@@ -25,35 +29,33 @@ class SavingSongToDB extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.account_creation);
         setContentView(R.layout.activity_create_account);
 
-        // TODO: Add popup for viewing password constraints.
         UserDBHelper dbHelper = new UserDBHelper(this);
         mDatabase = dbHelper.getWritableDatabase();
 
-
     }
 
-    public static void saveLikedSong(String song_name, int song_like, String artist_name, String song_uri, String image_uri ) {
 
+//
+//    public static void saveLikedSong(String song_name, int song_like, String artist_name, String song_uri, String image_uri) {
+//
+//        }
+//        catch (Error error) {
+//
+//        }
+//        return true;
+//    }
 
-
-
-        ContentValues cV = new ContentValues();
-        cV.put(SongStorage.COLUMN_SONG_NAME, song_name);
-        cV.put(SongStorage.COLUMN_SONG_LIKE, song_like);
-        cV.put(SongStorage.COLUMN_ARTIST_NAME, artist_name);
-        cV.put(SongStorage.COLUMN_SONG_URI, song_uri);
-        cV.put(SongStorage.COLUMN_IMAGE_URI, image_uri);
-
-
-       // mDatabase.insert(UserDBContract.UserEntry.TABLE_NAME, null, cV);
-
-
-    }
-
-    public static void saveDislikedSong() {
-
-
-    }
+//    public static void saveDislikedSong(String song_name, int song_like, String artist_name, String song_uri, ImageUri image_uri) {
+//
+//
+//
+//        try {
+//            mDatabase.insert(SongStorage.TABLE_NAME, null, cV);
+//        }
+//        catch (Error error) {
+//            //return "Failed to like song";
+//        }
+//    }
 
 
 }

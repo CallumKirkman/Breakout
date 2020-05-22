@@ -48,6 +48,7 @@ public class CreateAccountActivity extends Activity {
         // TODO: Add popup for viewing password constraints.
         UserDBHelper dbHelper = new UserDBHelper(this);
         mDatabase = dbHelper.getWritableDatabase();
+        
         mReadDatabase = dbHelper.getReadableDatabase();
         getUserInput();
 

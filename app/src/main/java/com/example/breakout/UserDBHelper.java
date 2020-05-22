@@ -35,7 +35,7 @@ class UserDBHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + SongStorage.TABLE_NAME + " (" +
                         SongStorage.COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
                         SongStorage.COLUMN_SONG_NAME + " TEXT," +
-                        SongStorage.COLUMN_SONG_LIKE + " TEXT," +
+                        SongStorage.COLUMN_SONG_LIKE + " INTEGER," +
                         SongStorage.COLUMN_ARTIST_NAME + " TEXT," +
                         SongStorage.COLUMN_SONG_URI + " TEXT," +
                         SongStorage.COLUMN_IMAGE_URI + " TEXT);";
@@ -56,6 +56,7 @@ class UserDBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_ENTRIES);
         db.execSQL(SQL_CREATE_SONG_ENTRIES);
         db.execSQL(SQL_CREATE_USER_SONGS_ENTRIES);
+        db.execSQL("COMMIT;");
 
 
     }
@@ -63,6 +64,9 @@ class UserDBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + UserEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + SongStorage.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + UserSongs.TABLE_NAME);
+
     }
 
 
