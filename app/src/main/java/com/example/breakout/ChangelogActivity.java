@@ -6,12 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
-public class VersionHistoryActivity extends AppCompatActivity {
+public class ChangelogActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Version History");
-        setContentView(R.layout.activity_version_history);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.changelog);
+        setContentView(R.layout.activity_changelog);
     }
 }
