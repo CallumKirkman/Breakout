@@ -29,25 +29,21 @@ class SavingSongToDB extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.account_creation);
         setContentView(R.layout.activity_create_account);
 
-        UserDBHelper dbHelper = new UserDBHelper(this);
-        mDatabase = dbHelper.getWritableDatabase();
+
 
     }
 
 
-//
-//    public static void saveLikedSong(String song_name, int song_like, String artist_name, String song_uri, String image_uri) {
-//
-//        }
-//        catch (Error error) {
-//
-//        }
-//        return true;
-//    }
 
-//    public static void saveDislikedSong(String song_name, int song_like, String artist_name, String song_uri, ImageUri image_uri) {
-//
-//
+    public static void saveLikedSong(String song_name, String artist_name, String song_uri, String image_uri) {
+
+        //write to song table
+        //write to user songs table with association
+    }
+
+    public static void saveDislikedSong(String song_name, int song_like, String artist_name, String song_uri, ImageUri image_uri) {
+
+
 //
 //        try {
 //            mDatabase.insert(SongStorage.TABLE_NAME, null, cV);
@@ -55,7 +51,7 @@ class SavingSongToDB extends AppCompatActivity {
 //        catch (Error error) {
 //            //return "Failed to like song";
 //        }
-//    }
+    }
 
 
 }

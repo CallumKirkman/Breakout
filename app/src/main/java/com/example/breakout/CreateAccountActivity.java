@@ -74,6 +74,8 @@ public class CreateAccountActivity extends Activity {
 
 
     public void onClickPasswordHelp(View view) {
+
+
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         assert inflater != null;
         View popupView = inflater.inflate(R.layout.popup_password_help, null);
@@ -89,7 +91,6 @@ public class CreateAccountActivity extends Activity {
     private boolean checkUserEmailExists(String userEmail)
     {
         // TODO: Check the password is correct against the stored password.
-
         String[] projection = {
                 UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS};
 

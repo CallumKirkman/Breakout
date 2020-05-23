@@ -1,6 +1,7 @@
 package com.example.breakout;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.account_res.*;
+
+import org.jetbrains.annotations.NotNull;
 
 public class LoginActivity extends Activity {
 
@@ -39,7 +42,6 @@ public class LoginActivity extends Activity {
         });
     }
 
-
     /**
      * The login button. Check user input, look for the account.
      * If the account exists, log the user in and display the song player.
@@ -52,25 +54,25 @@ public class LoginActivity extends Activity {
 
         // Check if the email entered is a registered account and the password is correct.
         if (checkLoginCreds(e.getText().toString(), p.getText().toString())) {
+            //UPDATE CURRENT USER
+            currentUser(e.getText().toString());
             startActivity(new Intent(this, PlayerActivity.class));
-        }
-        else {
+        } else {
             Toast.makeText(LoginActivity.this, "Incorrect Details", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     /**
      * Check the user input to see if the account exists and the password is correct.
      *
      * @param userEmail - the entered email address.
-     * @param password - the entered password.
+     * @param password  - the entered password.
      * @return - true if the account exists and the password is correct, false otherwise.
      */
     private boolean checkLoginCreds(String userEmail, String password) {
         String[] projection = {
                 UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS,
-                UserDBContract.UserEntry.COLUMN_PASSWORD, UserDBContract.UserEntry.COLUMN_SALT };
+                UserDBContract.UserEntry.COLUMN_PASSWORD, UserDBContract.UserEntry.COLUMN_SALT};
 
         String selection = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " LIKE ? ";
 
@@ -92,22 +94,80 @@ public class LoginActivity extends Activity {
             String storedSalt = null;
 
             // Query should give only 1 response - assuming emails are unique.
-            while(cursor.moveToNext()) {
+            while (cursor.moveToNext()) {
                 storedPassword = cursor.getString(cursor.getColumnIndex(UserDBContract.UserEntry.COLUMN_PASSWORD));
                 storedSalt = cursor.getString(cursor.getColumnIndex(UserDBContract.UserEntry.COLUMN_SALT));
             }
             // Account exists. Check that the passwords are the same.
-            if(storedPassword != null) {
+            if (storedPassword != null) {
                 try {
                     byte[] byteHash = PasswordUtilities.generateHash(password, storedSalt, "SHA-256");
                     String hash = PasswordUtilities.hexBytes(byteHash);
                     return hash.equals(storedPassword);
                 }
                 // Fail Condition. Keep the algorithm hard-coded.
-                catch(NoSuchAlgorithmException exc) { return false; }
+                catch (NoSuchAlgorithmException exc) {
+                    return false;
+                }
             }
             // No account found.
-            else { return false; }
+            else {
+                return false;
+            }
         }
     }
+
+    private void currentUser(String email) {
+        String[] projection = {
+                UserDBContract.CurrentUser.COLUMN_USER_EMAIL};
+
+        String selection = UserDBContract.CurrentUser.COLUMN_USER_EMAIL +
+                " LIKE ? ";
+
+        String[] selectionArgs = {email};
+
+        // Sorting the results.
+        String sortOrder = UserDBContract.CurrentUser.COLUMN_USER_EMAIL + " DESC";
+
+        List itemsIds = new ArrayList<>();
+
+        String currentUser= "";
+        try (Cursor cursor = mDatabase.query(
+                UserDBContract.CurrentUser.TABLE_NAME,    // Table to query
+                projection,                        // The array of columns to return
+                selection,                         // The columns for the WHERE clause
+                selectionArgs,                     // The values for the WHERE clause
+                null,                                   // Don't group the rows
+                null,                                   // Don't filter by the row groups
+                sortOrder)) {                           // Order to sort
+
+            while (cursor.moveToNext()) {
+                String userStored = cursor.getString(cursor.getColumnIndexOrThrow(UserDBContract.CurrentUser.COLUMN_USER_EMAIL));
+                currentUser = userStored;
+            }
+            if(currentUser == "")//no entry within the db | needs to be written to
+            {
+                ContentValues cV = new ContentValues();
+                cV.put(UserDBContract.CurrentUser.COLUMN_USER_EMAIL, email);
+                mDatabase.insert( UserDBContract.CurrentUser.TABLE_NAME, null, cV);
+            }
+            if(currentUser.equals(email))//not the current user | needs to be updated
+            {
+
+                //update
+                ContentValues cV = new ContentValues();
+                cV.put(UserDBContract.CurrentUser.COLUMN_USER_EMAIL, email);
+
+                mDatabase.update(UserDBContract.CurrentUser.TABLE_NAME, cV, UserDBContract.CurrentUser.COLUMN_USER_EMAIL , null);
+            }
+        } catch (Error e) {
+            // TODO: Something here.
+            System.out.println(e);
+
+        }
+        //
+
+
+    }
+
 }
