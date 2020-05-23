@@ -29,7 +29,7 @@ class ShopAdapter(var context: Context, var offers: ArrayList<ShopItem>) : BaseA
         var icon: ImageView = view.findViewById(R.id.offer)
 
         var listItem: ShopItem = offers[position]
-        icon.setImageResource(listItem.offers!!)
+        icon.setImageResource(listItem.offer!!)
 
         return view
     }
