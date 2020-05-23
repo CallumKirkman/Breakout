@@ -15,7 +15,7 @@ import kotlin.collections.ArrayList
 
 class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
-    //Pull from database
+    // ToDo(Pull from database)
     private var totalCurrency: Int = 0
 
     private var price: Int = 0
