@@ -6,6 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".AccountActivity">
 
+    <TextView
+        android:id="@+id/deleteAccountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/textview_boarder"
+        android:onClick="onDeleteClick"
+        android:padding="2dp"
+        android:text="Delete account"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submitButton" />
+
     <EditText
         android:id="@+id/emailText"
         android:layout_width="wrap_content"
@@ -80,11 +98,10 @@
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="90dp"
+        android:layout_marginTop="100dp"
         android:onClick="onSubmitClick"
         android:text="Submit"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/deleteAccountText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailText" />

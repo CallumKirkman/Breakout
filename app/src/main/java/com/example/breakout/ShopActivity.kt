@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.transition.Slide
 import android.view.*
 import android.widget.*
 import com.example.account_res.InputValidation
@@ -14,17 +15,13 @@ import kotlin.collections.ArrayList
 
 class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
-    //Pull from database
+    // ToDo(Pull from database)
     private var totalCurrency: Int = 0
 
     private var price: Int = 0
     private var offers: ArrayList<ShopItem> ? = null
 
     private var popupView: View ? = null
-
-    private var cardNumber: String = ""
-    private var expiryDate: String = ""
-    private var CVV: String = ""
 
     // Navigation Bar
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,36 +97,48 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
         val popupWidth = 1000
         val popupHeight = 600
         val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
+
+        popupWindow.elevation = 10.0F
+
+        // Create a new slide animation for popup window enter transition
+        val slideIn = Slide()
+        slideIn.slideEdge = Gravity.START
+        popupWindow.enterTransition = slideIn
+
+        // Slide animation for popup window exit transition
+        val slideOut = Slide()
+        slideOut.slideEdge = Gravity.END
+        popupWindow.exitTransition = slideOut
+
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+
 
         var item: ShopItem = offers!![position]
 
         price = item.price!!.toInt()
 //        Toast.makeText(applicationContext, item.price, Toast.LENGTH_SHORT).show()
-    }
 
-    // Give button on click
-    fun onPurchaseClick(view: View) {
+        popupView?.findViewById<Button>(R.id.purchaseButton)?.setOnClickListener{
 
-        cardNumber = popupView?.findViewById<EditText>(R.id.cardNumber)?.text.toString()
-        expiryDate = popupView?.findViewById<EditText>(R.id.expiryDate)?.text.toString()
-        CVV = popupView?.findViewById<EditText>(R.id.CVV)?.text.toString()
+            val cardNumber = popupView?.findViewById<EditText>(R.id.cardNumber)?.text.toString()
+            val expiryDate = popupView?.findViewById<EditText>(R.id.expiryDate)?.text.toString()
+            val CVV = popupView?.findViewById<EditText>(R.id.CVV)?.text.toString()
+            val currency = findViewById<TextView>(R.id.currency)
 
-//        println("Car number $cardNumber")
-//        println("Date $expiryDate")
-//        println("CVV $CVV")
-
-        if (!InputValidation.validateCard(cardNumber)) {
-            Toast.makeText(this.application, "Invalid Card Number", Toast.LENGTH_SHORT).show()
-        } else if (!InputValidation.validateCVV(CVV)) {
-            Toast.makeText(this.application, "Invalid CVV", Toast.LENGTH_SHORT).show()
-        } else if (!InputValidation.validateDate(expiryDate)) {
-            Toast.makeText(this.application, "Invalid Date", Toast.LENGTH_SHORT).show()
-        }
-        else {
-            totalCurrency = totalCurrency.plus(price)
-//            println("Total price is $totalCurrency")
-            // Lower keyboard
+            if (!InputValidation.validateCard(cardNumber)) {
+                Toast.makeText(this.application, "Invalid Card Number", Toast.LENGTH_SHORT).show()
+            } else if (!InputValidation.validateCVV(CVV)) {
+                Toast.makeText(this.application, "Invalid CVV", Toast.LENGTH_SHORT).show()
+            } else if (!InputValidation.validateDate(expiryDate)) {
+                Toast.makeText(this.application, "Invalid Date", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                totalCurrency = totalCurrency.plus(price)
+//                println("Total price is $totalCurrency")
+                Toast.makeText(this.application, "Purchase Successful", Toast.LENGTH_SHORT).show()
+                currency.text = totalCurrency.toString()
+                popupWindow.dismiss()
+            }
         }
     }
 }

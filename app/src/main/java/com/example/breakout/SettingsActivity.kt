@@ -85,7 +85,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     fun onLogoutClick(view: View) {
-        // Log out THEN
+        // ToDo(Log out THEN)
 
         val intent = Intent(this, LoginActivity::class.java)
 
@@ -93,6 +93,6 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     fun onDeleteClick(view: View) {
-        // Delete account
+        // ToDo(Delete account)
     }
 }
