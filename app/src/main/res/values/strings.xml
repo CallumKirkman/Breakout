@@ -14,7 +14,7 @@
     <string name="account_creation">Account Creation</string>
     <string name="changelog">Changelog</string>
     <string name="terms_link">I have read and accept the <u>Terms and Conditions</u></string>
-    <string name="close_terms_button">Close></string>
+    <string name="close_terms_button">Close</string>
 
     <!-- Player -->
     <string name="remaining_time">-1:11</string>
@@ -24,30 +24,41 @@
     <string name="songs">Songs</string>
     <string name="shop">Shop</string>
 
-
     <!-- Long Text -->
+
+    <string name="password_help">- Between 8 and 40 characters\n- Contain a lowercase character\n- Contain an uppercase character\n- Contain a number\n- Contain at least one of these special characters [ @ # $ % ! * £ ]</string>
+
     <string name="terms">
-    Consequatur quam eum labore corrupti fuga odit rerum ab. Molestiae vitae accusantium voluptatem. Quaerat sequi unde iusto ut. Blanditiis ut vitae dignissimos nisi deleniti. Hic reprehenderit sint qui vitae expedita.
-
-    Nisi qui enim sint praesentium veniam dolorum est. Minus ut earum inventore consectetur nesciunt tempora vitae sunt. Consequatur facere fugiat id repudiandae velit vitae pariatur non. Excepturi blanditiis eaque ut. Veritatis corrupti doloribus modi saepe amet dolorum nulla.
-
-    Est provident nostrum mollitia saepe. Est nam recusandae et reiciendis soluta. Reiciendis maxime quidem quo et odit error velit aut. In explicabo commodi autem et non provident. Facere repellat veritatis velit. Commodi minima non blanditiis accusamus harum eius nesciunt.
-
-    Quod tenetur quidem eius. Quisquam sit corporis aperiam et magni. Occaecati et ut assumenda fugit neque ut dignissimos. Incidunt cumque ut error accusantium quidem corporis. Vel doloremque aut deleniti iusto qui et aspernatur sunt. Consequuntur dolore et deleniti.
-
-    Rem sit aliquam laudantium et quis consectetur. Aliquid et nihil quis fugit. Corrupti itaque et iusto veritatis totam blanditiis error quia. Harum quidem rerum deleniti. Rerum recusandae et velit laborum. Eveniet atque aspernatur quasi culpa fugiat.
-    Consequatur quam eum labore corrupti fuga odit rerum ab. Molestiae vitae accusantium voluptatem. Quaerat sequi unde iusto ut. Blanditiis ut vitae dignissimos nisi deleniti. Hic reprehenderit sint qui vitae expedita.
-
-    Nisi qui enim sint praesentium veniam dolorum est. Minus ut earum inventore consectetur nesciunt tempora vitae sunt. Consequatur facere fugiat id repudiandae velit vitae pariatur non. Excepturi blanditiis eaque ut. Veritatis corrupti doloribus modi saepe amet dolorum nulla.
-
-    Est provident nostrum mollitia saepe. Est nam recusandae et reiciendis soluta. Reiciendis maxime quidem quo et odit error velit aut. In explicabo commodi autem et non provident. Facere repellat veritatis velit. Commodi minima non blanditiis accusamus harum eius nesciunt.
-
-    Quod tenetur quidem eius. Quisquam sit corporis aperiam et magni. Occaecati et ut assumenda fugit neque ut dignissimos. Incidunt cumque ut error accusantium quidem corporis. Vel doloremque aut deleniti iusto qui et aspernatur sunt. Consequuntur dolore et deleniti.
-
-    Rem sit aliquam laudantium et quis consectetur. Aliquid et nihil quis fugit. Corrupti itaque et iusto veritatis totam blanditiis error quia. Harum quidem rerum deleniti. Rerum recusandae et velit laborum. Eveniet atque aspernatur quasi culpa fugiat.
+\nWithin our application one of our main priorities is the privacy of our users. This Privacy Policy document contains types of information that is collected and recorded by Breakout and how we use it.\n
+If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.\n\n
+<b>General Data Protection Regulation (GDPR)</b>\n
+We are a Data Controller of your information.\n
+Beach Devs legal basis for collecting and using the personal information described in this Privacy Policy depends on the Personal Information we collect and the specific context in which we collect the information:\n
+Beach Devs needs to perform a contract with you\n
+You have given Beach Devs permission to do so\n
+Processing your personal information is in Beach Devs legitimate interests\n
+Beach Devs needs to comply with the law\n
+Beach Devs will retain your personal information only for as long as is necessary for the purposes set out in this Privacy Policy. We will retain and use your information to the extent necessary to comply with our legal obligations, resolve disputes, and enforce our policies.\n
+If you are a resident of the European Economic Area (EEA), you have certain data protection rights. If you wish to be informed what Personal Information we hold about you and if you want it to be removed from our systems, please contact us.\n
+In certain circumstances, you have the following data protection rights:\n
+The right to access, update or to delete the information we have on you.\n
+The right of rectification.\n
+The right to object.\n
+The right of restriction.\n
+The right to data portability\n
+The right to withdraw consent\n\n
+<b>Privacy Policies</b>\n
+You may consult this list to find the Privacy Policy for each of the advertising partners of Breakout.\n
+Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on Breakout, which are sent directly to users\' application. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit.\n
+Note that Breakout has no access to or control over these cookies that are used by third-party advertisers.\n\n
+<b>Third Party Privacy Policies</b>\n
+Breakout\'s Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options.\n\n
+<b>Children\'s Information</b>\n
+Breakout does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our website, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.\n\n
+<b>Consent</b>\n
+By using our application, you hereby consent to our Privacy Policy and agree to its terms.\n
     </string>
 
-    <string name="password_help">- Between 8 and 40 characters\n- Contain a lowercase character\n- Contain an uppercase character\n- Contain a number\n- Contain a special character [ @ # $ % ! . ]</string>
 
 
     <string name="changelog_content">

@@ -12,10 +12,10 @@ import com.example.breakout.adapters.ShopAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
 import kotlin.collections.ArrayList
+import com.example.breakout.AppCurrency.Companion.globalCurrency
 
 class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
-    // ToDo(Pull from database)
     private var totalCurrency: Int = 0
 
     private var price: Int = 0
@@ -45,6 +45,11 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
         gridView.adapter = adapter
 
         gridView.onItemClickListener = this
+
+
+        val currency = findViewById<TextView>(R.id.currency)
+        totalCurrency = globalCurrency
+        currency.text = totalCurrency.toString()
     }
 
     private val bottomNav = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -75,16 +80,16 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
         var offers: ArrayList<ShopItem> = ArrayList()
 
-        offers.add(ShopItem(R.drawable.unknown_image, "5"))
-        offers.add(ShopItem(R.drawable.unknown_image, "10"))
-        offers.add(ShopItem(R.drawable.unknown_image, "15"))
-        offers.add(ShopItem(R.drawable.unknown_image, "20"))
-        offers.add(ShopItem(R.drawable.unknown_image, "25"))
-        offers.add(ShopItem(R.drawable.unknown_image, "40"))
-        offers.add(ShopItem(R.drawable.unknown_image, "60"))
-        offers.add(ShopItem(R.drawable.unknown_image, "80"))
-        offers.add(ShopItem(R.drawable.unknown_image, "100"))
-        offers.add(ShopItem(R.drawable.unknown_image, "120"))
+        offers.add(ShopItem(R.drawable.currency5, "5"))
+        offers.add(ShopItem(R.drawable.currency10, "10"))
+        offers.add(ShopItem(R.drawable.currency15, "15"))
+        offers.add(ShopItem(R.drawable.currency20, "20"))
+        offers.add(ShopItem(R.drawable.currency25, "25"))
+        offers.add(ShopItem(R.drawable.currency40, "40"))
+        offers.add(ShopItem(R.drawable.currency60, "60"))
+        offers.add(ShopItem(R.drawable.currency80, "80"))
+        offers.add(ShopItem(R.drawable.currency100, "100"))
+        offers.add(ShopItem(R.drawable.currency120, "120"))
 
         return offers
     }
@@ -94,9 +99,10 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
         val inflater = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
         popupView = inflater.inflate(R.layout.popup_payment, null)
 
-        val popupWidth = 1000
+        val popupWidth = LinearLayout.LayoutParams.MATCH_PARENT
         val popupHeight = 600
         val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
+
 
         popupWindow.elevation = 10.0F
 
@@ -134,10 +140,11 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
             }
             else {
                 totalCurrency = totalCurrency.plus(price)
-//                println("Total price is $totalCurrency")
                 Toast.makeText(this.application, "Purchase Successful", Toast.LENGTH_SHORT).show()
                 currency.text = totalCurrency.toString()
                 popupWindow.dismiss()
+                globalCurrency = totalCurrency
+                // ToDo(Push total to database)
             }
         }
     }

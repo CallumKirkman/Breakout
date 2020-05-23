@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -82,17 +83,16 @@ class SettingsActivity : AppCompatActivity() {
         val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
 
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+
+        popupView.findViewById<Button>(R.id.closeTermsButton).setOnClickListener {
+            popupWindow.dismiss()
+        }
     }
 
     fun onLogoutClick(view: View) {
-        // ToDo(Log out THEN)
+        // ToDo(Maybe close spotify)
 
         val intent = Intent(this, LoginActivity::class.java)
-
         startActivity(intent)
-    }
-
-    fun onDeleteClick(view: View) {
-        // ToDo(Delete account)
     }
 }

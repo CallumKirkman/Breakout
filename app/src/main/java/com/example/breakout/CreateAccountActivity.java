@@ -28,171 +28,172 @@ public class CreateAccountActivity extends Activity {
     private SQLiteDatabase mDatabase;
     private SQLiteDatabase mReadDatabase;
 
-
-    private String forename, surname, password, confirmPassword, emailAddress; // Input Strings
-    private String algorithm = "SHA-256";
-
-    EditText forenameInput;
-    EditText surnameInput;
-    EditText passwordInput;
-    EditText confirmPasswordInput;
-    EditText emailAddressInput;
-    Button btnSubmit;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
-
-        // TODO: Add popup for viewing password constraints.
         UserDBHelper dbHelper = new UserDBHelper(this);
         mDatabase = dbHelper.getWritableDatabase();
-        
         mReadDatabase = dbHelper.getReadableDatabase();
-        getUserInput();
 
+        final EditText password = findViewById(R.id.enterPassword);
+
+        password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                onClickPasswordHelp(v);
+            }
+        });
     }
 
 
+    /**
+     * Return to the login page.
+     * @param view - view.
+     */
     public void onClickReturn(View view) {
         startActivity(new Intent(this, LoginActivity.class));
     }
 
+
+    /**
+     * Display the terms and conditions in a popup window.
+     * @param view - view.
+     */
     public void onClickTerms(View view) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         assert inflater != null;
         View popupView = inflater.inflate(R.layout.popup_terms, null);
 
-
         int popupWidth = 600;
         int popupHeight = 850;
-        final PopupWindow popupWindow = new PopupWindow(popupView, popupWidth, popupHeight, true);
 
+        final PopupWindow popupWindow = new PopupWindow(popupView, popupWidth, popupHeight, true);
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        Button closePopup = popupView.findViewById(R.id.closeTermsButton);
+        closePopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
     }
 
 
+    /**
+     * Display the password constraints in a popup window.
+     * @param view - view.
+     */
     public void onClickPasswordHelp(View view) {
-
-
+        Button lock = findViewById(R.id.passwordHelpButton);
+        lock.setBackgroundResource(R.drawable.ic_lock_outline);
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         assert inflater != null;
         View popupView = inflater.inflate(R.layout.popup_password_help, null);
-        // TODO: Different popup dimensions depending on screen orientation.
+
         int popupWidth = 500;
         int popupHeight = 200;
         final PopupWindow popupWindow = new PopupWindow(popupView, popupWidth, popupHeight, true);
 
-        popupWindow.showAtLocation(view, Gravity.CENTER, Gravity.START, 0);
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, -80);
 
     }
 
-    private boolean checkUserEmailExists(String userEmail)
-    {
-        // TODO: Check the password is correct against the stored password.
-        String[] projection = {
-                UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS};
 
-        String selection = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS +
-                " LIKE ? ";
-
-        String[] selectionArgs = {userEmail};
-
-        // Sorting the results.
+    /**
+     * See if the supplied string is an email in the database.
+     * @param userEmail - the email to lookup.
+     * @return - true if it exists, false otherwise.
+     */
+    private boolean checkUserEmailExists(String userEmail) {
+        // Query Building - specify column, condition, sort order, etc.
+        String[] projection = { UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS };
+        String selection = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " LIKE ? ";
+        String[] selectionArgs = { userEmail };
         String sortOrder = UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " DESC";
 
-        List itemsIds = new ArrayList<>();
+        List<Long> itemsIds = new ArrayList<>();
 
         try (Cursor cursor = mReadDatabase.query(
                 UserDBContract.UserEntry.TABLE_NAME,    // Table to query
-                projection,                        // The array of columns to return
-                selection,                         // The columns for the WHERE clause
-                selectionArgs,                     // The values for the WHERE clause
+                projection,                             // The array of columns to return
+                selection,                              // The columns for the WHERE clause
+                selectionArgs,                          // The values for the WHERE clause
                 null,                                   // Don't group the rows
                 null,                                   // Don't filter by the row groups
                 sortOrder)) {                           // Order to sort
 
             while (cursor.moveToNext()) {
-                long itemID = cursor.getLong(cursor.getColumnIndexOrThrow(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS));
+                long itemID = cursor.getLong(cursor.getColumnIndex(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS));
                 itemsIds.add(itemID);
             }
         }
-        catch (Error e) {
-            // TODO: Something here.
-            System.out.println(e);
-        }
-
-        // If the table is larger than 0 the username is used within the db else it doesn't exist.
-        // So its a new user without an account or inputted incorrectly.
+        // Greater than 0, the email exists - true.
         return itemsIds.size() > 0;
     }
 
-    private void getUserInput() {
-        forenameInput = (EditText) findViewById(R.id.enterForename);
-        surnameInput = findViewById(R.id.enterSurname);
-        passwordInput = (EditText) findViewById(R.id.enterPassword);
-        confirmPasswordInput = findViewById(R.id.enterConfirmPassword);
-        emailAddressInput = (EditText) findViewById(R.id.enterEmail);
 
-        btnSubmit = findViewById(R.id.createAccountButton);
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get input values.
-                forename = forenameInput.getText().toString();
-                surname = surnameInput.getText().toString();
-                password = passwordInput.getText().toString();
-                confirmPassword = confirmPasswordInput.getText().toString();
-                emailAddress = emailAddressInput.getText().toString();
+    /**
+     * Get the user input. See if an account already exists.
+     * If it doesn't, create the account. Load the song player.
+     * @param view - view.
+     */
+    public void onClickCreateAccount(View view) {
+        EditText forenameField = findViewById(R.id.enterForename);
+        EditText surnameField = findViewById(R.id.enterSurname);
+        EditText passwordField = findViewById(R.id.enterPassword);
+        EditText confirmPasswordField = findViewById(R.id.enterConfirmPassword);
+        EditText emailAddressField = findViewById(R.id.enterEmail);
 
-                // Validate input - Email, Password, and Names.
-                if (!InputValidation.validateEmail(emailAddress)) {
-                    Toast.makeText(CreateAccountActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+        String forename = forenameField.getText().toString();
+        String surname = surnameField.getText().toString();
+        String password = passwordField.getText().toString();
+        String confirmPassword = confirmPasswordField.getText().toString();
+        String emailAddress = emailAddressField.getText().toString();
+
+        // Validate input - email, password, and names.
+        if (!InputValidation.validateEmail(emailAddress)) {
+            Toast.makeText(CreateAccountActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+        }
+        else if (!InputValidation.validatePassword(password)) {
+            Toast.makeText(CreateAccountActivity.this, "Password does not meet constraints", Toast.LENGTH_SHORT).show();
+        }
+        else if(!InputValidation.validateName(forename) && !InputValidation.validateName(surname)) {
+            Toast.makeText(CreateAccountActivity.this, "Invalid Name", Toast.LENGTH_SHORT).show();
+        }
+        else if(!password.equals(confirmPassword)) {
+            Toast.makeText(CreateAccountActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+        }
+        // Account is valid. Salt and hash the password. Store the account.
+        else {
+            if(!checkUserEmailExists(emailAddress)) {
+                try {
+                    String salt = PasswordUtilities.generateSalt(4);
+                    byte[] hashBytes = PasswordUtilities.generateHash(password, salt, "SHA-256");
+                    String hash = PasswordUtilities.hexBytes(hashBytes);
+
+                    ContentValues cV = new ContentValues();
+                    cV.put(UserDBContract.UserEntry.COLUMN_FORENAME, forename);
+                    cV.put(UserDBContract.UserEntry.COLUMN_SURNAME, surname);
+                    cV.put(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS, emailAddress);
+                    cV.put(UserDBContract.UserEntry.COLUMN_PASSWORD, hash);
+                    cV.put(UserDBContract.UserEntry.COLUMN_SALT, salt);
+
+                    mDatabase.insert(UserDBContract.UserEntry.TABLE_NAME, null, cV);
+
+                    // Launch the player.
+                    startActivity(new Intent(CreateAccountActivity.this, PlayerActivity.class));
                 }
-                else if (!InputValidation.validatePassword(password)) {
-                    Toast.makeText(CreateAccountActivity.this, "Invalid Password", Toast.LENGTH_SHORT).show();
-                }
-                else if(!InputValidation.validateName(forename) && !InputValidation.validateName(surname)) {
-                    Toast.makeText(CreateAccountActivity.this, "Invalid Name", Toast.LENGTH_SHORT).show();
-                }
-                else if(!password.equals(confirmPassword)) {
-                    Toast.makeText(CreateAccountActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-                }
-                // Salt and hash the password. Store the account.
-                else {
-                    if(!checkUserEmailExists(emailAddress)) {
-                        try {
-                            String salt = PasswordUtilities.generateSalt(4);
-                            byte[] hashBytes = PasswordUtilities.generateHash(password, salt, algorithm);
-                            String hash = PasswordUtilities.hexBytes(hashBytes);
-
-                            ContentValues cV = new ContentValues();
-                            cV.put(UserDBContract.UserEntry.COLUMN_FORENAME, forename);
-                            cV.put(UserDBContract.UserEntry.COLUMN_SURNAME, surname);
-                            cV.put(UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS, emailAddress);
-                            cV.put(UserDBContract.UserEntry.COLUMN_PASSWORD, hash);
-                            cV.put(UserDBContract.UserEntry.COLUMN_SALT, salt);
-
-                            mDatabase.insert(UserDBContract.UserEntry.TABLE_NAME, null, cV);
-
-                            startActivity(new Intent(CreateAccountActivity.this, PlayerActivity.class));
-                        }
-
-                        catch (NoSuchAlgorithmException exc) {
-                            Toast.makeText(CreateAccountActivity.this, "An error occurred.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    else
-                    {
-                        Toast.makeText(CreateAccountActivity.this, "Email is associated with another account", Toast.LENGTH_SHORT).show();
-
-                    }
+                catch (NoSuchAlgorithmException exc) {
+                    Toast.makeText(CreateAccountActivity.this, "An error occurred.", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
-
-
+            else {
+                Toast.makeText(CreateAccountActivity.this, "Email is associated with another account.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
+}
 
 }

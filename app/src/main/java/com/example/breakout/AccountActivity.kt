@@ -9,10 +9,7 @@ import android.transition.Slide
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.PopupWindow
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.account_res.InputValidation
 import com.example.account_res.PasswordUtilities
@@ -113,6 +110,7 @@ class AccountActivity : AppCompatActivity() {
                 Toast.makeText(
                     this, "Email is associated with another account", Toast.LENGTH_SHORT).show()
             }
+            // ToDo(Change account details)
             Toast.makeText(this, "Successful change", Toast.LENGTH_SHORT).show()
 
             Thread.sleep(500)
@@ -126,7 +124,7 @@ class AccountActivity : AppCompatActivity() {
         val inflater = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
         popupView = inflater.inflate(R.layout.popup_delete, null)
 
-        val popupWidth = 900
+        val popupWidth = LinearLayout.LayoutParams.MATCH_PARENT
         val popupHeight = 600
         val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
 
@@ -149,8 +147,7 @@ class AccountActivity : AppCompatActivity() {
             val email = popupView?.findViewById<EditText>(R.id.email)?.text.toString()
             val password = popupView?.findViewById<EditText>(R.id.password)?.text.toString()
 
-            // ToDo(Make sure correct email)
-            // ToDo(Make sure correct password)
+            // ToDo(Make sure correct email and password)
 //            if (!InputValidation.validateCard(email)) {
 //                Toast.makeText(this.application, "Email Incorrect", Toast.LENGTH_SHORT).show()
 //            } else if (!InputValidation.validateCVV(password)) {
@@ -161,7 +158,7 @@ class AccountActivity : AppCompatActivity() {
             Toast.makeText(this.application, "Delete Successful", Toast.LENGTH_SHORT).show()
             popupWindow.dismiss()
 
-            Thread.sleep(5000)
+            Thread.sleep(2500) //ToDo(Is this needed? Makes it seem like a real database though)
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
 //            }
