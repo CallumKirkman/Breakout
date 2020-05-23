@@ -60,21 +60,24 @@ public class InputValidation {
 
 
     /**
-     * Check if the supplied String is 16 numbers
+     * Check if the supplied String is a valid Visa, MasterCard, or American Express card.
      * @param number - the card number to be validated.
      * @return - true if it meets the constraints, false otherwise.
      */
     public static boolean validateCard(String number) {
-        String numberRegex = "^(?:(?<visa>4[0-9]{12}(?:[0-9]{3})?)|\n" +
-                "\t\t(?<mastercard>5[1-5][0-9]{14})|\n" +
-                "\t\t(?<discover>6(?:011|5[0-9]{2})[0-9]{12})|\n" +
-                "\t\t(?<amex>3[47][0-9]{13})|\n" +
-                "\t\t(?<diners>3(?:0[0-5]|[68][0-9])?[0-9]{11})|\n" +
-                "\t\t(?<jcb>(?:2131|1800|35[0-9]{3})[0-9]{11}))$";
-        Pattern pattern = Pattern.compile(numberRegex);
-        Matcher matcher = pattern.matcher(number);
+        String visaRegex = "4[0-9]{12}(?:[0-9]{3})";
+        Pattern visaPattern = Pattern.compile(visaRegex);
+        if(visaPattern.matcher(number).matches()) { return true; }
 
-        return matcher.matches();
+        String masterCardRegex = "5[1-5][0-9]{14}";
+        Pattern masterCardPattern = Pattern.compile(masterCardRegex);
+       if(masterCardPattern.matcher(number).matches()) { return true; }
+
+       String amexRegex = "3[47][0-9]{13}";
+       Pattern amexPattern = Pattern.compile(amexRegex);
+       if(amexPattern.matcher(number).matches()) { return true; }
+
+       return false;
     }
 
 

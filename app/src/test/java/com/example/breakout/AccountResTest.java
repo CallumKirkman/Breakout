@@ -18,7 +18,7 @@ class AccountResTest {
      */
     @ParameterizedTest()
     @MethodSource("validEmails")
-    void testValidEmails(String email) { assertTrue(InputValidation.validateEmail(email)); }
+    void testEmailValid(String email) { assertTrue(InputValidation.validateEmail(email)); }
 
 
     /**
@@ -27,7 +27,7 @@ class AccountResTest {
      */
     @ParameterizedTest()
     @MethodSource("invalidEmails")
-    void testInvalidEmails(String email) { assertFalse(InputValidation.validateEmail(email)); }
+    void testEmailInvalid(String email) { assertFalse(InputValidation.validateEmail(email)); }
 
 
     /**
@@ -36,7 +36,7 @@ class AccountResTest {
      */
     @ParameterizedTest()
     @MethodSource("validPasswords")
-    void testValidPasswords(String password) { assertTrue(InputValidation.validatePassword(password)); }
+    void testPasswordValid(String password) { assertTrue(InputValidation.validatePassword(password)); }
 
 
     /**
@@ -45,7 +45,7 @@ class AccountResTest {
      */
     @ParameterizedTest()
     @MethodSource("invalidPasswords")
-    void testInvalidPasswords(String password) { assertFalse(InputValidation.validatePassword(password)); }
+    void testPasswordInvalid(String password) { assertFalse(InputValidation.validatePassword(password)); }
 
     /**
      * Test the name regex on valid names.
@@ -53,7 +53,7 @@ class AccountResTest {
      */
     @ParameterizedTest()
     @MethodSource("validNames")
-    void testValidNames(String name) { assertTrue(InputValidation.validateName(name)); }
+    void testNameValid(String name) { assertTrue(InputValidation.validateName(name)); }
 
 
     /**
@@ -62,7 +62,7 @@ class AccountResTest {
      */
     @ParameterizedTest()
     @MethodSource("invalidNames")
-    void testInvalidNames(String name) { assertFalse(InputValidation.validateName(name)); }
+    void testNameInvalid(String name) { assertFalse(InputValidation.validateName(name)); }
 
 
     /**
@@ -71,9 +71,7 @@ class AccountResTest {
      */
     @ParameterizedTest()
     @MethodSource("validCardNumbers")
-    void testValidCardNumbers(String number) {
-        // TODO: Call validate method. Assert true.
-    }
+    void testCardNumberValid(String number) { assertTrue(InputValidation.validateCard(number)); }
 
 
     /**
@@ -82,9 +80,7 @@ class AccountResTest {
      */
     @ParameterizedTest()
     @MethodSource("invalidCardNumbers")
-    void testInvalidCardNumbers(String number) {
-        // TODO: Call validate method. Assert false.
-    }
+    void testCardNumberInvalid(String number) { assertFalse(InputValidation.validateCard(number)); }
 
 
     /**
@@ -93,9 +89,7 @@ class AccountResTest {
      */
     @ParameterizedTest()
     @MethodSource("validCVVs")
-    void testValidCVV(String cvv) {
-        // TODO: Call validate method. Assert true.
-    }
+    void testCvvValid(String cvv) { assertTrue(InputValidation.validateCVV(cvv)); }
 
 
     /**
@@ -104,9 +98,7 @@ class AccountResTest {
      */
     @ParameterizedTest()
     @MethodSource("invalidCVVs")
-    void testInvalidCVV(String cvv) {
-        // TODO: Call validate method. Assert false.
-    }
+    void testCvvInvalid(String cvv) { assertFalse(InputValidation.validateCVV(cvv)); }
 
 
     /**
@@ -115,9 +107,7 @@ class AccountResTest {
      */
     @ParameterizedTest()
     @MethodSource("validExpiryDates")
-    void testValidExpiryData(String date) {
-        // TODO: Call validate method. Assert true.
-    }
+    void testExpiryDateValid(String date) { assertTrue(InputValidation.validateDate(date)); }
 
 
     /**
@@ -126,9 +116,7 @@ class AccountResTest {
      */
     @ParameterizedTest()
     @MethodSource("invalidExpiryDates")
-    void testInvalidExpiryData(String date) {
-        // TODO: Call validate method. Assert false.
-    }
+    void testExpiryDateInvalid(String date) { assertFalse(InputValidation.validateDate(date)); }
 
 
     /**
@@ -137,7 +125,7 @@ class AccountResTest {
      */
     @ParameterizedTest
     @MethodSource("validPasswords")
-    void testHashSaltedPasswords(String password) {
+    void testDifferentSaltDifferentPassword(String password) {
         String salt1 = PasswordUtilities.generateSalt(8);
         String salt2 = PasswordUtilities.generateSalt(8);
         // Salts generated could (potentially) be the same.
@@ -157,7 +145,7 @@ class AccountResTest {
      */
     @ParameterizedTest()
     @MethodSource("validPasswords")
-    void testHashedPasswords(String password) {
+    void testSameStringSameHash(String password) {
         try {
             byte[] hash = PasswordUtilities.generateHash(password, "SHA-256");
             String hashed1 = PasswordUtilities.hexBytes(hash);
@@ -339,30 +327,118 @@ class AccountResTest {
         };
     }
 
-    // TODO: Dummy data sets.
 
+    /**
+     *  An array of valid Visa, Mastercard, and American Express card numbers.
+     * @return - the array.
+     */
     private static String[] validCardNumbers() {
-        return new String[] { };
+        return new String[] {
+                "4123445575272",    // 13 digits, starting with a 4. (Visa)
+                "4123445575272256", // 16 digits, starting with a 4. (Visa)
+                "5134591289690298", // 16 digits, starting with 51.  (MasterCard)
+                "5234591289690298", // 16 digits, starting with 52.  (MasterCard)
+                "5234591289690298", // 16 digits, starting with 53.  (MasterCard)
+                "5434591289690298", // 16 digits, starting with 54.  (MasterCard)
+                "5534591289690298", // 16 digits, starting with 55.  (MasterCard)
+                "344285723457823",  // 15 digits, starting with 34.  (American Express)
+                "372347435634244",  // 15  digits, starting with 37. (American Express)
+        };
     }
 
+
+    /**
+     *  An array of invalid Visa, Mastercard, and American Express card numbers.
+     * @return - the array.
+     */
     private static String[] invalidCardNumbers() {
-        return new String[] { };
+        return new String[] {
+                // Visa
+                "412316346346",      // 12 digits, starting with a 4.
+                "46346345563576453", // 17 digits, starting with a 4.
+                "5253374634345",     // 13 digits, without starting with a 4.
+                "8834453453345435",  // 16 digits, without starting with a 4.
+                "445745623423154",    // 15 digits, starting with a 4.
+                // MasterCard
+                "512543452345234",       // 15 digits, starting with 51.
+                "52254345234523465",     // 17 digits, starting with 52.
+                "532543452345234",       // 15 digits, starting with 53.
+                "54254345232945234",     // 17 digits, starting with 54.
+                "552543452345234",       // 15 digits, starting with 55.
+                "6325434524345234",     // 16 digits, not starting with 51-55.
+                // American Express
+                "34345345293452",       // 14 digits, starting with 34.
+                "37345345293452",       // 14 digits, starting with 37.
+                "3434537245293452",     // 16 digits, starting with 34.
+                "3734534528393452",     // 16 digits, starting with 37.
+                "968234545745645"       // 15 digits, not starting with 34 or 37.
+        };
     }
 
+    /**
+     * An array of valid CVV numbers.
+     * @return - the array.
+     */
     private static String[] validCVVs() {
-        return new String[] { };
+        return new String[] {
+                "123",
+                "000",
+                "999",
+                "1234",
+                "0000",
+                "9999"
+        };
     }
 
+
+    /**
+     * An array of invalid CVV numbers.
+     * @return - the array.
+     */
     private static String[] invalidCVVs() {
-        return new String[] { };
+        return new String[] {
+                "1",
+                "12",
+                "12345",
+                "12A",
+                "123A",
+                "1234A",
+                "12%",
+                "123!",
+                "1234£"
+        };
     }
 
+
+    /**
+     * An array of valid card expiry dates.
+     * @return - the array.
+     */
     private static String[] validExpiryDates() {
-        return new String[] { };
+        return new String[] {
+                "05/20",
+                "0520",
+                "05/2020",
+                "052020",
+        };
     }
 
+
+    /**
+     * An array of invalid card expiry dates.
+     * @return - the array.
+     */
     private static String[] invalidExpiryDates() {
-        return new String[] { };
+        return new String[] {
+                "05/202",
+                "05/20200",
+                "05220",
+                "0520200",
+                "05/2",
+                "052",
+                "05/20a",
+                "05/2020!",
+                "",
+        };
     }
-
 }

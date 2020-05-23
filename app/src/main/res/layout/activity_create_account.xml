@@ -43,7 +43,7 @@
         android:layout_marginBottom="48dp"
         android:background="@color/colorPrimaryDark"
         android:fontFamily="monospace"
-        android:onClick="onClickLogin"
+        android:onClick="onClickCreateAccount"
         android:text="@string/create_account_button"
         android:textColor="@color/textColorAlt"
         android:textSize="18sp"
