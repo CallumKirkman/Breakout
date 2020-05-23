@@ -99,9 +99,10 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
         val inflater = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
         popupView = inflater.inflate(R.layout.popup_payment, null)
 
-        val popupWidth = 1000
+        val popupWidth = LinearLayout.LayoutParams.MATCH_PARENT
         val popupHeight = 600
         val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
+
 
         popupWindow.elevation = 10.0F
 

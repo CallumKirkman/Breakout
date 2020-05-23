@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -83,7 +84,7 @@ class SettingsActivity : AppCompatActivity() {
 
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
 
-        popupView.setOnClickListener {
+        popupView.findViewById<Button>(R.id.closeTermsButton).setOnClickListener {
             popupWindow.dismiss()
         }
     }
