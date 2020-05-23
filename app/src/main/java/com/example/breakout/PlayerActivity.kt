@@ -1,5 +1,6 @@
 package com.example.breakout
 
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
@@ -11,6 +12,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.breakout.fragments.GENRE
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector.ConnectionListener
@@ -19,6 +21,7 @@ import com.spotify.protocol.types.Image
 import com.spotify.protocol.types.ImageUri
 import com.spotify.protocol.types.Track
 import kotlinx.android.synthetic.main.activity_player.*
+import com.example.breakout.SongDBHelper
 
 
 class PlayerActivity : AppCompatActivity() {
@@ -168,6 +171,10 @@ class PlayerActivity : AppCompatActivity() {
         artistText.text = artistName
     }
 
+    private val dbHelper = UserDBHelper(this)
+
+    private val mDatabase = dbHelper.writableDatabase
+
     fun likeButtonClick(view: View) {
         val likeButton: ImageView = findViewById(R.id.likeButton)
         likeButton.setBackgroundResource(R.drawable.like_button_flash);
@@ -176,6 +183,20 @@ class PlayerActivity : AppCompatActivity() {
         // If not added?
         // Add to favourite songs
         //spotifyAppRemote!!.userApi.addToLibrary(trackLink)
+
+
+
+        val cV = ContentValues()
+        cV.put(UserDBContract.SongStorage.COLUMN_SONG_NAME, songName)
+        cV.put(UserDBContract.SongStorage.COLUMN_SONG_LIKE, 1)
+        cV.put(UserDBContract.SongStorage.COLUMN_ARTIST_NAME, artistName)
+        cV.put(UserDBContract.SongStorage.COLUMN_SONG_URI, trackLink)
+        cV.put(UserDBContract.SongStorage.COLUMN_IMAGE_URI, imageUri.raw)
+
+
+        mDatabase.insert(UserDBContract.SongStorage.TABLE_NAME, null, cV)
+
+
     }
 
     fun dislikeButtonClick(view: View) {
@@ -185,6 +206,18 @@ class PlayerActivity : AppCompatActivity() {
         dislikeAnimation?.start()
         // Remove from play list?
         //spotifyAppRemote!!.userApi.removeFromLibrary(trackLink)
+
+        val cV = ContentValues()
+        cV.put(UserDBContract.SongStorage.COLUMN_SONG_NAME, songName)
+        cV.put(UserDBContract.SongStorage.COLUMN_SONG_LIKE, 1)
+        cV.put(UserDBContract.SongStorage.COLUMN_ARTIST_NAME, artistName)
+        cV.put(UserDBContract.SongStorage.COLUMN_SONG_URI, trackLink)
+        cV.put(UserDBContract.SongStorage.COLUMN_IMAGE_URI, imageUri.raw)
+
+
+        mDatabase.insert(UserDBContract.SongStorage.TABLE_NAME, null, cV)
+
+
     }
 
 

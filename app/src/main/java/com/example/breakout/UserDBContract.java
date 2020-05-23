@@ -35,6 +35,8 @@ class UserDBContract {
         public static final String TABLE_NAME = "TBL_USER_SONGS";
         public static final String COLUMN_SONG_ID = "FK_USER_ID";
         public static final String COLUMN_USER_ID = "FK_SONG_ID";
+       // public static final String COLUMN_SONG_LIKE = "SONG_LIKE";
+
 
 
 
