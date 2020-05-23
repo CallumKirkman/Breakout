@@ -73,6 +73,8 @@ public class CreateAccountActivity extends Activity {
 
 
     public void onClickPasswordHelp(View view) {
+        Button lock = findViewById(R.id.passwordHelpButton);
+        lock.setBackgroundResource(R.drawable.ic_lock_outline);
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         assert inflater != null;
         View popupView = inflater.inflate(R.layout.popup_password_help, null);

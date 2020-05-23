@@ -10,6 +10,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".AppCurrency" />
         <activity android:name=".ShopActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".SongsActivity" />

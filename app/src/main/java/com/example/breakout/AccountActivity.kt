@@ -113,6 +113,7 @@ class AccountActivity : AppCompatActivity() {
                 Toast.makeText(
                     this, "Email is associated with another account", Toast.LENGTH_SHORT).show()
             }
+            // ToDo(Change account details)
             Toast.makeText(this, "Successful change", Toast.LENGTH_SHORT).show()
 
             Thread.sleep(500)
@@ -149,8 +150,7 @@ class AccountActivity : AppCompatActivity() {
             val email = popupView?.findViewById<EditText>(R.id.email)?.text.toString()
             val password = popupView?.findViewById<EditText>(R.id.password)?.text.toString()
 
-            // ToDo(Make sure correct email)
-            // ToDo(Make sure correct password)
+            // ToDo(Make sure correct email and password)
 //            if (!InputValidation.validateCard(email)) {
 //                Toast.makeText(this.application, "Email Incorrect", Toast.LENGTH_SHORT).show()
 //            } else if (!InputValidation.validateCVV(password)) {
@@ -161,7 +161,7 @@ class AccountActivity : AppCompatActivity() {
             Toast.makeText(this.application, "Delete Successful", Toast.LENGTH_SHORT).show()
             popupWindow.dismiss()
 
-            Thread.sleep(5000)
+            Thread.sleep(4000)
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
 //            }

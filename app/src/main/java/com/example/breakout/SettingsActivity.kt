@@ -82,17 +82,16 @@ class SettingsActivity : AppCompatActivity() {
         val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
 
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+
+        popupView.setOnClickListener {
+            popupWindow.dismiss()
+        }
     }
 
     fun onLogoutClick(view: View) {
-        // ToDo(Log out THEN)
+        // ToDo(Maybe close spotify)
 
         val intent = Intent(this, LoginActivity::class.java)
-
         startActivity(intent)
-    }
-
-    fun onDeleteClick(view: View) {
-        // ToDo(Delete account)
     }
 }

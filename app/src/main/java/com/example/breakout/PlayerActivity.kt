@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -20,9 +21,12 @@ import com.spotify.protocol.types.Image
 import com.spotify.protocol.types.ImageUri
 import com.spotify.protocol.types.Track
 import kotlinx.android.synthetic.main.activity_player.*
-
+import com.example.breakout.AppCurrency.Companion.globalCurrency
 
 class PlayerActivity : AppCompatActivity() {
+
+    // ToDo(Pull from database)
+    private var totalCurrency: Int = 0
 
     // Spotify connect
     private var spotifyAppRemote: SpotifyAppRemote? = null
@@ -139,33 +143,45 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     fun skipButtonClick(view: View) {
-        // Skip song
-        spotifyAppRemote!!.playerApi.skipNext()
+        if (globalCurrency < 5) {}
+        else {
+            globalCurrency -= 5
+            // Skip song
+            spotifyAppRemote!!.playerApi.skipNext()
 
-        // Get song data
-        songInfo()
-        albumImage()
+            // Get song data
+            songInfo()
+            albumImage()
 
-        val songText: TextView = findViewById(R.id.textSongName)
-        songText.text = songName
+            val songText: TextView = findViewById(R.id.textSongName)
+            songText.text = songName
 
-        val artistText: TextView = findViewById(R.id.textAtristName)
-        artistText.text = artistName
+            val artistText: TextView = findViewById(R.id.textAtristName)
+            artistText.text = artistName
+
+            removeSkips()
+        }
     }
 
     fun previousButtonClick(view: View) {
-        // Previous song
-        spotifyAppRemote!!.playerApi.skipPrevious()
+        if (globalCurrency < 5) {}
+        else {
+            globalCurrency -= 5
+            // Previous song
+            spotifyAppRemote!!.playerApi.skipPrevious()
 
-        // Get song data
-        songInfo()
-        albumImage()
+            // Get song data
+            songInfo()
+            albumImage()
 
-        val songText: TextView = findViewById(R.id.textSongName)
-        songText.text = songName
+            val songText: TextView = findViewById(R.id.textSongName)
+            songText.text = songName
 
-        val artistText: TextView = findViewById(R.id.textAtristName)
-        artistText.text = artistName
+            val artistText: TextView = findViewById(R.id.textAtristName)
+            artistText.text = artistName
+
+            removeSkips()
+        }
     }
 
     fun likeButtonClick(view: View) {
@@ -187,6 +203,32 @@ class PlayerActivity : AppCompatActivity() {
         //spotifyAppRemote!!.userApi.removeFromLibrary(trackLink)
     }
 
+    private fun removeSkips() {
+
+        // ToDo(Push total to database)
+
+        updateCurrency()
+
+        val skip = findViewById<ImageButton>(R.id.skipButton)
+        val prev = findViewById<ImageButton>(R.id.previousButton)
+
+        if (globalCurrency < 5) {
+            skip.setBackgroundResource(R.drawable.gray_forward)
+            prev.setBackgroundResource(R.drawable.gray_rewind)
+        }
+        else {
+            skip.setBackgroundResource(R.drawable.forward)
+            prev.setBackgroundResource(R.drawable.rewind)
+        }
+    }
+
+
+    private fun updateCurrency() {
+        val currency = findViewById<TextView>(R.id.playerCurrency)
+        totalCurrency = globalCurrency
+        currency.text = totalCurrency.toString()
+    }
+
 
     // Navigation Bar
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -198,6 +240,9 @@ class PlayerActivity : AppCompatActivity() {
         val menu: Menu = bottomNavigation.menu
         val menuItem: MenuItem = menu.getItem(1)
         menuItem.isChecked = true
+
+
+        removeSkips()
     }
 
     private val bottomNav = BottomNavigationView.OnNavigationItemSelectedListener { item ->

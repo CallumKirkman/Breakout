@@ -12,10 +12,10 @@ import com.example.breakout.adapters.ShopAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
 import kotlin.collections.ArrayList
+import com.example.breakout.AppCurrency.Companion.globalCurrency
 
 class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
-    // ToDo(Pull from database)
     private var totalCurrency: Int = 0
 
     private var price: Int = 0
@@ -45,6 +45,11 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
         gridView.adapter = adapter
 
         gridView.onItemClickListener = this
+
+
+        val currency = findViewById<TextView>(R.id.currency)
+        totalCurrency = globalCurrency
+        currency.text = totalCurrency.toString()
     }
 
     private val bottomNav = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -134,10 +139,11 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
             }
             else {
                 totalCurrency = totalCurrency.plus(price)
-//                println("Total price is $totalCurrency")
                 Toast.makeText(this.application, "Purchase Successful", Toast.LENGTH_SHORT).show()
                 currency.text = totalCurrency.toString()
                 popupWindow.dismiss()
+                globalCurrency = totalCurrency
+                // ToDo(Push total to database)
             }
         }
     }
