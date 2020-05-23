@@ -1,12 +1,17 @@
 package com.example.breakout
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
+import android.transition.Slide
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.account_res.InputValidation
@@ -15,6 +20,8 @@ import java.security.NoSuchAlgorithmException
 import java.util.*
 
 class AccountActivity : AppCompatActivity() {
+
+    private var popupView: View ? = null
 
     private val mDatabase: SQLiteDatabase? = null
     private val mReadDatabase: SQLiteDatabase? = null
@@ -62,7 +69,7 @@ class AccountActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_account)
 
-        // Fill all boxes with user details
+        // ToDo(Fill all boxes with user details)
     }
 
     fun onSubmitClick(view: View) {
@@ -106,6 +113,58 @@ class AccountActivity : AppCompatActivity() {
                 Toast.makeText(
                     this, "Email is associated with another account", Toast.LENGTH_SHORT).show()
             }
+            Toast.makeText(this, "Successful change", Toast.LENGTH_SHORT).show()
+
+            Thread.sleep(500)
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    fun onDeleteClick(view: View) {
+
+        val inflater = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+        popupView = inflater.inflate(R.layout.popup_delete, null)
+
+        val popupWidth = 900
+        val popupHeight = 600
+        val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
+
+        popupWindow.elevation = 10.0F
+
+        // Create a new slide animation for popup window enter transition
+        val slideIn = Slide()
+        slideIn.slideEdge = Gravity.TOP
+        popupWindow.enterTransition = slideIn
+
+        // Slide animation for popup window exit transition
+        val slideOut = Slide()
+        slideOut.slideEdge = Gravity.BOTTOM
+        popupWindow.exitTransition = slideOut
+
+        popupWindow.showAtLocation(view, Gravity.TOP, 0, 0)
+
+        popupView?.findViewById<Button>(R.id.deleteButton)?.setOnClickListener{
+
+            val email = popupView?.findViewById<EditText>(R.id.email)?.text.toString()
+            val password = popupView?.findViewById<EditText>(R.id.password)?.text.toString()
+
+            // ToDo(Make sure correct email)
+            // ToDo(Make sure correct password)
+//            if (!InputValidation.validateCard(email)) {
+//                Toast.makeText(this.application, "Email Incorrect", Toast.LENGTH_SHORT).show()
+//            } else if (!InputValidation.validateCVV(password)) {
+//                Toast.makeText(this.application, "Password Incorrect", Toast.LENGTH_SHORT).show()
+//            }
+//            else {
+            // ToDo(Delete account)
+            Toast.makeText(this.application, "Delete Successful", Toast.LENGTH_SHORT).show()
+            popupWindow.dismiss()
+
+            Thread.sleep(5000)
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+//            }
         }
     }
 }

@@ -23,6 +23,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:columnWidth="150dp"
         android:horizontalSpacing="15dp"
         android:numColumns="auto_fit"
@@ -31,5 +32,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:gravity="center"
+        android:paddingHorizontal="5dp"
+        android:text="0"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@id/shopGrid"
+        app:layout_constraintRight_toRightOf="@id/shopGrid" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="20sp"
+        android:layout_height="20sp"
+        app:srcCompat="@drawable/vinyl_currency"
+        app:layout_constraintRight_toLeftOf="@id/currency"
+        app:layout_constraintBottom_toBottomOf="@id/currency"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

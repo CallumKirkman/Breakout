@@ -7,48 +7,41 @@
 
 
     <EditText
-        android:id="@+id/cardNumber"
+        android:id="@+id/email"
         android:layout_width="250sp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="Card Number"
-        android:inputType="number"
+        android:gravity="center"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/CVV"
-        android:layout_width="90sp"
+        android:id="@+id/password"
+        android:layout_width="250sp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="CVV"
-        android:inputType="number"
-        app:layout_constraintLeft_toLeftOf="@+id/cardNumber"
-        app:layout_constraintTop_toBottomOf="@+id/cardNumber" />
-
-    <EditText
-        android:id="@+id/expiryDate"
-        android:layout_width="100sp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="Date"
-        android:inputType="date"
-        app:layout_constraintRight_toRightOf="@+id/cardNumber"
-        app:layout_constraintTop_toBottomOf="@+id/cardNumber" />
-
-    <Button
-        android:id="@+id/purchaseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Purchase"
+        android:gravity="center"
+        android:hint="Password"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/email" />
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Delete"
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
