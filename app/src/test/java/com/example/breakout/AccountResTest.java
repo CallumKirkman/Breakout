@@ -66,6 +66,72 @@ class AccountResTest {
 
 
     /**
+     * Test the credit card regex on valid numbers.
+     * @param number - test card number.
+     */
+    @ParameterizedTest()
+    @MethodSource("validCardNumbers")
+    void testValidCardNumbers(String number) {
+        // TODO: Call validate method. Assert true.
+    }
+
+
+    /**
+     * Test the credit card regex on invalid numbers.
+     * @param number - test card number.
+     */
+    @ParameterizedTest()
+    @MethodSource("invalidCardNumbers")
+    void testInvalidCardNumbers(String number) {
+        // TODO: Call validate method. Assert false.
+    }
+
+
+    /**
+     * Test the CVV regex on valid CVVs.
+     * @param cvv - test CVV number.
+     */
+    @ParameterizedTest()
+    @MethodSource("validCVVs")
+    void testValidCVV(String cvv) {
+        // TODO: Call validate method. Assert true.
+    }
+
+
+    /**
+     * Test the CVV regex on invalid CVVs.
+     * @param cvv - test CVV number.
+     */
+    @ParameterizedTest()
+    @MethodSource("invalidCVVs")
+    void testInvalidCVV(String cvv) {
+        // TODO: Call validate method. Assert false.
+    }
+
+
+    /**
+     * Test the expiry data regex on valid card expiry dates.
+     * @param date - test expiry date.
+     */
+    @ParameterizedTest()
+    @MethodSource("validExpiryDates")
+    void testValidExpiryData(String date) {
+        // TODO: Call validate method. Assert true.
+    }
+
+
+    /**
+     * Test the expiry data regex on invalid card expiry dates.
+     * @param date - test expiry date.
+     */
+    @ParameterizedTest()
+    @MethodSource("invalidExpiryDates")
+    void testInvalidExpiryData(String date) {
+        // TODO: Call validate method. Assert false.
+    }
+
+
+    /**
      * Test that a password with two different salts produces a different hash.
      * @param password - test password.
      */
@@ -272,4 +338,31 @@ class AccountResTest {
                 "john-0"
         };
     }
+
+    // TODO: Dummy data sets.
+
+    private static String[] validCardNumbers() {
+        return new String[] { };
+    }
+
+    private static String[] invalidCardNumbers() {
+        return new String[] { };
+    }
+
+    private static String[] validCVVs() {
+        return new String[] { };
+    }
+
+    private static String[] invalidCVVs() {
+        return new String[] { };
+    }
+
+    private static String[] validExpiryDates() {
+        return new String[] { };
+    }
+
+    private static String[] invalidExpiryDates() {
+        return new String[] { };
+    }
+
 }

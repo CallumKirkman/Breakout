@@ -12,7 +12,6 @@ public class InputValidation {
 
     /**
      * Check if the supplied String matches the email regular expression.
-     *
      * @param email - the email to be validated against the regex.
      * @return - true if it meets the regex, false otherwise.
      */
@@ -32,7 +31,6 @@ public class InputValidation {
      *      - contains at least one uppercase letter.
      *      - contains at least one number.
      *      - contains at least one special character [ @ # $ % ! . ].
-     *
      * @param password - the password to be validated.
      * @return - true if it meets the constraints, false otherwise.
      */
@@ -47,10 +45,8 @@ public class InputValidation {
 
     /**
      * Check if the supplied String matches the following constraints:
-     *      - BETWEEN X AND Y CHARACTERS
      *      - No numbers.
      *      - No special characters.
-     *
      * @param name - the name to be validated.
      * @return - true if it meets the constraints, false otherwise.
      */
@@ -65,8 +61,7 @@ public class InputValidation {
 
     /**
      * Check if the supplied String is 16 numbers
-     *
-     * @param number - the number to validate
+     * @param number - the card number to be validated.
      * @return - true if it meets the constraints, false otherwise.
      */
     public static boolean validateCard(String number) {
@@ -84,8 +79,8 @@ public class InputValidation {
 
 
     /**
-     * Check if the supplied String is 3 numbers
-     * @param number - the number to validate
+     * Check if the supplied String is 3 or 4 numbers
+     * @param number - the CVV to be validated.
      * @return - true if it meets the constraints, false otherwise.
      */
     public static boolean validateCVV(String number) {
@@ -99,7 +94,7 @@ public class InputValidation {
 
     /**
      * Check if the supplied String is the correct date format
-     * @param number - the number to validate
+     * @param number - the card expiry date to be validated.
      * @return - true if it meets the constraints, false otherwise.
      */
     public static boolean validateDate(String number) {
