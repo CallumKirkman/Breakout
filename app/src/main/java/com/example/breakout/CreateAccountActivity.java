@@ -35,6 +35,15 @@ public class CreateAccountActivity extends Activity {
         UserDBHelper dbHelper = new UserDBHelper(this);
         mDatabase = dbHelper.getWritableDatabase();
         mReadDatabase = dbHelper.getReadableDatabase();
+
+        final EditText password = findViewById(R.id.enterPassword);
+
+        password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                onClickPasswordHelp(v);
+            }
+        });
     }
 
 
@@ -87,7 +96,7 @@ public class CreateAccountActivity extends Activity {
         int popupHeight = 200;
         final PopupWindow popupWindow = new PopupWindow(popupView, popupWidth, popupHeight, true);
 
-        popupWindow.showAtLocation(view, Gravity.CENTER, Gravity.START, 0);
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, -80);
 
     }
 

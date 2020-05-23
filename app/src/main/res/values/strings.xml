@@ -26,7 +26,7 @@
 
     <!-- Long Text -->
 
-    <string name="password_help">- Between 8 and 40 characters\n- Contain a lowercase character\n- Contain an uppercase character\n- Contain a number\n- Contain a special character [ @ # $ % ! . ]</string>
+    <string name="password_help">- Between 8 and 40 characters\n- Contain a lowercase character\n- Contain an uppercase character\n- Contain a number\n- Contain at least one of these special characters [ @ # $ % ! * £ ]</string>
 
     <string name="terms">
 \nWithin our application one of our main priorities is the privacy of our users. This Privacy Policy document contains types of information that is collected and recorded by Breakout and how we use it.\n

@@ -116,11 +116,11 @@
         android:id="@+id/passwordHelpButton"
         android:layout_width="27dp"
         android:layout_height="23dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
         android:background="@drawable/ic_lock_black"
         android:onClick="onClickPasswordHelp"
-        app:layout_constraintEnd_toStartOf="@+id/enterPassword"
+        app:layout_constraintStart_toEndOf="@id/enterPassword"
         app:layout_constraintTop_toTopOf="@+id/enterPassword" />
 
     <Button
