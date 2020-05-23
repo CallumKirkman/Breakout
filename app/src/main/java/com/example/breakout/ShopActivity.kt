@@ -75,16 +75,16 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
         var offers: ArrayList<ShopItem> = ArrayList()
 
-        offers.add(ShopItem(R.drawable.unknown_image, "5"))
-        offers.add(ShopItem(R.drawable.unknown_image, "10"))
-        offers.add(ShopItem(R.drawable.unknown_image, "15"))
-        offers.add(ShopItem(R.drawable.unknown_image, "20"))
-        offers.add(ShopItem(R.drawable.unknown_image, "25"))
-        offers.add(ShopItem(R.drawable.unknown_image, "40"))
-        offers.add(ShopItem(R.drawable.unknown_image, "60"))
-        offers.add(ShopItem(R.drawable.unknown_image, "80"))
-        offers.add(ShopItem(R.drawable.unknown_image, "100"))
-        offers.add(ShopItem(R.drawable.unknown_image, "120"))
+        offers.add(ShopItem(R.drawable.currency5, "5"))
+        offers.add(ShopItem(R.drawable.currency10, "10"))
+        offers.add(ShopItem(R.drawable.currency15, "15"))
+        offers.add(ShopItem(R.drawable.currency20, "20"))
+        offers.add(ShopItem(R.drawable.currency25, "25"))
+        offers.add(ShopItem(R.drawable.currency40, "40"))
+        offers.add(ShopItem(R.drawable.currency60, "60"))
+        offers.add(ShopItem(R.drawable.currency80, "80"))
+        offers.add(ShopItem(R.drawable.currency100, "100"))
+        offers.add(ShopItem(R.drawable.currency120, "120"))
 
         return offers
     }
