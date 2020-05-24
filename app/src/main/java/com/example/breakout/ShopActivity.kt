@@ -81,16 +81,15 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
         var offers: ArrayList<ShopItem> = ArrayList()
 
-        offers.add(ShopItem(R.drawable.currency5, "5"))
-        offers.add(ShopItem(R.drawable.currency10, "10"))
-        offers.add(ShopItem(R.drawable.currency15, "15"))
-        offers.add(ShopItem(R.drawable.currency20, "20"))
-        offers.add(ShopItem(R.drawable.currency25, "25"))
-        offers.add(ShopItem(R.drawable.currency40, "40"))
-        offers.add(ShopItem(R.drawable.currency60, "60"))
-        offers.add(ShopItem(R.drawable.currency80, "80"))
-        offers.add(ShopItem(R.drawable.currency100, "100"))
-        offers.add(ShopItem(R.drawable.currency120, "120"))
+        offers.add(ShopItem(R.drawable.vinyl_currency, "10", "£1"))
+        offers.add(ShopItem(R.drawable.vinyl_currency, "30", "£1.25"))
+        offers.add(ShopItem(R.drawable.vinyl_currency, "50", "£1.50"))
+        offers.add(ShopItem(R.drawable.vinyl_currency, "70", "£1.57"))
+        offers.add(ShopItem(R.drawable.vinyl_currency, "100", "£2"))
+//        offers.add(ShopItem(R.drawable.vinyl_currency, "60", "£1.50"))
+//        offers.add(ShopItem(R.drawable.vinyl_currency, "80", "£1.60"))
+//        offers.add(ShopItem(R.drawable.vinyl_currency, "100", "£1.80"))
+//        offers.add(ShopItem(R.drawable.vinyl_currency, "120", "£2"))
 
         return offers
     }
@@ -126,7 +125,7 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
         var item: ShopItem = offers!![position]
 
-        price = item.price!!.toInt()
+        price = item.number!!.toInt()
 //        Toast.makeText(applicationContext, item.price, Toast.LENGTH_SHORT).show()
 
         popupView?.findViewById<Button>(R.id.purchaseButton)?.setOnClickListener{

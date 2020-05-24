@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import android.widget.TextView
 import com.example.breakout.R
 import com.example.breakout.ShopItem
 
@@ -27,9 +28,13 @@ class ShopAdapter(var context: Context, var offers: ArrayList<ShopItem>) : BaseA
         //Add other view inflate?
         var view: View = View.inflate(context, R.layout.item_shop, null)
         var icon: ImageView = view.findViewById(R.id.offer)
+        var number: TextView = view.findViewById(R.id.vinyls)
+        var price: TextView = view.findViewById(R.id.price)
 
         var listItem: ShopItem = offers[position]
         icon.setImageResource(listItem.offer!!)
+        number.text = listItem.number!!
+        price.text = listItem.price!!
 
         return view
     }
