@@ -1,5 +1,6 @@
 package com.example.breakout
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -19,9 +20,9 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
     private var totalCurrency: Int = 0
 
     private var price: Int = 0
-    private var offers: ArrayList<ShopItem> ? = null
+    private var offers: ArrayList<ShopItem>? = null
 
-    private var popupView: View ? = null
+    private var popupView: View? = null
 
     // Navigation Bar
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,7 +125,7 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
         price = item.price!!.toInt()
 //        Toast.makeText(applicationContext, item.price, Toast.LENGTH_SHORT).show()
 
-        popupView?.findViewById<Button>(R.id.purchaseButton)?.setOnClickListener{
+        popupView?.findViewById<Button>(R.id.purchaseButton)?.setOnClickListener {
 
             val cardNumber = popupView?.findViewById<EditText>(R.id.cardNumber)?.text.toString()
             val expiryDate = popupView?.findViewById<EditText>(R.id.expiryDate)?.text.toString()
@@ -137,15 +138,40 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
                 Toast.makeText(this.application, "Invalid CVV", Toast.LENGTH_SHORT).show()
             } else if (!InputValidation.validateDate(expiryDate)) {
                 Toast.makeText(this.application, "Invalid Date", Toast.LENGTH_SHORT).show()
-            }
-            else {
+            } else {
                 totalCurrency = totalCurrency.plus(price)
                 Toast.makeText(this.application, "Purchase Successful", Toast.LENGTH_SHORT).show()
                 currency.text = totalCurrency.toString()
                 popupWindow.dismiss()
                 globalCurrency = totalCurrency
                 // ToDo(Push total to database)
+                writeBalanceToDB(globalCurrency)
             }
         }
     }
+
+    //use current user to then add their balance to tbl_userData
+    fun writeBalanceToDB(balance: Int) {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.readableDatabase
+
+        val selection = "${UserDBContract.UserEntry.COLUMN_USER_BALANCE} LIKE ?"
+
+        var currUsr = UserDBContract.CurrentUser.COLUMN_USER_EMAIL[1]
+        val value = ContentValues().apply {
+            put(UserDBContract.UserEntry.COLUMN_USER_BALANCE, balance)
+        }
+
+        //mDatabase.update(UserDBContract.UserEntry.TABLE_NAME, value, UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + "="+currUsr ,null)
+
+        //where user email = currentUserEmail(make this an String val)
+
+       // UPDATE TBL_USERDATA SET USER_BALANCE = 16 WHERE USER_EMAIL_ADDRESS = "joefleetwood@gmail.com";
+
+
+
+
+
+    }
+
 }

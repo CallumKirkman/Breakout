@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import java.util.Objects;
 
 import com.example.account_res.InputValidation;
 import com.example.account_res.PasswordUtilities;
+import com.example.breakout.LoginActivity;
 
 
 public class CreateAccountActivity extends Activity {
@@ -139,6 +141,7 @@ public class CreateAccountActivity extends Activity {
      * If it doesn't, create the account. Load the song player.
      * @param view - view.
      */
+
     public void onClickCreateAccount(View view) {
         EditText forenameField = findViewById(R.id.enterForename);
         EditText surnameField = findViewById(R.id.enterSurname);
@@ -182,6 +185,8 @@ public class CreateAccountActivity extends Activity {
 
                     mDatabase.insert(UserDBContract.UserEntry.TABLE_NAME, null, cV);
 
+
+
                     // Launch the player.
                     startActivity(new Intent(CreateAccountActivity.this, PlayerActivity.class));
                 }
@@ -194,6 +199,8 @@ public class CreateAccountActivity extends Activity {
             }
         }
     }
-}
+
+
 
 }
+

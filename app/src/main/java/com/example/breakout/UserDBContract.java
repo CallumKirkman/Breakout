@@ -36,6 +36,7 @@ class UserDBContract {
 
     public static final class CurrentUser implements BaseColumns {
         public static final String TABLE_NAME = "TBL_CURRENT";
+        public static final String COLUMN_USER_CURRENT_ID = "CURRENT_USER_ID";
         public static final String COLUMN_USER_EMAIL = "CURRENT_USER_EMAIL";
     }
 }

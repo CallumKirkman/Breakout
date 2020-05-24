@@ -155,6 +155,7 @@ class AccountActivity : AppCompatActivity() {
 //            }
 //            else {
             // ToDo(Delete account)
+            deleteUser()
             Toast.makeText(this.application, "Delete Successful", Toast.LENGTH_SHORT).show()
             popupWindow.dismiss()
 
@@ -164,4 +165,10 @@ class AccountActivity : AppCompatActivity() {
 //            }
         }
     }
+
+    fun deleteUser()
+    {
+
+    }
+
 }

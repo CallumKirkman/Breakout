@@ -47,10 +47,11 @@ class UserDBHelper extends SQLiteOpenHelper {
 
         final String SQL_CURRENT_USER =
                 "CREATE TABLE " + CurrentUser.TABLE_NAME + " (" +
-                        CurrentUser.COLUMN_USER_EMAIL + " TEXT PRIMARY KEY" +
+                        CurrentUser.COLUMN_USER_CURRENT_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"+
+                        CurrentUser.COLUMN_USER_EMAIL + " TEXT " +
                        ");";
 
-        db.execSQL("PRAGMA foreign_keys = ON;");
+        //db.execSQL("PRAGMA foreign_keys = ON;");// Makes sure forign keys are ennabled
         db.execSQL(SQL_CREATE_ENTRIES);
         db.execSQL(SQL_CREATE_SONG_ENTRIES);
         db.execSQL(SQL_CREATE_USER_SONGS);

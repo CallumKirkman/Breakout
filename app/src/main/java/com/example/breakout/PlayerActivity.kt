@@ -261,8 +261,6 @@ class PlayerActivity : AppCompatActivity() {
                 cursor.getString(cursor.getColumnIndexOrThrow(UserDBContract.SongStorage.COLUMN_SONG_NAME))
             itemsIds.add(itemID)
         }
-
-
     }
 
     private fun checkSongExists(songName: String): Boolean {
@@ -296,7 +294,6 @@ class PlayerActivity : AppCompatActivity() {
                 cursor.getString(cursor.getColumnIndexOrThrow(UserDBContract.SongStorage.COLUMN_SONG_NAME))
             itemsIds.add(itemID)
         }
-
         return itemsIds.size > 0
     }
 

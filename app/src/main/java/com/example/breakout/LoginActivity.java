@@ -117,21 +117,35 @@ public class LoginActivity extends Activity {
         }
     }
 
-    private void currentUser(String email) {
+    public void currentUser(String email) {
+
+        String currentUser = getCurrentUser(email);
+        if (currentUser.equals(""))//no entry within the db | needs to be written to
+        {
+            ContentValues cV = new ContentValues();
+            cV.put(UserDBContract.CurrentUser.COLUMN_USER_EMAIL, email);
+            mDatabase.insert(UserDBContract.CurrentUser.TABLE_NAME, null, cV);
+        } else {
+            updateCurrentUser(email, currentUser);
+        }
+    }
+
+    //check if the current user is the within the current db
+    private  String getCurrentUser(String email) {// returns the current user within the db
         String[] projection = {
                 UserDBContract.CurrentUser.COLUMN_USER_EMAIL};
 
-        String selection = UserDBContract.CurrentUser.COLUMN_USER_EMAIL +
-                " LIKE ? ";
+        String selection = UserDBContract.CurrentUser.COLUMN_USER_CURRENT_ID +
+                "  = ? " ;
 
-        String[] selectionArgs = {email};
+        String[] selectionArgs = {"1"};
 
         // Sorting the results.
         String sortOrder = UserDBContract.CurrentUser.COLUMN_USER_EMAIL + " DESC";
 
         List itemsIds = new ArrayList<>();
 
-        String currentUser= "";
+        String currentUser = "";
         try (Cursor cursor = mDatabase.query(
                 UserDBContract.CurrentUser.TABLE_NAME,    // Table to query
                 projection,                        // The array of columns to return
@@ -142,32 +156,32 @@ public class LoginActivity extends Activity {
                 sortOrder)) {                           // Order to sort
 
             while (cursor.moveToNext()) {
-                String userStored = cursor.getString(cursor.getColumnIndexOrThrow(UserDBContract.CurrentUser.COLUMN_USER_EMAIL));
+                String userStored = cursor.getString(cursor.getColumnIndex(UserDBContract.CurrentUser.COLUMN_USER_EMAIL));
                 currentUser = userStored;
             }
-            if(currentUser == "")//no entry within the db | needs to be written to
-            {
-                ContentValues cV = new ContentValues();
-                cV.put(UserDBContract.CurrentUser.COLUMN_USER_EMAIL, email);
-                mDatabase.insert( UserDBContract.CurrentUser.TABLE_NAME, null, cV);
-            }
-            if(currentUser.equals(email))//not the current user | needs to be updated
-            {
 
-                //update
-                ContentValues cV = new ContentValues();
-                cV.put(UserDBContract.CurrentUser.COLUMN_USER_EMAIL, email);
-
-                mDatabase.update(UserDBContract.CurrentUser.TABLE_NAME, cV, UserDBContract.CurrentUser.COLUMN_USER_EMAIL , null);
-            }
         } catch (Error e) {
             // TODO: Something here.
             System.out.println(e);
-
         }
-        //
-
-
+        return currentUser;
     }
 
+    private void updateCurrentUser(String email, String currentUser) {
+        if (!currentUser.equals(email))//not the current user | needs to be updated
+        {
+            String currentUserSelection = UserDBContract.CurrentUser.COLUMN_USER_CURRENT_ID + "  = 1";
+            //String[] CurrentUserSelectionArgs = {"1"};
+
+            //update
+            ContentValues cV = new ContentValues();
+            cV.put(UserDBContract.CurrentUser.COLUMN_USER_EMAIL, email);
+
+            mDatabase.update(UserDBContract.CurrentUser.TABLE_NAME, cV, currentUserSelection, null);
+        }
+        else
+        {
+            //same user logging in
+        }
+    }
 }
