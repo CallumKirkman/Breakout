@@ -1,11 +1,11 @@
 package com.example.breakout
 
-import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.breakout.AppCurrency.Companion.globalCurrency
 import com.example.breakout.fragments.GENRE
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.spotify.android.appremote.api.ConnectionParams
@@ -23,8 +24,7 @@ import com.spotify.protocol.types.Image
 import com.spotify.protocol.types.ImageUri
 import com.spotify.protocol.types.Track
 import kotlinx.android.synthetic.main.activity_player.*
-import com.example.breakout.AppCurrency.Companion.globalCurrency
-import java.util.ArrayList
+
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -146,7 +146,12 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     fun skipButtonClick(view: View) {
-        if (globalCurrency < 5) {}
+        if (globalCurrency < 5) {
+            val toast = Toast.makeText(this, "Less than 5 vinyls \n Purchase more from store", Toast.LENGTH_SHORT)
+            val v = toast.view.findViewById<View>(android.R.id.message) as TextView
+            v.gravity = Gravity.CENTER
+            toast.show()
+        }
         else {
             globalCurrency -= 5
             // Skip song
@@ -162,12 +167,20 @@ class PlayerActivity : AppCompatActivity() {
             val artistText: TextView = findViewById(R.id.textAtristName)
             artistText.text = artistName
 
+            playPause = true
+            playButtonClick(playButton)
+
             removeSkips()
         }
     }
 
     fun previousButtonClick(view: View) {
-        if (globalCurrency < 5) {}
+        if (globalCurrency < 5) {
+            val toast = Toast.makeText(this, "Less than 5 vinyls \n Purchase more from store", Toast.LENGTH_SHORT)
+            val v = toast.view.findViewById<View>(android.R.id.message) as TextView
+            v.gravity = Gravity.CENTER
+            toast.show()
+        }
         else {
             globalCurrency -= 5
             // Previous song
@@ -182,6 +195,9 @@ class PlayerActivity : AppCompatActivity() {
 
             val artistText: TextView = findViewById(R.id.textAtristName)
             artistText.text = artistName
+
+            playPause = true
+            playButtonClick(playButton)
 
             removeSkips()
         }
@@ -443,8 +459,13 @@ class PlayerActivity : AppCompatActivity() {
         songInfo()
         //albumImage()
 
-        playPause = true
-        playButton.setBackgroundResource(R.drawable.pause)
+
+        Thread.sleep(200)
+        // Stop
+        playPause = false
+        playButton.setBackgroundResource(R.drawable.play)
+        spotifyAppRemote!!.playerApi.pause()
+
 
         val songText: TextView = findViewById(R.id.textSongName)
         songText.text = songName
