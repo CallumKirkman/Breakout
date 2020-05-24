@@ -3,6 +3,7 @@ package com.example.breakout
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.*
 import android.widget.Button
 import android.widget.PopupWindow
@@ -77,9 +78,12 @@ class SettingsActivity : AppCompatActivity() {
         val inflater = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
         val popupView = inflater.inflate(R.layout.popup_terms, null)
 
+        val display = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(display)
+        // Popup is 85% screen width, and 70% screen height.
+        val popupWidth = (display.widthPixels.toDouble() * 0.85).toInt()
+        val popupHeight = (display.heightPixels.toDouble() * 0.70).toInt()
 
-        val popupWidth = 700
-        val popupHeight = 900
         val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
 
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
