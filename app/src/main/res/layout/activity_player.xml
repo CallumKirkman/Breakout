@@ -36,11 +36,11 @@
         android:id="@+id/albumView"
         android:layout_width="181dp"
         android:layout_height="0dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="24dp"
         android:src="@drawable/unknown_album_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topAd"
         tools:visibility="visible" />
 
     <ImageButton
@@ -127,8 +127,8 @@
         android:id="@+id/textAtristName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="121dp"
         android:text="Artist name"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/playButton"
@@ -140,7 +140,7 @@
         android:id="@+id/textSongName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="24dp"
         android:text="Song name"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
