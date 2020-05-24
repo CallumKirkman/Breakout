@@ -56,4 +56,13 @@ public class LoginActivityTest {
     public void testInputPassword() {
         onView(withId(R.id.enterPassword)).perform(typeText("ExamplePassword123!"));
     }
+
+    /**
+     * Test the login button accepts clicks.
+     */
+    @Test
+    public void testLoginButton() {
+        onView(withId(R.id.loginButton)).perform(click());
+    }
+
 }

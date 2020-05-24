@@ -6,13 +6,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -65,8 +68,11 @@ public class CreateAccountActivity extends Activity {
         assert inflater != null;
         View popupView = inflater.inflate(R.layout.popup_terms, null);
 
-        int popupWidth = 600;
-        int popupHeight = 850;
+        DisplayMetrics display = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(display);
+        // Popup is 85% screen width, and 70% screen height.
+        int popupWidth =  (int) (((double) display.widthPixels) * 0.85);
+        int popupHeight =  (int) (((double) display.heightPixels) * 0.70);
 
         final PopupWindow popupWindow = new PopupWindow(popupView, popupWidth, popupHeight, true);
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
