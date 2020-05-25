@@ -99,11 +99,10 @@ public class CreateAccountActivity extends Activity {
         View popupView = inflater.inflate(R.layout.popup_password_help, null);
 
         int popupWidth = 500;
-        int popupHeight = 200;
+        int popupHeight = 350;
         final PopupWindow popupWindow = new PopupWindow(popupView, popupWidth, popupHeight, true);
 
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, -80);
-
+        popupWindow.showAtLocation(view, Gravity.TOP, 0, 140);
     }
 
 
