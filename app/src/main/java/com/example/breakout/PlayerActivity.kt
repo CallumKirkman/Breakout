@@ -16,8 +16,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.breakout.AppCurrency.Companion.globalCurrency
-import com.example.breakout.UserDBContract.CurrentUser
 import com.example.breakout.UserDBContract.UserEntry
+import com.example.breakout.UserDBContract.SongStorage
+import com.example.breakout.UserDBContract.CurrentUser
+import com.example.breakout.UserDBContract.UserSongs
 import com.example.breakout.fragments.GENRE
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.spotify.android.appremote.api.ConnectionParams
@@ -26,6 +28,7 @@ import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.protocol.types.Image
 import com.spotify.protocol.types.ImageUri
 import com.spotify.protocol.types.Track
+
 import kotlinx.android.synthetic.main.activity_player.*
 
 
@@ -241,13 +244,13 @@ class PlayerActivity : AppCompatActivity() {
         val mDatabase = dbHelper.writableDatabase
 
         val cV = ContentValues()
-        cV.put(UserDBContract.SongStorage.COLUMN_SONG_NAME, songName)
-        cV.put(UserDBContract.SongStorage.COLUMN_ARTIST_NAME, artistName)
-        cV.put(UserDBContract.SongStorage.COLUMN_SONG_URI, trackLink)
-        cV.put(UserDBContract.SongStorage.COLUMN_IMAGE_URI, imageUri.raw)
+        cV.put(SongStorage.COLUMN_SONG_NAME, songName)
+        cV.put(SongStorage.COLUMN_ARTIST_NAME, artistName)
+        cV.put(SongStorage.COLUMN_SONG_URI, trackLink)
+        cV.put(SongStorage.COLUMN_IMAGE_URI, imageUri.raw)
 
         if (!checkSongExists(songName, trackLink)) {
-            mDatabase.insert(UserDBContract.SongStorage.TABLE_NAME, null, cV)
+            mDatabase.insert(SongStorage.TABLE_NAME, null, cV)
         } else {
             //check if song already is liked by user
 //            isLiked()
@@ -271,15 +274,15 @@ class PlayerActivity : AppCompatActivity() {
         val dbHelper = UserDBHelper(this)
         val mDatabase = dbHelper.readableDatabase
 
-        val projection = arrayOf(UserDBContract.SongStorage.COLUMN_SONG_ID)
+        val projection = arrayOf(SongStorage.COLUMN_SONG_ID)
         val selection =
-            "${UserDBContract.SongStorage.COLUMN_SONG_NAME} LIKE ? AND " + "${UserDBContract.SongStorage.COLUMN_SONG_URI} LIKE ?"
+            "${SongStorage.COLUMN_SONG_NAME} LIKE ? AND " + "${SongStorage.COLUMN_SONG_URI} LIKE ?"
         val selectionArgs = arrayOf(songName, songLink)
-        val sortOrder = "${UserDBContract.SongStorage.COLUMN_SONG_NAME} DESC"
+        val sortOrder = "${SongStorage.COLUMN_SONG_NAME} DESC"
 
 
         val cursor = mDatabase.query(
-            UserDBContract.SongStorage.TABLE_NAME,   // The table to query
+            SongStorage.TABLE_NAME,   // The table to query
             projection,             // The array of columns to return (pass null to get all)
             selection,              // The columns for the WHERE clause
             selectionArgs,          // The values for the WHERE clause
@@ -290,7 +293,7 @@ class PlayerActivity : AppCompatActivity() {
         var songID: Int = -1
         while (cursor.moveToNext()) {
             val itemID =
-                cursor.getInt(cursor.getColumnIndexOrThrow(UserDBContract.SongStorage.COLUMN_SONG_ID))
+                cursor.getInt(cursor.getColumnIndexOrThrow(SongStorage.COLUMN_SONG_ID))
             songID = itemID
         }
 
@@ -298,23 +301,67 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun writeToUserSongDB(liked: Int) {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.readableDatabase
 
         var songID = getSongID(songName, trackLink)
         var userID = getCurrentUserID()
-        var liked = liked
+
 
         try {
-            if (liked == 1)//user has already liked the song
+            if (liked == 1)//user has liked the song
             {
-                if (userID != null) {
-                    writeTOUserSongsDB(userID, songID, 1)
+                //check if user has disliked the SONG if not like the song
+                // else update song status to liked
+                if (checkUserHasDislikedSong()) {//check if song has been disliked
+
+                    //change disliked song to liked
+                    val cV = ContentValues().apply {
+                        put(UserSongs.COLUMN_SONG_LIKE, liked)
+                    }
+                    var currUsr = getCurrentUserID()
+
+                    val selection = "${UserSongs.COLUMN_FK_USER_ID}  LIKE ? " + "${UserSongs.COLUMN_FK_SONG_ID} LIKE ?"
+
+                    val selectionArgs = arrayOf(currUsr, songID)
+                    mDatabase.update(
+                        UserSongs.COLUMN_SONG_LIKE,
+                        cV,
+                        selection,
+                        null)
+
+                } else {//write song liked to db
+                    if (userID != null) {
+                        writeTOUserSongsDB(userID, songID, 1)
+                    }
                 }
 
-
             } else if (liked == 0) {
-                //check if user wants to update song
+                //check if user has liked the song if not dislike the song.
+                // else update song status disliked
 
-                writeTOUserSongsDB(userID, songID, 0)
+                if (checkUserHasLikedSong()) {//check if song has been liked
+
+                    //change liked song to disliked
+                    val cV = ContentValues().apply {
+                        put(UserSongs.COLUMN_SONG_LIKE, liked)
+                    }
+                    var currUsr = getCurrentUserID()
+
+                    val selection = "${UserSongs.COLUMN_FK_USER_ID}  LIKE ? " + "${UserSongs.COLUMN_FK_SONG_ID} LIKE ?"
+
+                    val selectionArgs = arrayOf(currUsr, songID)
+                    mDatabase.update(
+                        UserSongs.COLUMN_SONG_LIKE,
+                        cV,
+                        selection,
+                        null)
+
+
+                } else {
+                    writeTOUserSongsDB(userID, songID, 0)
+                }
+
 
             }
         }//error catching - if try doesn't work user has already liked song
@@ -325,17 +372,97 @@ class PlayerActivity : AppCompatActivity() {
 
     }
 
+    //DISLIKE
+    private fun checkUserHasLikedSong(): Boolean//return true if user has liked the song
+    {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.writableDatabase
+
+        // Query Building - specify column, condition, sort order, etc.
+
+        // Query Building - specify column, condition, sort order, etc.
+        val projection = arrayOf(SongStorage.COLUMN_SONG_NAME)
+        val selection =
+            UserSongs.COLUMN_FK_USER_ID + " LIKE ? AND " + UserSongs.COLUMN_FK_SONG_ID + " LIKE ? AND " +
+                UserSongs.COLUMN_SONG_LIKE + " = 1 AND " + UserEntry.COLUMN_USER_ID + " = ? AND " +
+                    SongStorage.COLUMN_SONG_ID + " LIKE ? "
+        val selectionArgs = arrayOf<String>(UserEntry.COLUMN_USER_ID, SongStorage.COLUMN_SONG_ID, getCurrentUserID().toString(), getSongID(songName, trackLink).toString() )
+        val sortOrder = UserSongs.COLUMN_SONG_LIKE + " DESC"
+
+        val itemsIds: MutableList<Long> =
+            java.util.ArrayList()
+
+        mDatabase.query(
+            UserEntry.TABLE_NAME + ", " + SongStorage.TABLE_NAME + ", " + UserSongs.TABLE_NAME,  // Table to query
+            projection,  // The array of columns to return
+            selection,  // The columns for the WHERE clause
+            selectionArgs,  // The values for the WHERE clause
+            null,  // Don't group the rows
+            null,  // Don't filter by the row groups
+            sortOrder
+        ).use { cursor ->                            // Order to sort
+            while (cursor.moveToNext()) {
+                val itemID: Long =
+                    cursor.getLong(cursor.getColumnIndex(UserEntry.COLUMN_EMAIL_ADDRESS))
+                itemsIds.add(itemID)
+            }
+        }
+        // Greater than 0, the email exists - true.
+        // Greater than 0, the email exists - true.
+        return itemsIds.size > 0
+    }
+
+    //LIKE
+    private fun checkUserHasDislikedSong(): Boolean// return true if user has disliked the song
+    {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.writableDatabase
+
+        // Query Building - specify column, condition, sort order, etc.
+
+        // Query Building - specify column, condition, sort order, etc.
+        val projection = arrayOf(SongStorage.COLUMN_SONG_NAME)
+        val selection =
+            UserSongs.COLUMN_FK_USER_ID + " LIKE ? AND " + UserSongs.COLUMN_FK_SONG_ID + " LIKE ? AND " +
+                    UserSongs.COLUMN_SONG_LIKE + " = 0 AND " + UserEntry.COLUMN_USER_ID + " = ? AND " +
+                    SongStorage.COLUMN_SONG_ID + " LIKE ? "
+        val selectionArgs = arrayOf<String>(UserEntry.COLUMN_USER_ID, SongStorage.COLUMN_SONG_ID, getCurrentUserID().toString(), getSongID(songName, trackLink).toString() )
+        val sortOrder = UserSongs.COLUMN_SONG_LIKE + " DESC"
+
+        val itemsIds: MutableList<Long> =
+            java.util.ArrayList()
+
+        mDatabase.query(
+            UserEntry.TABLE_NAME + ", " + SongStorage.TABLE_NAME + ", " + UserSongs.TABLE_NAME,  // Table to query
+            projection,  // The array of columns to return
+            selection,  // The columns for the WHERE clause
+            selectionArgs,  // The values for the WHERE clause
+            null,  // Don't group the rows
+            null,  // Don't filter by the row groups
+            sortOrder
+        ).use { cursor ->                            // Order to sort
+            while (cursor.moveToNext()) {
+                val itemID: Long =
+                    cursor.getLong(cursor.getColumnIndex(UserEntry.COLUMN_EMAIL_ADDRESS))
+                itemsIds.add(itemID)
+            }
+        }
+        // Greater than 0, the email exists - true.
+        // Greater than 0, the email exists - true.
+        return itemsIds.size > 0
+    }
+
     private fun writeTOUserSongsDB(userID: Int, songId: Int, liked: Int) {
         val dbHelper = UserDBHelper(this)
         val mDatabase = dbHelper.writableDatabase
 
         val values = ContentValues().apply {
-            put(UserDBContract.UserSongs.COLUMN_FK_USER_ID, userID)
-            put(UserDBContract.UserSongs.COLUMN_FK_SONG_ID, songId)
-            put(UserDBContract.UserSongs.COLUMN_SONG_LIKE, liked)
+            put(UserSongs.COLUMN_FK_USER_ID, userID)
+            put(UserSongs.COLUMN_FK_SONG_ID, songId)
+            put(UserSongs.COLUMN_SONG_LIKE, liked)
         }
 
-        mDatabase?.insert(UserDBContract.UserSongs.TABLE_NAME, null, values)
+        mDatabase?.insert(UserSongs.TABLE_NAME, null, values)
 
 
     }
@@ -345,13 +472,13 @@ class PlayerActivity : AppCompatActivity() {
 //        val dbHelper = UserDBHelper(this)
 //        val mDatabase = dbHelper.writableDatabase
 //        val cV = ContentValues()
-//        cV.put(UserDBContract.SongStorage.COLUMN_SONG_NAME, songName)
-//        cV.put(UserDBContract.SongStorage.COLUMN_ARTIST_NAME, artistName)
-//        cV.put(UserDBContract.SongStorage.COLUMN_SONG_URI, trackLink)
-//        cV.put(UserDBContract.SongStorage.COLUMN_IMAGE_URI, imageUri.raw)
+//        cV.put(SongStorage.COLUMN_SONG_NAME, songName)
+//        cV.put(SongStorage.COLUMN_ARTIST_NAME, artistName)
+//        cV.put(SongStorage.COLUMN_SONG_URI, trackLink)
+//        cV.put(SongStorage.COLUMN_IMAGE_URI, imageUri.raw)
 //
 //        if (!checkSongExists(songName, trackLink)) {
-//            mDatabase.insert(UserDBContract.SongStorage.TABLE_NAME, null, cV)
+//            mDatabase.insert(SongStorage.TABLE_NAME, null, cV)
 //        } else {
 //            //check if song already is liked by user
 ////            isLiked()
@@ -371,19 +498,19 @@ class PlayerActivity : AppCompatActivity() {
 
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
-        val projection = arrayOf(UserDBContract.SongStorage.COLUMN_SONG_NAME)
+        val projection = arrayOf(SongStorage.COLUMN_SONG_NAME)
 
         // Filter results WHERE "title" = 'My Title'
-        val selection = "${UserDBContract.SongStorage.COLUMN_SONG_NAME} like ?"
+        val selection = "${SongStorage.COLUMN_SONG_NAME} like ?"
         val selectionArgs = arrayOf(songName)
 
         // How you want the results sorted in the resulting Cursor
-        val sortOrder = "${UserDBContract.SongStorage.COLUMN_SONG_NAME} DESC"
+        val sortOrder = "${SongStorage.COLUMN_SONG_NAME} DESC"
 
         val itemsIds: MutableList<String> = ArrayList<String>()
 
         val cursor = db.query(
-            UserDBContract.UserSongs.TABLE_NAME,   // The table to query
+            UserSongs.TABLE_NAME,   // The table to query
             projection,             // The array of columns to return (pass null to get all)
             selection,              // The columns for the WHERE clause
             selectionArgs,          // The values for the WHERE clause
@@ -393,7 +520,7 @@ class PlayerActivity : AppCompatActivity() {
         )
         while (cursor.moveToNext()) {
             val itemID =
-                cursor.getString(cursor.getColumnIndexOrThrow(UserDBContract.SongStorage.COLUMN_SONG_NAME))
+                cursor.getString(cursor.getColumnIndexOrThrow(SongStorage.COLUMN_SONG_NAME))
             itemsIds.add(itemID)
         }
     }
@@ -404,20 +531,20 @@ class PlayerActivity : AppCompatActivity() {
         val mDatabase = dbHelper.readableDatabase
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
-        val projection = arrayOf(UserDBContract.SongStorage.COLUMN_SONG_NAME)
+        val projection = arrayOf(SongStorage.COLUMN_SONG_NAME)
 
         // Filter results WHERE "title" = 'My Title'
         val selection =
-            "${UserDBContract.SongStorage.COLUMN_SONG_NAME} like ? AND " + "${UserDBContract.SongStorage.COLUMN_SONG_URI} LIKE ?"
+            "${SongStorage.COLUMN_SONG_NAME} like ? AND " + "${SongStorage.COLUMN_SONG_URI} LIKE ?"
         val selectionArgs = arrayOf(songName, songLink)
 
         // How you want the results sorted in the resulting Cursor
-        val sortOrder = "${UserDBContract.SongStorage.COLUMN_SONG_NAME} DESC"
+        val sortOrder = "${SongStorage.COLUMN_SONG_NAME} DESC"
 
         val itemsIds: MutableList<String> = ArrayList<String>()
 
         val cursor = mDatabase.query(
-            UserDBContract.SongStorage.TABLE_NAME,   // The table to query
+            SongStorage.TABLE_NAME,   // The table to query
             projection,             // The array of columns to return (pass null to get all)
             selection,              // The columns for the WHERE clause
             selectionArgs,          // The values for the WHERE clause
@@ -427,7 +554,7 @@ class PlayerActivity : AppCompatActivity() {
         )
         while (cursor.moveToNext()) {
             val itemID =
-                cursor.getString(cursor.getColumnIndexOrThrow(UserDBContract.SongStorage.COLUMN_SONG_NAME))
+                cursor.getString(cursor.getColumnIndexOrThrow(SongStorage.COLUMN_SONG_NAME))
             itemsIds.add(itemID)
         }
         return itemsIds.size > 0
@@ -601,22 +728,22 @@ class PlayerActivity : AppCompatActivity() {
         val dbHelper = UserDBHelper(this)
         val mDatabase = dbHelper.writableDatabase
 
-//        val tbl:String = UserDBContract.UserEntry.TABLE_NAME
+//        val tbl:String = UserEntry.TABLE_NAME
 //        val localBal: String = balance.toString()
 ////        val cV = ContentValues()
-////        cV.put(UserDBContract.UserEntry.COLUMN_USER_BALANCE, "0")
+////        cV.put(UserEntry.COLUMN_USER_BALANCE, "0")
 //
-//        val balSelection = "${UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS} LIKE =? "
+//        val balSelection = "${UserEntry.COLUMN_EMAIL_ADDRESS} LIKE =? "
 //
         val cV = ContentValues().apply {
-            put(UserDBContract.UserEntry.COLUMN_USER_BALANCE, balance)
+            put(UserEntry.COLUMN_USER_BALANCE, balance)
         }
         var currUsr = getCurrentUserID()
 
-        val selection = "${UserDBContract.UserEntry.COLUMN_USER_ID}  = " + currUsr
+        val selection = "${UserEntry.COLUMN_USER_ID}  = " + currUsr
 
-        //mDatabase.execSQL("UPDATE " + UserDBContract.UserEntry.TABLE_NAME + " SET " + cV + " WHERE " + UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " = "+ "joefleetwood@gmail.com" )
-        mDatabase.update(UserDBContract.UserEntry.TABLE_NAME, cV, selection, null)
+        //mDatabase.execSQL("UPDATE " + UserEntry.TABLE_NAME + " SET " + cV + " WHERE " + UserEntry.COLUMN_EMAIL_ADDRESS + " = "+ "joefleetwood@gmail.com" )
+        mDatabase.update(UserEntry.TABLE_NAME, cV, selection, null)
 
         //where user email = currentUserEmail(make this an String val)
 
@@ -641,5 +768,19 @@ class PlayerActivity : AppCompatActivity() {
         return userID
     }
 
+
+    private fun deleteDislikedSong()
+    {
+        //make sure song is disliked
+        //then delete
+
+        if(checkUserHasDislikedSong())
+        {
+
+        }
+
+
+
+    }
 
 }
