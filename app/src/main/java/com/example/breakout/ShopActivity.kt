@@ -14,6 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
 import kotlin.collections.ArrayList
 import com.example.breakout.AppCurrency.Companion.globalCurrency
+import com.example.breakout.items.ShopItem
 
 class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
@@ -86,10 +87,6 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
         offers.add(ShopItem(R.drawable.vinyl_currency, "50", "£1.50"))
         offers.add(ShopItem(R.drawable.vinyl_currency, "70", "£1.57"))
         offers.add(ShopItem(R.drawable.vinyl_currency, "100", "£2"))
-//        offers.add(ShopItem(R.drawable.vinyl_currency, "60", "£1.50"))
-//        offers.add(ShopItem(R.drawable.vinyl_currency, "80", "£1.60"))
-//        offers.add(ShopItem(R.drawable.vinyl_currency, "100", "£1.80"))
-//        offers.add(ShopItem(R.drawable.vinyl_currency, "120", "£2"))
 
         return offers
     }

@@ -1,4 +1,4 @@
-package com.example.breakout
+package com.example.breakout.items
 
 class ShopItem {
 

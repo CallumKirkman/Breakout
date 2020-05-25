@@ -18,6 +18,12 @@ const val GENRE = "com.example.breakout.fragments.GENRE"
 
 class SongFragment : Fragment(), SongsAdapter.OnSongClickListener{
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_song, container, false)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -54,12 +60,6 @@ class SongFragment : Fragment(), SongsAdapter.OnSongClickListener{
                 return false
             }
         })
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_song, container, false)
     }
 
     override fun onSongClick(songs: String, position: Int) {
