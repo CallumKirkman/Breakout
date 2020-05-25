@@ -35,7 +35,7 @@ public class InputValidation {
      * @return - true if it meets the constraints, false otherwise.
      */
     public static boolean validatePassword(String password) {
-        String passwordRegex = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!*£]).{8,40})";
+        String passwordRegex = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[-.@#$%!*£_]).{8,40})";
         Pattern pattern = Pattern.compile(passwordRegex);
         Matcher matcher = pattern.matcher(password);
 
