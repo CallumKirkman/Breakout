@@ -190,6 +190,8 @@ public class CreateAccountActivity extends Activity {
 
                     //update the current player is in the db (use the method within login activity )
 
+                    LoginActivity.currentUser(emailAddress);
+
                     // Launch the player.
                     startActivity(new Intent(CreateAccountActivity.this, PlayerActivity.class));
                 }

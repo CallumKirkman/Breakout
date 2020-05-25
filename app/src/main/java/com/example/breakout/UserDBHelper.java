@@ -1,5 +1,6 @@
 package com.example.breakout;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -67,4 +68,7 @@ class UserDBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + CurrentUser.TABLE_NAME);
         onCreate(db);
     }
+
+
+
 }

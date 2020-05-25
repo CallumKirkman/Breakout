@@ -24,6 +24,8 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
     private var popupView: View? = null
 
+
+
     // Navigation Bar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -145,33 +147,10 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
                 popupWindow.dismiss()
                 globalCurrency = totalCurrency
                 // ToDo(Push total to database)
-                writeBalanceToDB(globalCurrency)
+
             }
         }
     }
 
-    //use current user to then add their balance to tbl_userData
-    fun writeBalanceToDB(balance: Int) {
-        val dbHelper = UserDBHelper(this)
-        val mDatabase = dbHelper.readableDatabase
-
-        val selection = "${UserDBContract.UserEntry.COLUMN_USER_BALANCE} LIKE ?"
-
-        var currUsr = UserDBContract.CurrentUser.COLUMN_USER_EMAIL[1]
-        val value = ContentValues().apply {
-            put(UserDBContract.UserEntry.COLUMN_USER_BALANCE, balance)
-        }
-
-        //mDatabase.update(UserDBContract.UserEntry.TABLE_NAME, value, UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + "="+currUsr ,null)
-
-        //where user email = currentUserEmail(make this an String val)
-
-       // UPDATE TBL_USERDATA SET USER_BALANCE = 16 WHERE USER_EMAIL_ADDRESS = "joefleetwood@gmail.com";
-
-
-
-
-
-    }
 
 }

@@ -1,5 +1,6 @@
 package com.example.breakout
 
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
@@ -15,6 +16,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.breakout.AppCurrency.Companion.globalCurrency
+import com.example.breakout.UserDBContract.CurrentUser
+import com.example.breakout.UserDBContract.UserEntry
 import com.example.breakout.fragments.GENRE
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.spotify.android.appremote.api.ConnectionParams
@@ -147,12 +150,15 @@ class PlayerActivity : AppCompatActivity() {
 
     fun skipButtonClick(view: View) {
         if (globalCurrency < 5) {
-            val toast = Toast.makeText(this, "Less than 5 vinyls \n Purchase more from store", Toast.LENGTH_SHORT)
+            val toast = Toast.makeText(
+                this,
+                "Less than 5 vinyls \n Purchase more from store",
+                Toast.LENGTH_SHORT
+            )
             val v = toast.view.findViewById<View>(android.R.id.message) as TextView
             v.gravity = Gravity.CENTER
             toast.show()
-        }
-        else {
+        } else {
             globalCurrency -= 5
             // Skip song
             spotifyAppRemote!!.playerApi.skipNext()
@@ -176,12 +182,15 @@ class PlayerActivity : AppCompatActivity() {
 
     fun previousButtonClick(view: View) {
         if (globalCurrency < 5) {
-            val toast = Toast.makeText(this, "Less than 5 vinyls \n Purchase more from store", Toast.LENGTH_SHORT)
+            val toast = Toast.makeText(
+                this,
+                "Less than 5 vinyls \n Purchase more from store",
+                Toast.LENGTH_SHORT
+            )
             val v = toast.view.findViewById<View>(android.R.id.message) as TextView
             v.gravity = Gravity.CENTER
             toast.show()
-        }
-        else {
+        } else {
             globalCurrency -= 5
             // Previous song
             spotifyAppRemote!!.playerApi.skipPrevious()
@@ -228,7 +237,6 @@ class PlayerActivity : AppCompatActivity() {
 
         val dbHelper = UserDBHelper(this)
         val mDatabase = dbHelper.writableDatabase
-
         val cV = ContentValues()
         cV.put(UserDBContract.SongStorage.COLUMN_SONG_NAME, songName)
         cV.put(UserDBContract.SongStorage.COLUMN_ARTIST_NAME, artistName)
@@ -243,10 +251,30 @@ class PlayerActivity : AppCompatActivity() {
             Toast.makeText(this@PlayerActivity, "song has already been added", Toast.LENGTH_LONG)
 
         }
+
+        //get song id - user track link as unique identifier
+        //get user id - current email
+        //also whether they liked or disliked(1 or 0)
+        //check if they've already liked or disliked the song
+        //  then update if Song_liked? is not what they have selected
+        //if they dont eexist they havent liked or disliked the song before then...
+        //write whether they liked to disliked
+
     }
 
-    private fun checkUserHasLiked()
-    {
+    private fun getSongID() {
+
+    }
+
+    private fun getUserID() {
+
+    }
+
+    private fun writeToUserSongDB(userID: Int, songID: Int, liked: Int) {
+
+    }
+
+    private fun checkUserHasLiked() {
         val dbHelper = UserDBHelper(this)
         val db = dbHelper.readableDatabase
 
@@ -280,9 +308,9 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun checkSongExists(songName: String): Boolean {
-        val dbHelper = UserDBHelper(this)
-        val db = dbHelper.readableDatabase
 
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.writableDatabase
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         val projection = arrayOf(UserDBContract.SongStorage.COLUMN_SONG_NAME)
@@ -296,7 +324,7 @@ class PlayerActivity : AppCompatActivity() {
 
         val itemsIds: MutableList<String> = ArrayList<String>()
 
-        val cursor = db.query(
+        val cursor = mDatabase.query(
             UserDBContract.SongStorage.TABLE_NAME,   // The table to query
             projection,             // The array of columns to return (pass null to get all)
             selection,              // The columns for the WHERE clause
@@ -313,7 +341,7 @@ class PlayerActivity : AppCompatActivity() {
         return itemsIds.size > 0
     }
 
-    private fun isLiked(song:String) {
+    private fun isLiked(song: String) {
 
         //check if current user has the song liked
 
@@ -332,18 +360,18 @@ class PlayerActivity : AppCompatActivity() {
         if (globalCurrency < 5) {
             skip.setBackgroundResource(R.drawable.gray_forward)
             prev.setBackgroundResource(R.drawable.gray_rewind)
-        }
-        else {
+        } else {
             skip.setBackgroundResource(R.drawable.forward)
             prev.setBackgroundResource(R.drawable.rewind)
         }
     }
 
-
     private fun updateCurrency() {
         val currency = findViewById<TextView>(R.id.playerCurrency)
         totalCurrency = globalCurrency
         currency.text = totalCurrency.toString()
+        var appCurr: Int = globalCurrency
+        writeBalanceToDB(appCurr)
     }
 
 
@@ -351,6 +379,8 @@ class PlayerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
+
+
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNavigation.setOnNavigationItemSelectedListener(bottomNav)
@@ -473,4 +503,55 @@ class PlayerActivity : AppCompatActivity() {
         val artistText: TextView = findViewById(R.id.textAtristName)
         artistText.text = artistName
     }
+
+    //use current user to then add their balance to tbl_userData
+    private fun writeBalanceToDB(balance: Int) {
+
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.writableDatabase
+
+//        val tbl:String = UserDBContract.UserEntry.TABLE_NAME
+//        val localBal: String = balance.toString()
+////        val cV = ContentValues()
+////        cV.put(UserDBContract.UserEntry.COLUMN_USER_BALANCE, "0")
+//
+//        val balSelection = "${UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS} LIKE =? "
+//
+        val cV = ContentValues().apply {
+            put(UserDBContract.UserEntry.COLUMN_USER_BALANCE, balance)
+        }
+        var currUsr = getCurrentUserID()
+
+        val selection = "${UserDBContract.UserEntry.COLUMN_USER_ID}  = " +  currUsr
+
+      //mDatabase.execSQL("UPDATE " + UserDBContract.UserEntry.TABLE_NAME + " SET " + cV + " WHERE " + UserDBContract.UserEntry.COLUMN_EMAIL_ADDRESS + " = "+ "joefleetwood@gmail.com" )
+        mDatabase.update(UserDBContract.UserEntry.TABLE_NAME, cV, selection , null)
+
+        //where user email = currentUserEmail(make this an String val)
+
+        // UPDATE TBL_USERDATA SET USER_BALANCE = 16 WHERE USER_EMAIL_ADDRESS = "joefleetwood@gmail.com";
+
+    }
+
+    fun getCurrentUserID(): Int? {
+
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.writableDatabase
+
+        var userID: Int? = null
+
+        // Sorting the results.
+
+        val query ="SELECT USER_ID FROM TBL_USERDATA, TBL_CURRENT WHERE USER_EMAIL_ADDRESS = CURRENT_USER_EMAIL"
+        val c = mDatabase.rawQuery(query, null)
+        c?.moveToFirst()
+        userID = c!!.getInt(c.getColumnIndex(UserEntry.COLUMN_USER_ID))
+        return userID
+    }
+
+
+
+
+
+
 }
