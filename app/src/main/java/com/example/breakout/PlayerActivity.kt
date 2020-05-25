@@ -751,16 +751,15 @@ class PlayerActivity : AppCompatActivity() {
             "Video game" -> spotifyAppRemote!!.playerApi.play("spotify:playlist:7lv2JeRaHu2unEJgENSXoP")
         }
 
+        Thread.sleep(200)
+
         // Get song data
         songInfo()
         //albumImage()
 
-
-        Thread.sleep(200)
         // Stop
-        playPause = false
-        playButton.setBackgroundResource(R.drawable.play)
-        spotifyAppRemote!!.playerApi.pause()
+        playPause = true
+        playButtonClick(playButton)
 
 
         val songText: TextView = findViewById(R.id.textSongName)

@@ -28,7 +28,7 @@
 
     <string name="spotify_not_connected">No Spotify account found \n Please ensure spotify is installed \n and the desired account is linked</string>
 
-    <string name="password_help">- Between 8 and 40 characters\n- Contain a lowercase character\n- Contain an uppercase character\n- Contain a number\n- Contain at least one of these special characters [ @ # $ % ! * £ ]</string>
+    <string name="password_help">- Between 8 and 40 characters\n- Contain a lowercase character\n- Contain an uppercase character\n- Contain a number\n- Contain at least one of these special characters\n[ @ # $ % ! * £ . - _ ]</string>
 
     <string name="terms">
 \nWithin our application one of our main priorities is the privacy of our users. This Privacy Policy document contains types of information that is collected and recorded by Breakout and how we use it.\n
