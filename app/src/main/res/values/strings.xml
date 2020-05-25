@@ -26,6 +26,8 @@
 
     <!-- Long Text -->
 
+    <string name="spotify_not_connected">No Spotify account found \n Please ensure spotify is installed \n and the desired account is linked</string>
+
     <string name="password_help">- Between 8 and 40 characters\n- Contain a lowercase character\n- Contain an uppercase character\n- Contain a number\n- Contain at least one of these special characters [ @ # $ % ! * £ ]</string>
 
     <string name="terms">

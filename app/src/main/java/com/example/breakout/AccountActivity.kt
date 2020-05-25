@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.transition.Slide
+import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -149,8 +150,12 @@ class AccountActivity : AppCompatActivity() {
         val inflater = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
         popupView = inflater.inflate(R.layout.popup_delete, null)
 
-        val popupWidth = LinearLayout.LayoutParams.MATCH_PARENT
-        val popupHeight = 600
+        val display = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(display)
+        // Popup is 85% screen width, and 40% screen height.
+        val popupWidth = (display.widthPixels.toDouble() * 0.85).toInt()
+        val popupHeight = (display.heightPixels.toDouble() * 0.40).toInt()
+
         val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
 
         popupWindow.elevation = 10.0F
@@ -165,7 +170,7 @@ class AccountActivity : AppCompatActivity() {
         slideOut.slideEdge = Gravity.BOTTOM
         popupWindow.exitTransition = slideOut
 
-        popupWindow.showAtLocation(view, Gravity.TOP, 0, 0)
+        popupWindow.showAtLocation(view, Gravity.TOP, 0, 100)
 
         popupView?.findViewById<Button>(R.id.deleteButton)?.setOnClickListener {
 

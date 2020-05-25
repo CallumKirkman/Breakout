@@ -5,21 +5,13 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.transition.Slide
+import android.util.DisplayMetrics
 import android.util.Log
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.view.*
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.breakout.AppCurrency.Companion.globalCurrency
-import com.example.breakout.UserDBContract.UserEntry
-import com.example.breakout.UserDBContract.SongStorage
-import com.example.breakout.UserDBContract.CurrentUser
-import com.example.breakout.UserDBContract.UserSongs
 import com.example.breakout.fragments.GENRE
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.spotify.android.appremote.api.ConnectionParams
@@ -28,13 +20,16 @@ import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.protocol.types.Image
 import com.spotify.protocol.types.ImageUri
 import com.spotify.protocol.types.Track
-
 import kotlinx.android.synthetic.main.activity_player.*
+import com.example.breakout.UserDBContract.UserSongs
+import com.example.breakout.UserDBContract.UserEntry
+import com.example.breakout.UserDBContract.SongStorage
 
 
 class PlayerActivity : AppCompatActivity() {
 
-    // ToDo(Pull from database)
+    private var popupView: View ? = null
+
     private var totalCurrency: Int = 0
 
     // Spotify connect
@@ -91,6 +86,37 @@ class PlayerActivity : AppCompatActivity() {
         // Handle errors
         spotifyAppRemote?.let {
             SpotifyAppRemote.disconnect(it)
+        }
+
+        val inflater = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+        val popupView = inflater.inflate(R.layout.popup_spotify_disconnected, null)
+
+        val display = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(display)
+        // Popup is 90% screen width, and 40% screen height.
+        val popupWidth = (display.widthPixels.toDouble() * 0.90).toInt()
+        val popupHeight = (display.heightPixels.toDouble() * 0.40).toInt()
+
+        val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
+
+
+        popupWindow.elevation = 10.0F
+
+        // Create a new slide animation for popup window enter transition
+        val slideIn = Slide()
+        slideIn.slideEdge = Gravity.TOP
+        popupWindow.enterTransition = slideIn
+
+        // Slide animation for popup window exit transition
+        val slideOut = Slide()
+        slideOut.slideEdge = Gravity.BOTTOM
+        popupWindow.exitTransition = slideOut
+
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0)
+
+        popupView?.findViewById<Button>(R.id.backToLogin)?.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -153,15 +179,12 @@ class PlayerActivity : AppCompatActivity() {
 
     fun skipButtonClick(view: View) {
         if (globalCurrency < 5) {
-            val toast = Toast.makeText(
-                this,
-                "Less than 5 vinyls \n Purchase more from store",
-                Toast.LENGTH_SHORT
-            )
+            val toast = Toast.makeText(this, "Less than 5 vinyls \n Purchase more from store", Toast.LENGTH_SHORT)
             val v = toast.view.findViewById<View>(android.R.id.message) as TextView
             v.gravity = Gravity.CENTER
             toast.show()
-        } else {
+        }
+        else {
             globalCurrency -= 5
             // Skip song
             spotifyAppRemote!!.playerApi.skipNext()
@@ -185,15 +208,12 @@ class PlayerActivity : AppCompatActivity() {
 
     fun previousButtonClick(view: View) {
         if (globalCurrency < 5) {
-            val toast = Toast.makeText(
-                this,
-                "Less than 5 vinyls \n Purchase more from store",
-                Toast.LENGTH_SHORT
-            )
+            val toast = Toast.makeText(this, "Less than 5 vinyls \n Purchase more from store", Toast.LENGTH_SHORT)
             val v = toast.view.findViewById<View>(android.R.id.message) as TextView
             v.gravity = Gravity.CENTER
             toast.show()
-        } else {
+        }
+        else {
             globalCurrency -= 5
             // Previous song
             spotifyAppRemote!!.playerApi.skipPrevious()
@@ -579,18 +599,18 @@ class PlayerActivity : AppCompatActivity() {
         if (globalCurrency < 5) {
             skip.setBackgroundResource(R.drawable.gray_forward)
             prev.setBackgroundResource(R.drawable.gray_rewind)
-        } else {
+        }
+        else {
             skip.setBackgroundResource(R.drawable.forward)
             prev.setBackgroundResource(R.drawable.rewind)
         }
     }
 
+
     private fun updateCurrency() {
         val currency = findViewById<TextView>(R.id.playerCurrency)
         totalCurrency = globalCurrency
         currency.text = totalCurrency.toString()
-        var appCurr: Int = globalCurrency
-        writeBalanceToDB(appCurr)
     }
 
 
@@ -598,7 +618,6 @@ class PlayerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
-
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNavigation.setOnNavigationItemSelectedListener(bottomNav)

@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.transition.Slide
+import android.util.DisplayMetrics
 import android.view.*
 import android.widget.*
 import com.example.account_res.InputValidation
@@ -14,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
 import kotlin.collections.ArrayList
 import com.example.breakout.AppCurrency.Companion.globalCurrency
+import com.example.breakout.items.ShopItem
 
 class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
@@ -83,16 +85,11 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
         var offers: ArrayList<ShopItem> = ArrayList()
 
-        offers.add(ShopItem(R.drawable.currency5, "5"))
-        offers.add(ShopItem(R.drawable.currency10, "10"))
-        offers.add(ShopItem(R.drawable.currency15, "15"))
-        offers.add(ShopItem(R.drawable.currency20, "20"))
-        offers.add(ShopItem(R.drawable.currency25, "25"))
-        offers.add(ShopItem(R.drawable.currency40, "40"))
-        offers.add(ShopItem(R.drawable.currency60, "60"))
-        offers.add(ShopItem(R.drawable.currency80, "80"))
-        offers.add(ShopItem(R.drawable.currency100, "100"))
-        offers.add(ShopItem(R.drawable.currency120, "120"))
+        offers.add(ShopItem(R.drawable.vinyl_currency, "10", "£1"))
+        offers.add(ShopItem(R.drawable.vinyl_currency, "30", "£1.25"))
+        offers.add(ShopItem(R.drawable.vinyl_currency, "50", "£1.50"))
+        offers.add(ShopItem(R.drawable.vinyl_currency, "70", "£1.57"))
+        offers.add(ShopItem(R.drawable.vinyl_currency, "100", "£2"))
 
         return offers
     }
@@ -102,8 +99,12 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
         val inflater = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
         popupView = inflater.inflate(R.layout.popup_payment, null)
 
-        val popupWidth = LinearLayout.LayoutParams.MATCH_PARENT
-        val popupHeight = 600
+        val display = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(display)
+        // Popup is 90% screen width, and 40% screen height.
+        val popupWidth = (display.widthPixels.toDouble() * 0.90).toInt()
+        val popupHeight = (display.heightPixels.toDouble() * 0.40).toInt()
+
         val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
 
 
@@ -124,7 +125,7 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
         var item: ShopItem = offers!![position]
 
-        price = item.price!!.toInt()
+        price = item.number!!.toInt()
 //        Toast.makeText(applicationContext, item.price, Toast.LENGTH_SHORT).show()
 
         popupView?.findViewById<Button>(R.id.purchaseButton)?.setOnClickListener {

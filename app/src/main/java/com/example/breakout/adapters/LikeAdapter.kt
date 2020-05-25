@@ -7,12 +7,13 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.breakout.R
+import com.example.breakout.items.LikeItem
 import com.example.breakout.items.ShopItem
 
-class ShopAdapter(var context: Context, var offers: ArrayList<ShopItem>) : BaseAdapter() {
+class LikeAdapter(var songs: ArrayList<LikeItem>) : BaseAdapter() {
 
     override fun getItem(position: Int): Any {
-        return offers[position]
+        return songs[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -20,23 +21,20 @@ class ShopAdapter(var context: Context, var offers: ArrayList<ShopItem>) : BaseA
     }
 
     override fun getCount(): Int {
-        return offers.size
+        return songs.size
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
         //Add other view inflate?
-        var view: View = View.inflate(context, R.layout.item_shop, null)
-        var icon: ImageView = view.findViewById(R.id.offer)
-        var number: TextView = view.findViewById(R.id.vinyls)
-        var price: TextView = view.findViewById(R.id.price)
+        var view: View = View.inflate(parent?.context, R.layout.item_fav, null)
+        var album: ImageView = view.findViewById(R.id.albumImage)
+        var name: TextView = view.findViewById(R.id.song)
 
-        var listItem: ShopItem = offers[position]
-        icon.setImageResource(listItem.offer!!)
-        number.text = listItem.number!!
-        price.text = listItem.price!!
+        var listItem: LikeItem = songs[position]
+        album.setImageResource(listItem.image!!)
+        name.text = listItem.name!!
 
         return view
     }
-
 }
