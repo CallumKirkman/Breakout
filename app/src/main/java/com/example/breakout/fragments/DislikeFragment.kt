@@ -39,15 +39,15 @@ class DislikeFragment : Fragment(), AdapterView.OnItemClickListener {
 
     private fun setDataList(): ArrayList<DislikeItem> {
 
-        var offers: ArrayList<DislikeItem> = ArrayList()
+        var disliked: ArrayList<DislikeItem> = ArrayList()
 
-        offers.add(DislikeItem(R.drawable.unknown_album_image, "1Song", "1"))
-        offers.add(DislikeItem(R.drawable.unknown_album_image, "2Song", "2"))
-        offers.add(DislikeItem(R.drawable.unknown_album_image, "3Song", "3"))
-        offers.add(DislikeItem(R.drawable.unknown_album_image, "4Song", "4"))
-        offers.add(DislikeItem(R.drawable.unknown_album_image, "5Song", "5"))
+        disliked.add(DislikeItem(R.drawable.unknown_album_image, "1Song", "URI1"))
+        disliked.add(DislikeItem(R.drawable.unknown_album_image, "2Song", "URI2"))
+        disliked.add(DislikeItem(R.drawable.unknown_album_image, "3Song", "URI3"))
+        disliked.add(DislikeItem(R.drawable.unknown_album_image, "4Song", "URI4"))
+        disliked.add(DislikeItem(R.drawable.unknown_album_image, "5Song", "URI5"))
 
-        return offers
+        return disliked
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

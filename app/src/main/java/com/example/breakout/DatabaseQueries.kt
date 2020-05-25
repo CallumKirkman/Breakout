@@ -2,6 +2,7 @@ package com.example.breakout
 
 import androidx.appcompat.app.AppCompatActivity
 import com.example.breakout.UserDBContract.*
+import com.example.breakout.fragments.FavouriteFragment
 
 class DatabaseQueries: AppCompatActivity() {
 
@@ -18,10 +19,10 @@ class DatabaseQueries: AppCompatActivity() {
         return userID
     }
 
-    private fun getUsersLikedSongs() {
+    public fun getUsersLikedSongs() {
         //want to read all of the music data which the current user has disliked
         val dbHelper = UserDBHelper(this)
-        val mDatabase = dbHelper.writableDatabase
+        val mDatabase = dbHelper.readableDatabase
         val projection = arrayOf(
             SongStorage.COLUMN_SONG_NAME,
             SongStorage.COLUMN_ARTIST_NAME,
@@ -37,7 +38,7 @@ class DatabaseQueries: AppCompatActivity() {
         )
         val sortOrder = "${SongStorage.COLUMN_SONG_NAME} DESC"
         var songName: String
-        var artistName: String
+        var imageURI: String
         var songURI: String
         mDatabase.query(
             SongStorage.TABLE_NAME + ", " + UserEntry.TABLE_NAME + ", " + UserDBContract.UserSongs.TABLE_NAME,
@@ -51,8 +52,11 @@ class DatabaseQueries: AppCompatActivity() {
             while (cursor.moveToNext()) {
                 val itemID: Long
                 songName = cursor.getString(cursor.getColumnIndex(SongStorage.COLUMN_SONG_NAME))
-                artistName = cursor.getString(cursor.getColumnIndex(SongStorage.COLUMN_ARTIST_NAME))
+                imageURI = cursor.getString(cursor.getColumnIndex(SongStorage.COLUMN_IMAGE_URI))
                 songURI = cursor.getString(cursor.getColumnIndex(SongStorage.COLUMN_SONG_URI))
+//                FavouriteFragment().songName.add(songName)
+//                FavouriteFragment().imageURI.add(imageURI)
+//                FavouriteFragment().songURI.add(songURI)
             }
         }
     }

@@ -1,18 +1,16 @@
 package com.example.breakout
 
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.transition.Slide
+import android.util.DisplayMetrics
 import android.util.Log
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.view.*
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.breakout.AppCurrency.Companion.globalCurrency
 import com.example.breakout.fragments.GENRE
@@ -24,11 +22,15 @@ import com.spotify.protocol.types.Image
 import com.spotify.protocol.types.ImageUri
 import com.spotify.protocol.types.Track
 import kotlinx.android.synthetic.main.activity_player.*
+import com.example.breakout.UserDBContract.UserSongs
+import com.example.breakout.UserDBContract.UserEntry
+import com.example.breakout.UserDBContract.SongStorage
 
 
 class PlayerActivity : AppCompatActivity() {
 
-    // ToDo(Pull from database)
+    private var popupView: View ? = null
+
     private var totalCurrency: Int = 0
 
     // Spotify connect
@@ -85,6 +87,37 @@ class PlayerActivity : AppCompatActivity() {
         // Handle errors
         spotifyAppRemote?.let {
             SpotifyAppRemote.disconnect(it)
+        }
+
+        val inflater = (getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+        val popupView = inflater.inflate(R.layout.popup_spotify_disconnected, null)
+
+        val display = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(display)
+        // Popup is 90% screen width, and 40% screen height.
+        val popupWidth = (display.widthPixels.toDouble() * 0.90).toInt()
+        val popupHeight = (display.heightPixels.toDouble() * 0.40).toInt()
+
+        val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
+
+
+        popupWindow.elevation = 10.0F
+
+        // Create a new slide animation for popup window enter transition
+        val slideIn = Slide()
+        slideIn.slideEdge = Gravity.TOP
+        popupWindow.enterTransition = slideIn
+
+        // Slide animation for popup window exit transition
+        val slideOut = Slide()
+        slideOut.slideEdge = Gravity.BOTTOM
+        popupWindow.exitTransition = slideOut
+
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0)
+
+        popupView?.findViewById<Button>(R.id.backToLogin)?.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -246,6 +279,243 @@ class PlayerActivity : AppCompatActivity() {
         val currency = findViewById<TextView>(R.id.playerCurrency)
         totalCurrency = globalCurrency
         currency.text = totalCurrency.toString()
+    }
+
+
+    //Database stuff
+    private fun checkSongExists(songName: String, songLink: String): Boolean {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.readableDatabase
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        val projection = arrayOf(SongStorage.COLUMN_SONG_NAME)
+        // Filter results WHERE "title" = 'My Title'
+        val selection =
+            "${SongStorage.COLUMN_SONG_NAME} like ? AND " + "${SongStorage.COLUMN_SONG_URI} LIKE ?"
+        val selectionArgs = arrayOf(songName, songLink)
+        // How you want the results sorted in the resulting Cursor
+        val sortOrder = "${SongStorage.COLUMN_SONG_NAME} DESC"
+        val itemsIds: MutableList<String> = ArrayList<String>()
+        val cursor = mDatabase.query(
+            SongStorage.TABLE_NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            selection,              // The columns for the WHERE clause
+            selectionArgs,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            sortOrder               // The sort order
+        )
+        while (cursor.moveToNext()) {
+            val itemID =
+                cursor.getString(cursor.getColumnIndexOrThrow(SongStorage.COLUMN_SONG_NAME))
+            itemsIds.add(itemID)
+        }
+        return itemsIds.size > 0
+    }
+
+    private fun writeBalanceToDB(balance: Int) {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.writableDatabase
+        val cV = ContentValues().apply {
+            put(UserEntry.COLUMN_USER_BALANCE, balance)
+        }
+        var currUsr = getCurrentUserID()
+        val selection = "${UserEntry.COLUMN_USER_ID}  = " + currUsr
+        mDatabase.update(UserEntry.TABLE_NAME, cV, selection, null)
+    }
+
+    public fun getCurrentUserID(): Int {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.writableDatabase
+        var userID: Int? = null
+        // Sorting the results.
+        val query =
+            "SELECT USER_ID FROM TBL_USERDATA, TBL_CURRENT WHERE USER_EMAIL_ADDRESS = CURRENT_USER_EMAIL"
+        val c = mDatabase.rawQuery(query, null)
+        c?.moveToFirst()
+        userID = c!!.getInt(c.getColumnIndex(UserEntry.COLUMN_USER_ID))
+        return userID
+    }
+
+    private fun writeTOUserSongsDB(userID: Int, songId: Int, liked: Int) {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.writableDatabase
+        val values = ContentValues().apply {
+            put(UserSongs.COLUMN_FK_USER_ID, userID)
+            put(UserSongs.COLUMN_FK_SONG_ID, songId)
+            put(UserSongs.COLUMN_SONG_LIKE, liked)
+        }
+        mDatabase?.insert(UserSongs.TABLE_NAME, null, values)
+
+    }
+
+    private fun writeSongToDB() {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.writableDatabase
+        val cV = ContentValues()
+        cV.put(SongStorage.COLUMN_SONG_NAME, songName)
+        cV.put(SongStorage.COLUMN_ARTIST_NAME, artistName)
+        cV.put(SongStorage.COLUMN_SONG_URI, trackLink)
+        cV.put(SongStorage.COLUMN_IMAGE_URI, imageUri.raw)
+        if (!checkSongExists(songName, trackLink)) {
+            mDatabase.insert(SongStorage.TABLE_NAME, null, cV)
+        } else {
+            //check if song already is liked by user
+            //isLiked()
+            Toast.makeText(this@PlayerActivity, "song has already been added", Toast.LENGTH_LONG)
+        }
+    }
+
+    private fun getSongID(songName: String, songLink: String): Int {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.readableDatabase
+        val projection = arrayOf(SongStorage.COLUMN_SONG_ID)
+        val selection =
+            "${SongStorage.COLUMN_SONG_NAME} LIKE ? AND " + "${SongStorage.COLUMN_SONG_URI} LIKE ?"
+        val selectionArgs = arrayOf(songName, songLink)
+        val sortOrder = "${SongStorage.COLUMN_SONG_NAME} DESC"
+
+        val cursor = mDatabase.query(
+            SongStorage.TABLE_NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            selection,              // The columns for the WHERE clause
+            selectionArgs,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            sortOrder               // The sort order
+        )
+        var songID: Int = -1
+        while (cursor.moveToNext()) {
+            val itemID =
+                cursor.getInt(cursor.getColumnIndexOrThrow(SongStorage.COLUMN_SONG_ID))
+            songID = itemID
+        }
+        return songID
+    }
+
+    private fun writeToUserSongDB(liked: Int) {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.readableDatabase
+        var songID = getSongID(songName, trackLink)
+        var userID = getCurrentUserID()
+        try {
+            if (liked == 1)//user has liked the song
+            {
+                //check if user has disliked the SONG if not like the song
+                // else update song status to liked
+                if (checkUserHasDislikedSong()) {//check if song has been disliked
+                    //change disliked song to liked
+                    val cV = ContentValues().apply {
+                        put(UserSongs.COLUMN_SONG_LIKE, liked)
+                    }
+                    var currUsr = getCurrentUserID()
+                    val selection = "${UserSongs.COLUMN_FK_USER_ID}  LIKE ? " + "${UserSongs.COLUMN_FK_SONG_ID} LIKE ?"
+                    val selectionArgs = arrayOf(currUsr, songID)
+                    mDatabase.update(
+                        UserSongs.COLUMN_SONG_LIKE,
+                        cV,
+                        selection,
+                        null)
+                } else {//write song liked to db
+                    if (userID != null) {
+                        writeTOUserSongsDB(userID, songID, 1)
+                    }
+                }
+            } else if (liked == 0) {
+                //check if user has liked the song if not dislike the song.
+                // else update song status disliked
+                if (checkUserHasLikedSong()) {//check if song has been liked
+                    //change liked song to disliked
+                    val cV = ContentValues().apply {
+                        put(UserSongs.COLUMN_SONG_LIKE, liked)
+                    }
+                    var currUsr = getCurrentUserID()
+                    val selection = "${UserSongs.COLUMN_FK_USER_ID}  LIKE ? " + "${UserSongs.COLUMN_FK_SONG_ID} LIKE ?"
+                    val selectionArgs = arrayOf(currUsr, songID)
+                    mDatabase.update(
+                        UserSongs.COLUMN_SONG_LIKE,
+                        cV,
+                        selection,
+                        null)
+
+                } else {
+                    writeTOUserSongsDB(userID, songID, 0)
+                }
+
+            }
+        }//error catching - if try doesn't work user has already liked song
+        finally {
+        }
+    }
+
+    private fun checkUserHasLikedSong(): Boolean//return true if user has liked the song
+    {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.writableDatabase
+        // Query Building - specify column, condition, sort order, etc.
+        // Query Building - specify column, condition, sort order, etc.
+        val projection = arrayOf(SongStorage.COLUMN_SONG_NAME)
+        val selection =
+            UserSongs.COLUMN_FK_USER_ID + " LIKE ? AND " + UserSongs.COLUMN_FK_SONG_ID + " LIKE ? AND " +
+                    UserSongs.COLUMN_SONG_LIKE + " = 1 AND " + UserEntry.COLUMN_USER_ID + " = ? AND " +
+                    SongStorage.COLUMN_SONG_ID + " LIKE ? "
+        val selectionArgs = arrayOf<String>(UserEntry.COLUMN_USER_ID, SongStorage.COLUMN_SONG_ID, getCurrentUserID().toString(), getSongID(songName, trackLink).toString() )
+        val sortOrder = UserSongs.COLUMN_SONG_LIKE + " DESC"
+        val itemsIds: MutableList<Long> =
+            java.util.ArrayList()
+        mDatabase.query(
+            UserEntry.TABLE_NAME + ", " + SongStorage.TABLE_NAME + ", " + UserSongs.TABLE_NAME,  // Table to query
+            projection,  // The array of columns to return
+            selection,  // The columns for the WHERE clause
+            selectionArgs,  // The values for the WHERE clause
+            null,  // Don't group the rows
+            null,  // Don't filter by the row groups
+            sortOrder
+        ).use { cursor ->                            // Order to sort
+            while (cursor.moveToNext()) {
+                val itemID: Long =
+                    cursor.getLong(cursor.getColumnIndex(UserEntry.COLUMN_EMAIL_ADDRESS))
+                itemsIds.add(itemID)
+            }
+        }
+        // Greater than 0, the email exists - true.
+        // Greater than 0, the email exists - true.
+        return itemsIds.size > 0
+    }
+
+    private fun checkUserHasDislikedSong(): Boolean// return true if user has disliked the song
+    {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.writableDatabase
+        // Query Building - specify column, condition, sort order, etc.
+        // Query Building - specify column, condition, sort order, etc.
+        val projection = arrayOf(SongStorage.COLUMN_SONG_NAME)
+        val selection =
+            UserSongs.COLUMN_FK_USER_ID + " LIKE ? AND " + UserSongs.COLUMN_FK_SONG_ID + " LIKE ? AND " +
+                    UserSongs.COLUMN_SONG_LIKE + " = 0 AND " + UserEntry.COLUMN_USER_ID + " = ? AND " +
+                    SongStorage.COLUMN_SONG_ID + " LIKE ? "
+        val selectionArgs = arrayOf<String>(UserEntry.COLUMN_USER_ID, SongStorage.COLUMN_SONG_ID, getCurrentUserID().toString(), getSongID(songName, trackLink).toString() )
+        val sortOrder = UserSongs.COLUMN_SONG_LIKE + " DESC"
+        val itemsIds: MutableList<Long> =
+            java.util.ArrayList()
+        mDatabase.query(
+            UserEntry.TABLE_NAME + ", " + SongStorage.TABLE_NAME + ", " + UserSongs.TABLE_NAME,  // Table to query
+            projection,  // The array of columns to return
+            selection,  // The columns for the WHERE clause
+            selectionArgs,  // The values for the WHERE clause
+            null,  // Don't group the rows
+            null,  // Don't filter by the row groups
+            sortOrder
+        ).use { cursor ->                            // Order to sort
+            while (cursor.moveToNext()) {
+                val itemID: Long =
+                    cursor.getLong(cursor.getColumnIndex(UserEntry.COLUMN_EMAIL_ADDRESS))
+                itemsIds.add(itemID)
+            }
+        }
+        // Greater than 0, the email exists - true.
+        // Greater than 0, the email exists - true.
+        return itemsIds.size > 0
     }
 
 
