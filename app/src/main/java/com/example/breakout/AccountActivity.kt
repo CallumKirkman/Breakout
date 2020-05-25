@@ -1,6 +1,5 @@
 package com.example.breakout
 
-import android.accounts.Account
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -13,7 +12,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.account_res.InputValidation
 import com.example.account_res.PasswordUtilities
-import com.example.breakout.UserDBContract.CurrentUser
 import com.example.breakout.UserDBContract.UserEntry
 import kotlinx.android.synthetic.main.activity_account.*
 import java.security.NoSuchAlgorithmException
@@ -131,7 +129,13 @@ class AccountActivity : AppCompatActivity() {
                 ).show()
             }
             // ToDo(Change account details)
-            updateUserData(nameText.toString(),secondNameText.toString(), emailText.toString(), passwordText.toString())
+            updateUserData(
+                nameText.toString(),
+                secondNameText.toString(),
+                emailText.toString(),
+                passwordText.toString(),
+                pSalt
+            )
             Toast.makeText(this, "Successful change", Toast.LENGTH_SHORT).show()
 
             Thread.sleep(500)
@@ -188,6 +192,7 @@ class AccountActivity : AppCompatActivity() {
         }
     }
 
+    private var pSalt: String = ""
     private fun getUserInfo() {
         //get current user
         //get all their account info
@@ -227,7 +232,7 @@ class AccountActivity : AppCompatActivity() {
                 password = cursor.getString(cursor.getColumnIndexOrThrow(UserEntry.COLUMN_PASSWORD))
                 salt = cursor.getString(cursor.getColumnIndexOrThrow(UserEntry.COLUMN_SALT))
             }
-
+            pSalt = salt
             fillAccountBoxes(forename, surname, email)
 
 
@@ -238,8 +243,7 @@ class AccountActivity : AppCompatActivity() {
 
             }
 
-        }
-        finally {
+        } finally {
 
         }
 
@@ -255,17 +259,62 @@ class AccountActivity : AppCompatActivity() {
 
     }
 
-    private fun updateUserData(forename:String, surname: String, email: String, password:String)
-    {
+    private fun updateUserData(
+        forename: String,
+        surname: String,
+        email: String,
+        password: String,
+        salt: String
+    ) {
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.writableDatabase
 
+        var hashPassword: String = ""
 
+        try {
+            val byteHash = PasswordUtilities.generateHash(password, pSalt, "SHA-256")
+            val hash = PasswordUtilities.hexBytes(byteHash)
+            hashPassword = hash
+        } // Fail Condition. Keep the algorithm hard-coded.
+        catch (exc: NoSuchAlgorithmException) {
+            false
+        }
 
+        // New value for one column
+        val title = "MyNewTitle"
+        val values = ContentValues().apply {
+            put(UserEntry.COLUMN_FORENAME, forename)
+            put(UserEntry.COLUMN_SURNAME, surname)
+            put(UserEntry.COLUMN_EMAIL_ADDRESS, email)
+            put(UserEntry.COLUMN_PASSWORD, hashPassword)
 
+        }
+
+        // Which row to update, based on the title
+        val selection = "${UserEntry.COLUMN_EMAIL_ADDRESS} LIKE ?"
+        val selectionArgs = arrayOf(UserDBContract.CurrentUser.COLUMN_USER_EMAIL)
+        mDatabase.update(
+            UserEntry.TABLE_NAME,
+            values,
+            selection,
+            selectionArgs
+        )
 
 
     }
 
-    fun deleteUser() {
+    private fun deleteUser() {
+
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.writableDatabase
+
+        // Define 'where' part of query.
+        val selection = "${UserEntry.COLUMN_EMAIL_ADDRESS} LIKE ?"
+        // Specify arguments in placeholder order.
+        val selectionArgs = arrayOf(UserDBContract.CurrentUser.COLUMN_USER_EMAIL)
+        // Issue SQL statement.
+        mDatabase.delete(UserEntry.TABLE_NAME, selection, selectionArgs)
+
 
     }
 
