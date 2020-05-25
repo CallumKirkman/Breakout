@@ -236,7 +236,10 @@ class AccountResTest {
                 "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!7!!!!!aB",
                 "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA2AAAAAAAAb$",
                 "myPassword123!",
-                "S1mpl3p455w0rd%"
+                "S1mpl3p455w0rd%",
+                ".....1aB",
+                "--__123AAAbbG%",
+                "123456_iJ"
         };
     }
 
