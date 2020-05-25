@@ -107,7 +107,6 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
         val popupWindow = PopupWindow(popupView, popupWidth, popupHeight, true)
 
-
         popupWindow.elevation = 10.0F
 
         // Create a new slide animation for popup window enter transition
@@ -126,7 +125,8 @@ class ShopActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
         var item: ShopItem = offers!![position]
 
         price = item.number!!.toInt()
-//        Toast.makeText(applicationContext, item.price, Toast.LENGTH_SHORT).show()
+
+        popupView?.findViewById<TextView>(R.id.itemPrice)?.text = item.price
 
         popupView?.findViewById<Button>(R.id.purchaseButton)?.setOnClickListener {
 
