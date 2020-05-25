@@ -1,14 +1,19 @@
 package com.example.breakout.adapters
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
+import com.example.breakout.PlayerActivity
 import com.example.breakout.R
 import com.example.breakout.items.LikeItem
 import com.example.breakout.items.ShopItem
+import com.spotify.protocol.types.Image
+import kotlinx.android.synthetic.main.activity_player.*
 
 class LikeAdapter(var songs: ArrayList<LikeItem>) : BaseAdapter() {
 
@@ -32,7 +37,7 @@ class LikeAdapter(var songs: ArrayList<LikeItem>) : BaseAdapter() {
         var name: TextView = view.findViewById(R.id.song)
 
         var listItem: LikeItem = songs[position]
-        album.setImageResource(listItem.image!!)
+        album.setImageURI(listItem.image!!)
         name.text = listItem.name!!
 
         return view

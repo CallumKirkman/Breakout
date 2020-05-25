@@ -36,35 +36,35 @@
         app:layout_constraintBottom_toTopOf="@+id/submitButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirmText" />
+        app:layout_constraintTop_toBottomOf="@+id/newPasswordText" />
 
     <EditText
-        android:id="@+id/passwordText"
+        android:id="@+id/oldPasswordText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:ems="10"
         android:gravity="center"
-        android:hint="Password"
+        android:hint="Old Password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/confirmText"
+        app:layout_constraintBottom_toTopOf="@+id/newPasswordText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/secondNameText" />
 
     <EditText
-        android:id="@+id/confirmText"
+        android:id="@+id/newPasswordText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:ems="10"
         android:gravity="center"
-        android:hint="Confirm password"
+        android:hint="New  password"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/emailText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordText" />
+        app:layout_constraintTop_toBottomOf="@+id/oldPasswordText" />
 
     <EditText
         android:id="@+id/nameText"
@@ -89,7 +89,7 @@
         android:gravity="center"
         android:hint="Second name"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/passwordText"
+        app:layout_constraintBottom_toTopOf="@+id/oldPasswordText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameText" />

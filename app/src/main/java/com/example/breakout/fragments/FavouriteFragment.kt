@@ -1,5 +1,7 @@
 package com.example.breakout.fragments
 
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,9 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.GridView
+import com.example.breakout.FavSongs.Companion.globalImageURI
+import com.example.breakout.FavSongs.Companion.globalSongName
+import com.example.breakout.FavSongs.Companion.globalSongURI
+import com.example.breakout.PlayerActivity
 import com.example.breakout.R
 import com.example.breakout.adapters.LikeAdapter
 import com.example.breakout.items.LikeItem
+import com.spotify.protocol.types.Image
+import com.spotify.protocol.types.ImageUri
 
 class FavouriteFragment : Fragment(), AdapterView.OnItemClickListener {
 
@@ -19,16 +27,17 @@ class FavouriteFragment : Fragment(), AdapterView.OnItemClickListener {
         return inflater.inflate(R.layout.fragment_favourite, container, false)
     }
 
-    var songName: MutableList<String> = mutableListOf("Song1", "Song2", "Song3", "Song4")
-    var songURI: MutableList<String> = mutableListOf("URI1", "URI2", "URI3", "URI4")
-    var imageURI: MutableList<Int> = mutableListOf(R.drawable.unknown_album_image, R.drawable.unknown_album_image, R.drawable.unknown_album_image, R.drawable.unknown_album_image)
+//    var songName: MutableList<String> = mutableListOf()
+//    var songURI: MutableList<String> = mutableListOf()
+//    var imageURI: MutableList<Uri> = mutableListOf()
 
     private var favourites: ArrayList<LikeItem> ? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //DatabaseQueries().getUsersLikedSongs()
+
+
 
         val gridView = view.findViewById<GridView>(R.id.favGrid)
         favourites = ArrayList()
@@ -39,9 +48,10 @@ class FavouriteFragment : Fragment(), AdapterView.OnItemClickListener {
 
         gridView.onItemClickListener = this
 
-        println("Song name $songName")
-        println("Image URI $imageURI")
-        println("Song URI $songURI")
+        println("Song name $globalSongName")
+        println("Image URI $globalSongURI")
+        println("Song URI $globalImageURI")
+        println("Song URI $globalImageURI")
     }
 
     private fun setDataList(): ArrayList<LikeItem> {
@@ -49,10 +59,11 @@ class FavouriteFragment : Fragment(), AdapterView.OnItemClickListener {
         var liked: ArrayList<LikeItem> = ArrayList()
 
         var x = 0
-        for (i in songName) {
-            liked.add(LikeItem(imageURI[x], songName[x], songURI[x]))
+        for (i in globalSongName) {
+            liked.add(LikeItem(globalImageURI[x], globalSongName[x], globalSongURI[x]))
             x++
         }
+
 
 //        offers.add(LikeItem(R.drawable.unknown_album_image, "Song2", "URI2"))
 //        offers.add(LikeItem(R.drawable.unknown_album_image, "Song3", "URI3"))

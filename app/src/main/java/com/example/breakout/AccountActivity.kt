@@ -65,18 +65,11 @@ class AccountActivity : AppCompatActivity() {
         this.actionBar?.setHomeButtonEnabled(true)
         Objects.requireNonNull(supportActionBar)?.title = "Account"
 
-
-
-        getUserInfo()
-
-
-
-
         assert(supportActionBar != null)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         setContentView(R.layout.activity_account)
-
+        getUserInfo()
         //call method which gets all user current user data and puts it within the boxes
 
 
@@ -90,8 +83,8 @@ class AccountActivity : AppCompatActivity() {
 
         val forename = findViewById<EditText>(R.id.nameText).text.toString()
         val surname = findViewById<EditText>(R.id.secondNameText).text.toString()
-        val password = findViewById<EditText>(R.id.passwordText).text.toString()
-        val confirm = findViewById<EditText>(R.id.confirmText).text.toString()
+        val password = findViewById<EditText>(R.id.oldPasswordText).text.toString()
+        val confirm = findViewById<EditText>(R.id.newPasswordText).text.toString()
         val email = findViewById<EditText>(R.id.emailText).text.toString()
 
         if (!InputValidation.validateEmail(email)) {
@@ -100,8 +93,6 @@ class AccountActivity : AppCompatActivity() {
             Toast.makeText(this, "Invalid Password", Toast.LENGTH_SHORT).show()
         } else if (!InputValidation.validateName(forename) && !InputValidation.validateName(surname)) {
             Toast.makeText(this, "Invalid Name", Toast.LENGTH_SHORT).show()
-        } else if (password != confirm) {
-            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
         }
         // Salt and hash the password. Store the account.
         else {
@@ -134,7 +125,7 @@ class AccountActivity : AppCompatActivity() {
                 nameText.toString(),
                 secondNameText.toString(),
                 emailText.toString(),
-                passwordText.toString(),
+                oldPasswordText.toString(),
                 pSalt
             )
             Toast.makeText(this, "Successful change", Toast.LENGTH_SHORT).show()
@@ -241,25 +232,18 @@ class AccountActivity : AppCompatActivity() {
             fillAccountBoxes(forename, surname, email)
 
 
-            //convert password back to plaintext
-            val byteHash = PasswordUtilities.generateHash(password, salt, "SHA-256")
-            val hash = PasswordUtilities.hexBytes(byteHash)
-            if (hash.equals(password)) {
-
-            }
-
         } finally {
 
         }
-
     }
+
 
     private fun fillAccountBoxes(forename: String, surname: String, email: String) {
 
         //val nameText = findViewById(R.id.nameText) as EditText
-        nameText.setText(forename).toString()
-        secondNameText.setText(surname).toString()
-        emailText.setText(email).toString()
+        nameText.setText(forename)
+        secondNameText.setText(surname)
+        emailText.setText(email)
 
 
     }
@@ -274,28 +258,21 @@ class AccountActivity : AppCompatActivity() {
         val dbHelper = UserDBHelper(this)
         val mDatabase = dbHelper.writableDatabase
 
+        val byteHash =
+            PasswordUtilities.generateHash(
+                newPasswordText.text.toString(),
+                salt,
+                "SHA-256"
+            )
+        val mHash = PasswordUtilities.hexBytes(byteHash)
         var hashPassword: String = ""
-
-        try {
-            val byteHash = PasswordUtilities.generateHash(password, pSalt, "SHA-256")
-            val hash = PasswordUtilities.hexBytes(byteHash)
-            hashPassword = hash
-        } // Fail Condition. Keep the algorithm hard-coded.
-        catch (exc: NoSuchAlgorithmException) {
-            false
-        }
-
-        // New value for one column
-        val title = "MyNewTitle"
         val values = ContentValues().apply {
-            put(UserEntry.COLUMN_FORENAME, forename)
-            put(UserEntry.COLUMN_SURNAME, surname)
-            put(UserEntry.COLUMN_EMAIL_ADDRESS, email)
-            put(UserEntry.COLUMN_PASSWORD, hashPassword)
-
+            put(UserEntry.COLUMN_FORENAME, nameText.text.toString())
+            put(UserEntry.COLUMN_SURNAME, secondNameText.text.toString())
+            put(UserEntry.COLUMN_EMAIL_ADDRESS, emailText.text.toString())
+            put(UserEntry.COLUMN_PASSWORD, mHash)
         }
-
-        // Which row to update, based on the title
+               // Which row to update, based on the title
         val selection = "${UserEntry.COLUMN_EMAIL_ADDRESS} LIKE ?"
         val selectionArgs = arrayOf(UserDBContract.CurrentUser.COLUMN_USER_EMAIL)
         mDatabase.update(

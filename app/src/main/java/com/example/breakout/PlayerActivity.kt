@@ -1,9 +1,12 @@
 package com.example.breakout
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
+import android.net.Uri
+import android.net.Uri.parse
 import android.os.Bundle
 import android.transition.Slide
 import android.util.DisplayMetrics
@@ -11,7 +14,11 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.example.breakout.AppCurrency.Companion.globalCurrency
+import com.example.breakout.FavSongs.Companion.globalImageURI
+import com.example.breakout.FavSongs.Companion.globalSongName
+import com.example.breakout.FavSongs.Companion.globalSongURI
 import com.example.breakout.fragments.GENRE
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.spotify.android.appremote.api.ConnectionParams
@@ -24,16 +31,18 @@ import kotlinx.android.synthetic.main.activity_player.*
 import com.example.breakout.UserDBContract.UserSongs
 import com.example.breakout.UserDBContract.UserEntry
 import com.example.breakout.UserDBContract.SongStorage
+import com.example.breakout.fragments.FavouriteFragment
+import java.util.logging.Level.parse
 
 
 class PlayerActivity : AppCompatActivity() {
 
-    private var popupView: View ? = null
+    private var popupView: View? = null
 
     private var totalCurrency: Int = 0
 
     // Spotify connect
-    private var spotifyAppRemote: SpotifyAppRemote? = null
+    var spotifyAppRemote: SpotifyAppRemote? = null
 
     private val clientId = "daa95815630947bd980906b32437654d"
     private val redirectUri = "com.example.breakout:/callback"
@@ -114,7 +123,7 @@ class PlayerActivity : AppCompatActivity() {
 
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0)
 
-        popupView?.findViewById<Button>(R.id.backToLogin)?.setOnClickListener{
+        popupView?.findViewById<Button>(R.id.backToLogin)?.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
@@ -179,12 +188,15 @@ class PlayerActivity : AppCompatActivity() {
 
     fun skipButtonClick(view: View) {
         if (globalCurrency < 5) {
-            val toast = Toast.makeText(this, "Less than 5 vinyls \n Purchase more from store", Toast.LENGTH_SHORT)
+            val toast = Toast.makeText(
+                this,
+                "Less than 5 vinyls \n Purchase more from store",
+                Toast.LENGTH_SHORT
+            )
             val v = toast.view.findViewById<View>(android.R.id.message) as TextView
             v.gravity = Gravity.CENTER
             toast.show()
-        }
-        else {
+        } else {
             globalCurrency -= 5
             // Skip song
             spotifyAppRemote!!.playerApi.skipNext()
@@ -208,12 +220,15 @@ class PlayerActivity : AppCompatActivity() {
 
     fun previousButtonClick(view: View) {
         if (globalCurrency < 5) {
-            val toast = Toast.makeText(this, "Less than 5 vinyls \n Purchase more from store", Toast.LENGTH_SHORT)
+            val toast = Toast.makeText(
+                this,
+                "Less than 5 vinyls \n Purchase more from store",
+                Toast.LENGTH_SHORT
+            )
             val v = toast.view.findViewById<View>(android.R.id.message) as TextView
             v.gravity = Gravity.CENTER
             toast.show()
-        }
-        else {
+        } else {
             globalCurrency -= 5
             // Previous song
             spotifyAppRemote!!.playerApi.skipPrevious()
@@ -341,14 +356,16 @@ class PlayerActivity : AppCompatActivity() {
                     }
                     var currUsr = getCurrentUserID()
 
-                    val selection = "${UserSongs.COLUMN_FK_USER_ID}  LIKE ? " + "${UserSongs.COLUMN_FK_SONG_ID} LIKE ?"
+                    val selection =
+                        "${UserSongs.COLUMN_FK_USER_ID}  LIKE ? " + "${UserSongs.COLUMN_FK_SONG_ID} LIKE ?"
 
                     val selectionArgs = arrayOf(currUsr, songID)
                     mDatabase.update(
                         UserSongs.COLUMN_SONG_LIKE,
                         cV,
                         selection,
-                        null)
+                        null
+                    )
 
                 } else {//write song liked to db
                     if (userID != null) {
@@ -368,14 +385,16 @@ class PlayerActivity : AppCompatActivity() {
                     }
                     var currUsr = getCurrentUserID()
 
-                    val selection = "${UserSongs.COLUMN_FK_USER_ID}  LIKE ? " + "${UserSongs.COLUMN_FK_SONG_ID} LIKE ?"
+                    val selection =
+                        "${UserSongs.COLUMN_FK_USER_ID}  LIKE ? " + "${UserSongs.COLUMN_FK_SONG_ID} LIKE ?"
 
                     val selectionArgs = arrayOf(currUsr, songID)
                     mDatabase.update(
                         UserSongs.COLUMN_SONG_LIKE,
                         cV,
                         selection,
-                        null)
+                        null
+                    )
 
 
                 } else {
@@ -404,9 +423,14 @@ class PlayerActivity : AppCompatActivity() {
         val projection = arrayOf(SongStorage.COLUMN_SONG_NAME)
         val selection =
             UserSongs.COLUMN_FK_USER_ID + " LIKE ? AND " + UserSongs.COLUMN_FK_SONG_ID + " LIKE ? AND " +
-                UserSongs.COLUMN_SONG_LIKE + " = 1 AND " + UserEntry.COLUMN_USER_ID + " = ? AND " +
+                    UserSongs.COLUMN_SONG_LIKE + " = 1 AND " + UserEntry.COLUMN_USER_ID + " = ? AND " +
                     SongStorage.COLUMN_SONG_ID + " LIKE ? "
-        val selectionArgs = arrayOf<String>(UserEntry.COLUMN_USER_ID, SongStorage.COLUMN_SONG_ID, getCurrentUserID().toString(), getSongID(songName, trackLink).toString() )
+        val selectionArgs = arrayOf<String>(
+            UserEntry.COLUMN_USER_ID,
+            SongStorage.COLUMN_SONG_ID,
+            getCurrentUserID().toString(),
+            getSongID(songName, trackLink).toString()
+        )
         val sortOrder = UserSongs.COLUMN_SONG_LIKE + " DESC"
 
         val itemsIds: MutableList<Long> =
@@ -446,7 +470,12 @@ class PlayerActivity : AppCompatActivity() {
             UserSongs.COLUMN_FK_USER_ID + " LIKE ? AND " + UserSongs.COLUMN_FK_SONG_ID + " LIKE ? AND " +
                     UserSongs.COLUMN_SONG_LIKE + " = 0 AND " + UserEntry.COLUMN_USER_ID + " = ? AND " +
                     SongStorage.COLUMN_SONG_ID + " LIKE ? "
-        val selectionArgs = arrayOf<String>(UserEntry.COLUMN_USER_ID, SongStorage.COLUMN_SONG_ID, getCurrentUserID().toString(), getSongID(songName, trackLink).toString() )
+        val selectionArgs = arrayOf<String>(
+            UserEntry.COLUMN_USER_ID,
+            SongStorage.COLUMN_SONG_ID,
+            getCurrentUserID().toString(),
+            getSongID(songName, trackLink).toString()
+        )
         val sortOrder = UserSongs.COLUMN_SONG_LIKE + " DESC"
 
         val itemsIds: MutableList<Long> =
@@ -599,8 +628,7 @@ class PlayerActivity : AppCompatActivity() {
         if (globalCurrency < 5) {
             skip.setBackgroundResource(R.drawable.gray_forward)
             prev.setBackgroundResource(R.drawable.gray_rewind)
-        }
-        else {
+        } else {
             skip.setBackgroundResource(R.drawable.forward)
             prev.setBackgroundResource(R.drawable.rewind)
         }
@@ -635,6 +663,7 @@ class PlayerActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener false
             }
             R.id.navSong -> {
+                getUserLikedSongsFromPlaylist()
                 val intent = Intent(this, SongsActivity::class.java)
                 startActivity(intent)
                 return@OnNavigationItemSelectedListener true
@@ -788,18 +817,69 @@ class PlayerActivity : AppCompatActivity() {
     }
 
 
-    private fun deleteDislikedSong()
-    {
+    private fun deleteDislikedSong() {
         //make sure song is disliked
         //then delete
 
-        if(checkUserHasDislikedSong())
-        {
+        if (checkUserHasDislikedSong()) {
 
         }
 
 
-
     }
 
+    //    fun getUserLikedSongsFromPlaylist()
+//    {
+//        val dbHelper = UserDBHelper(this)
+//        val mDatabase = dbHelper.readableDatabase
+//
+//        val query =
+//            "SELECT USER_ID FROM TBL_USERDATA, TBL_CURRENT WHERE USER_EMAIL_ADDRESS = CURRENT_USER_EMAIL"
+//        val cursor = mDatabase.rawQuery(query, null)
+//
+//    }
+    fun getUserLikedSongsFromPlaylist() {
+        //want to read all of the music data which the current user has disliked
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.readableDatabase
+
+
+        val query =
+            "SELECT SONG_NAME, SONG_URI, IMAGE_URI\n" +
+                    "FROM TBL_SONG, TBL_USERDATA, TBL_USER_SONGS\n" +
+                    "WHERE FK_USER_ID LIKE USER_ID\n" +
+                    "AND FK_SONG_ID LIKE SONG_ID\n" +
+                    "AND SONG_LIKE LIKE 1\n" +
+                    "AND USER_EMAIL_ADDRESS LIKE \"joefleetwood@gmail.com\""
+        val cursor = mDatabase.rawQuery(query, null)
+        while (cursor.moveToNext()) {
+            val songName = cursor.getString(cursor.getColumnIndex(SongStorage.COLUMN_SONG_NAME))
+            val songURI = cursor.getString(cursor.getColumnIndex(SongStorage.COLUMN_SONG_URI))
+            val imageURI = cursor.getString(cursor.getColumnIndex(SongStorage.COLUMN_IMAGE_URI))
+
+            val uri = Uri.parse(imageURI)
+//            val image = ImageUri.
+                //val imageTest: ImageUri = imageURI.toImageUri
+
+            // Get image from track
+//            spotifyAppRemote!!.imagesApi.(uri, Image.Dimension.LARGE)
+//                .setResultCallback { bitmap: Bitmap ->
+//                    albumView.setImageBitmap(bitmap)
+//                }
+
+            globalSongName.add(songName)
+            globalImageURI.add(uri)
+            globalSongURI.add(songURI)
+
+            println(songName)
+            println(songURI)
+            println(songURI)
+        }
+
+
+    }
 }
+
+
+
+
