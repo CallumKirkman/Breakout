@@ -185,17 +185,16 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     fun skipButtonClick(view: View) {
-        if (globalCurrency < 5) {
+        if (globalCurrency < 2) {
             val toast = Toast.makeText(
                 this,
-                "Less than 5 vinyls \n Purchase more from store",
-                Toast.LENGTH_SHORT
+                "Less than 2 vinyls \n Purchase more from store", Toast.LENGTH_SHORT
             )
             val v = toast.view.findViewById<View>(android.R.id.message) as TextView
             v.gravity = Gravity.CENTER
             toast.show()
         } else {
-            globalCurrency -= 5
+            globalCurrency -= 2
             // Skip song
             spotifyAppRemote!!.playerApi.skipNext()
 
@@ -217,17 +216,16 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     fun previousButtonClick(view: View) {
-        if (globalCurrency < 5) {
+        if (globalCurrency < 2) {
             val toast = Toast.makeText(
                 this,
-                "Less than 5 vinyls \n Purchase more from store",
-                Toast.LENGTH_SHORT
+                "Less than 2 vinyls \n Purchase more from store", Toast.LENGTH_SHORT
             )
             val v = toast.view.findViewById<View>(android.R.id.message) as TextView
             v.gravity = Gravity.CENTER
             toast.show()
         } else {
-            globalCurrency -= 5
+            globalCurrency -= 2
             // Previous song
             spotifyAppRemote!!.playerApi.skipPrevious()
 
@@ -258,6 +256,8 @@ class PlayerActivity : AppCompatActivity() {
         //spotifyAppRemote!!.userApi.addToLibrary(trackLink)
         writeSongToDB()
         writeToUserSongDB(1)
+
+        getUserLikedSongsFromPlaylist()
     }
 
     fun dislikeButtonClick(view: View) {
@@ -623,7 +623,7 @@ class PlayerActivity : AppCompatActivity() {
         val skip = findViewById<ImageButton>(R.id.skipButton)
         val prev = findViewById<ImageButton>(R.id.previousButton)
 
-        if (globalCurrency < 5) {
+        if (globalCurrency < 2) {
             skip.setBackgroundResource(R.drawable.gray_forward)
             prev.setBackgroundResource(R.drawable.gray_rewind)
         } else {
@@ -835,7 +835,7 @@ class PlayerActivity : AppCompatActivity() {
 //        val cursor = mDatabase.rawQuery(query, null)
 //
 //    }
-    fun getUserLikedSongsFromPlaylist() {
+    private fun getUserLikedSongsFromPlaylist() {
         //want to read all of the music data which the current user has disliked
         val dbHelper = UserDBHelper(this)
         val mDatabase = dbHelper.readableDatabase
@@ -849,6 +849,11 @@ class PlayerActivity : AppCompatActivity() {
                     "AND SONG_LIKE LIKE 1\n" +
                     "AND USER_EMAIL_ADDRESS LIKE \"CURRENT_USER_EMAIL\""
         val cursor = mDatabase.rawQuery(query, null)
+
+        globalSongName.clear()
+        globalSongURI.clear()
+        globalImageURI.clear()
+
         while (cursor.moveToNext()) {
             val songName = cursor.getString(cursor.getColumnIndex(SongStorage.COLUMN_SONG_NAME))
             val songURI = cursor.getString(cursor.getColumnIndex(SongStorage.COLUMN_SONG_URI))
@@ -856,7 +861,7 @@ class PlayerActivity : AppCompatActivity() {
 
             val uri = Uri.parse(imageURI)
 //            val image = ImageUri.
-                //val imageTest: ImageUri = imageURI.toImageUri
+            //val imageTest: ImageUri = imageURI.toImageUri
 
             // Get image from track
 //            spotifyAppRemote!!.imagesApi.(uri, Image.Dimension.LARGE)
@@ -873,6 +878,51 @@ class PlayerActivity : AppCompatActivity() {
             println(songURI)
         }
 
+
+    }
+    fun getUserDislikedSongsFromPlaylist() {
+        //want to read all of the music data which the current user has disliked
+        val dbHelper = UserDBHelper(this)
+        val mDatabase = dbHelper.readableDatabase
+
+
+        val query =
+            "SELECT SONG_NAME, SONG_URI, IMAGE_URI\n" +
+                    "FROM TBL_SONG, TBL_USERDATA, TBL_USER_SONGS, TBL_CURRENT\n" +
+                    "WHERE FK_USER_ID LIKE USER_ID\n" +
+                    "AND FK_SONG_ID LIKE SONG_ID\n" +
+                    "AND SONG_LIKE LIKE 0\n" +
+                    "AND USER_EMAIL_ADDRESS LIKE \"CURRENT_USER_EMAIL\""
+        val cursor = mDatabase.rawQuery(query, null)
+
+//        globalDislikeSongName.clear()
+//        globalDislikeSongURI.clear()
+//        globalDislikeImageURI.clear()
+
+        while (cursor.moveToNext()) {
+            val songName = cursor.getString(cursor.getColumnIndex(SongStorage.COLUMN_SONG_NAME))
+            val songURI = cursor.getString(cursor.getColumnIndex(SongStorage.COLUMN_SONG_URI))
+            val imageURI = cursor.getString(cursor.getColumnIndex(SongStorage.COLUMN_IMAGE_URI))
+
+            val uri = Uri.parse(imageURI)
+//            val image = ImageUri.
+            //val imageTest: ImageUri = imageURI.toImageUri
+
+            // Get image from track
+//            spotifyAppRemote!!.imagesApi.(uri, Image.Dimension.LARGE)
+//                .setResultCallback { bitmap: Bitmap ->
+//                    albumView.setImageBitmap(bitmap)
+//                }
+
+
+//            globalDislikeSongName.add(songName)
+//            globalDislikeSongURI.add(songURI)
+//            globalDislikeImageURI.add(uri)
+
+            println(songName)
+            println(songURI)
+            println(songURI)
+        }
 
     }
 }

@@ -26,11 +26,11 @@ class DislikeAdapter(var songs: ArrayList<DislikeItem>) : BaseAdapter() {
 
         //Add other view inflate?
         var view: View = View.inflate(parent?.context, R.layout.item_dis, null)
-        var album: ImageView = view.findViewById(R.id.removeThis)
+        //var album: ImageView = view.findViewById(R.id.removeThis)
         var name: TextView = view.findViewById(R.id.song)
 
         var listItem: DislikeItem = songs[position]
-        album.setImageResource(listItem.image!!)
+        //album.setImageResource(listItem.image!!)
         name.text = listItem.name!!
 
         return view
