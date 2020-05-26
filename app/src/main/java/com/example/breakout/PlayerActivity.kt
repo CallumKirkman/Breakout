@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import android.net.Uri
-import android.net.Uri.parse
 import android.os.Bundle
 import android.transition.Slide
 import android.util.DisplayMetrics
@@ -14,7 +13,6 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import com.example.breakout.AppCurrency.Companion.globalCurrency
 import com.example.breakout.FavSongs.Companion.globalImageURI
 import com.example.breakout.FavSongs.Companion.globalSongName
@@ -31,8 +29,6 @@ import kotlinx.android.synthetic.main.activity_player.*
 import com.example.breakout.UserDBContract.UserSongs
 import com.example.breakout.UserDBContract.UserEntry
 import com.example.breakout.UserDBContract.SongStorage
-import com.example.breakout.fragments.FavouriteFragment
-import java.util.logging.Level.parse
 
 
 class PlayerActivity : AppCompatActivity() {
@@ -72,6 +68,8 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun connected() {
         spotifyAppRemote!!.playerApi.setShuffle(true)
+
+        println("Test test")
         // Play a track
         //spotifyAppRemote!!.playerApi.play("spotify:album:3T4tUhGYeRNVUGevb0wThu")
         //Thread.sleep(50)
@@ -154,7 +152,7 @@ class PlayerActivity : AppCompatActivity() {
         // Get image from track
         spotifyAppRemote!!.imagesApi.getImage(imageUri, Image.Dimension.LARGE)
             .setResultCallback { bitmap: Bitmap ->
-                albumView.setImageBitmap(bitmap)
+                albumImage.setImageBitmap(bitmap)
             }
     }
 
@@ -845,11 +843,11 @@ class PlayerActivity : AppCompatActivity() {
 
         val query =
             "SELECT SONG_NAME, SONG_URI, IMAGE_URI\n" +
-                    "FROM TBL_SONG, TBL_USERDATA, TBL_USER_SONGS\n" +
+                    "FROM TBL_SONG, TBL_USERDATA, TBL_USER_SONGS, TBL_CURRENT\n" +
                     "WHERE FK_USER_ID LIKE USER_ID\n" +
                     "AND FK_SONG_ID LIKE SONG_ID\n" +
                     "AND SONG_LIKE LIKE 1\n" +
-                    "AND USER_EMAIL_ADDRESS LIKE \"joefleetwood@gmail.com\""
+                    "AND USER_EMAIL_ADDRESS LIKE \"CURRENT_USER_EMAIL\""
         val cursor = mDatabase.rawQuery(query, null)
         while (cursor.moveToNext()) {
             val songName = cursor.getString(cursor.getColumnIndex(SongStorage.COLUMN_SONG_NAME))

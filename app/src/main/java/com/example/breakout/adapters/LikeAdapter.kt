@@ -33,11 +33,11 @@ class LikeAdapter(var songs: ArrayList<LikeItem>) : BaseAdapter() {
 
         //Add other view inflate?
         var view: View = View.inflate(parent?.context, R.layout.item_fav, null)
-        var album: ImageView = view.findViewById(R.id.albumImage)
+        //var album: ImageView = view.findViewById(R.id.albumImage)
         var name: TextView = view.findViewById(R.id.song)
 
         var listItem: LikeItem = songs[position]
-        album.setImageURI(listItem.image!!)
+        //album.setImageURI(listItem.image!!)
         name.text = listItem.name!!
 
         return view

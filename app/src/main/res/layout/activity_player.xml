@@ -33,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/albumView"
+        android:id="@+id/albumImage"
         android:layout_width="181dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
@@ -145,7 +145,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/albumView" />
+        app:layout_constraintTop_toBottomOf="@+id/albumImage" />
 
     <ImageButton
         android:id="@+id/skipButton"

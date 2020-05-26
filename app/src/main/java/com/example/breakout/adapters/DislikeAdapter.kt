@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.breakout.R
 import com.example.breakout.items.DislikeItem
-import com.example.breakout.items.LikeItem
 
 class DislikeAdapter(var songs: ArrayList<DislikeItem>) : BaseAdapter() {
 
@@ -27,7 +26,7 @@ class DislikeAdapter(var songs: ArrayList<DislikeItem>) : BaseAdapter() {
 
         //Add other view inflate?
         var view: View = View.inflate(parent?.context, R.layout.item_dis, null)
-        var album: ImageView = view.findViewById(R.id.albumImage)
+        var album: ImageView = view.findViewById(R.id.removeThis)
         var name: TextView = view.findViewById(R.id.song)
 
         var listItem: DislikeItem = songs[position]
