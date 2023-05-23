@@ -1,4 +1,5 @@
 # Breakout
+### This was a university project to create a product along with all aspects of presentation, delivery, and market viability.
 
 Breakout is a music-streaming application tailored for low-hit artists.
 
